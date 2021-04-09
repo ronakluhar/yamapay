@@ -1,5 +1,6 @@
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import itemImg from '../../images/item1.webp'
 import { Checkbox } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
@@ -12,7 +13,7 @@ const CustomizeOrder = () => {
         <div>
           <h2 className="font-bold text-2xl mb-2.5">Add New Item</h2>
         </div>
-        <div className="bg-white customize-order py-5">
+        <div className="bg-white customize-order py-5 mb-5">
           <div className="flex items-center p-5">
             <div className="mr-4">
               <img className="w-12 h-12 order-item-img" src={itemImg} alt="" />
@@ -91,6 +92,20 @@ const CustomizeOrder = () => {
               </Formik>
             </div>
           </div>
+        </div>
+        <div className="flex rounded-2xl tabs">
+          <Link
+            to="#"
+            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
+          >
+            Close
+          </Link>
+          <Link
+            to="#"
+            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
+          >
+            Save Changes
+          </Link>
         </div>
       </div>
     </div>

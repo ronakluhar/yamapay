@@ -52,13 +52,13 @@ const MerchantMenu = () => {
           <div className="flex rounded-2xl tabs mx-5 mb-8">
             <Link
               to="#"
-              className="rounded-2xl text-darkgray hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 flex items-center justify-center"
+              className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
             >
               Dine-In
             </Link>
             <Link
               to="#"
-              className="rounded-2xl text-darkgray hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 flex items-center justify-center"
+              className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
             >
               Takeaway
             </Link>

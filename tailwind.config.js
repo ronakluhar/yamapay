@@ -17,6 +17,8 @@ module.exports = {
       gray: '#757373',
       darkgray: '#7a7a7a',
       offWhite: '#f9f9fd',
+      red: '#cd051d',
+      border: '#c4c4c4',
     },
     extend: {},
   },
