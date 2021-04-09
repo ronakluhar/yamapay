@@ -1,19 +1,19 @@
-function App() {
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { MerchantMenu } from './components/merchantDetail'
+import MerchantListing from './components/merchantList/MerchantListing'
+import CustomizeOrder from './components/Orders/CustomizeOrder'
+import './styles/main.scss'
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={MerchantListing} />
+          <Route path="/restaurant" component={MerchantMenu} />
+          <Route path="/customize-order" component={CustomizeOrder} />
+        </Switch>
+      </BrowserRouter>
     </div>
   )
 }
