@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Minus, Pencil, Plus, Trash } from '../common/icons'
+import { OrderSummary, Tips } from '.'
+import { Chat, Minus, Pencil, Plus, Trash } from '../common/icons'
 
 const Cart = () => {
   const [quantity, setQuantity] = useState(Number)
 
   return (
-    <div className="bg-offWhite p-5 h-screen cart">
+    <div className="bg-offWhite p-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
         <div>
           <h2 className="font-bold text-2xl mb-5">Cart</h2>
@@ -32,7 +33,7 @@ const Cart = () => {
               .fill(0)
               .map((index) => (
                 <div
-                  className="border-b border-border border-dashed py-8"
+                  className="border-b last:border-0 border-border border-dashed py-8"
                   key={index}
                 >
                   <div className="py-2 flex justify-between items-center">
@@ -73,6 +74,14 @@ const Cart = () => {
                 </div>
               ))}
           </div>
+          <div className="my-5 bg-white border border-blue p-6 other-info flex items-center">
+            <Chat className="h-6 w-6 text-blue mr-1.5" />
+            <p className="text-xs">
+              Please write any other info we should share with the chef...
+            </p>
+          </div>
+          <Tips />
+          <OrderSummary />
         </div>
       </div>
     </div>

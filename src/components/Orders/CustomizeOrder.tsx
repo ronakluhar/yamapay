@@ -1,4 +1,4 @@
-import { Form, Formik } from 'formik'
+import { Formik } from 'formik'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import itemImg from '../../images/item1.webp'
@@ -58,7 +58,8 @@ const CustomizeOrder = () => {
             <div className="px-5 pt-6 pb-4">
               <Formik initialValues={{}} onSubmit={(values) => {}}>
                 {() => (
-                  <Form>
+                  // <Form>
+                  <>
                     <div className="grid grid-cols-2">
                       <Checkbox name="size_s" label="Size S (500 ml)" />
                       <p className="text-right py-2">$0.0</p>
@@ -71,7 +72,8 @@ const CustomizeOrder = () => {
                       <Checkbox name="size_l" label="Size L (1100 ml)" />
                       <p className="text-right py-2">$25.40</p>
                     </div>
-                  </Form>
+                  </>
+                  // </Form>
                 )}
               </Formik>
             </div>
@@ -83,11 +85,13 @@ const CustomizeOrder = () => {
             <div className="px-5 pt-6 pb-4">
               <Formik initialValues={{}} onSubmit={(values) => {}}>
                 {() => (
-                  <Form>
+                  // <Form>
+                  <>
                     <Checkbox name="option_1" label="Add Lemon" />
                     <Checkbox name="option_2" label="Add Ice" />
                     <Checkbox name="option_3" label="Add Mint" />
-                  </Form>
+                  </>
+                  // </Form>
                 )}
               </Formik>
             </div>

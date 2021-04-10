@@ -1,10 +1,10 @@
-import { Navigation } from '../navigation'
 import Tags from './Tags'
 import img1 from '../../images/hotel1.jpg'
 import img2 from '../../images/hotel2.jpg'
 import img3 from '../../images/hotel3.jpg'
 import rest1 from '../../images/rest1.jpg'
 import rest2 from '../../images/rest2.webp'
+import { Navigation } from '../navigation'
 
 const popularShops = [img1, img2, img3, img1, img2, img3]
 const allShops = [rest1, rest2, rest1, rest2]

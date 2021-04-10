@@ -26,6 +26,7 @@ module.exports = {
     extend: {
       backgroundColor: ['checked'],
       borderColor: ['checked'],
+      borderWidth: ['last'],
     },
   },
   plugins: [],

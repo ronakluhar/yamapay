@@ -1,2 +1,5 @@
 export { default as CustomizeOrder } from './CustomizeOrder'
 export { default as Cart } from './Cart'
+export { default as Tips } from './Tips'
+export { default as OrderSummary } from './OrderSummary'
+export { default as ReviewOrder } from './ReviewOrder'
