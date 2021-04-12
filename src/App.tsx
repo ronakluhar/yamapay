@@ -1,7 +1,17 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { MerchantMenu } from './components/merchantDetail'
 import MerchantListing from './components/merchantList/MerchantListing'
-import { Cart, CustomizeOrder, ReviewOrder } from './components/Orders'
+import {
+  Cart,
+  CustomizeOrder,
+  OrderStatus,
+  ReviewOrder,
+} from './components/Orders'
+import {
+  InvalidCard,
+  PaymentCard,
+  PaymentSuccess,
+} from './components/PaymentCard'
 import './styles/main.scss'
 
 const App = () => {
@@ -14,6 +24,10 @@ const App = () => {
           <Route path="/customize-order" component={CustomizeOrder} />
           <Route path="/cart" component={Cart} />
           <Route path="/review-order" component={ReviewOrder} />
+          <Route path="/invalid-card" component={InvalidCard} />
+          <Route path="/payment-success" component={PaymentSuccess} />
+          <Route path="/payment-card" component={PaymentCard} />
+          <Route path="/order-status" component={OrderStatus} />
         </Switch>
       </BrowserRouter>
     </div>

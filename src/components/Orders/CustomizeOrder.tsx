@@ -8,7 +8,7 @@ import { Minus, Plus } from '../common/icons'
 const CustomizeOrder = () => {
   const [quantity, setQuantity] = useState(Number)
   return (
-    <div className="bg-offWhite p-5 h-screen order-item">
+    <div className="bg-offWhite p-5 min-h-screen order-item">
       <div className="mx-auto max-w-xl">
         <div>
           <h2 className="font-bold text-2xl mb-2.5">Add New Item</h2>

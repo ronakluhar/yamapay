@@ -2,6 +2,12 @@
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
+.rounded-30 {
+  border-radius: 30px;
+}
+.rounded-10 {
+  border-radius: 10px;
+}
 .navbar-container {
   display: flex;
   background-color: #fff;
@@ -283,7 +289,7 @@ input:checked div:parent {
     border-radius: 10px;
   }
   .order-total {
-    background-color: #f9f9fd;
+    background-color: #f9f9f9;
   }
   .change-card-btn {
     border-radius: 30px;
@@ -302,5 +308,25 @@ input:checked div:parent {
     border-radius: 10px;
     outline: none;
     width: 100%;
+  }
+}
+
+// payment merchant
+.payment-merchant {
+  box-shadow: 5px 10px 35px #bfe6f0;
+}
+
+// order status
+.order-status {
+  .order-status-subheader {
+    background-color: #f9f9f9;
+  }
+  .order-details .item-desc {
+    font-size: 8px;
+  }
+  .payment-details {
+    .payment-method {
+      font-size: 10px;
+    }
   }
 }

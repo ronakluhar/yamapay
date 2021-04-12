@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { OrderSummary, Tips } from '.'
-import { Chat, Minus, Pencil, Plus, Trash } from '../common/icons'
+import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 
 const Cart = () => {
   const [quantity, setQuantity] = useState(Number)
 
   return (
-    <div className="bg-offWhite p-5 min-h-screen cart">
+    <div className="bg-offWhite px-5 pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
         <div>
           <h2 className="font-bold text-2xl mb-5">Cart</h2>
@@ -82,6 +82,15 @@ const Cart = () => {
           </div>
           <Tips />
           <OrderSummary />
+        </div>
+        <div className="bg-blue px-10 py-4 flex justify-between items-center">
+          <div className="">
+            <p className="text-lg text-white font-bold">Total Cost: $206.00</p>
+            <p className="text-xs text-white font-normal">Confirm Your Order</p>
+          </div>
+          <div>
+            <ChevronRight className="h-5 w-5 text-white" />
+          </div>
         </div>
       </div>
     </div>
