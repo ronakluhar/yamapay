@@ -52,10 +52,7 @@ const MerchantListing = () => {
           <h5 className="mt-3 text-base">All restaurants & services</h5>
           <div className="flex flex-col md:flex-row flex-wrap items-center md:items-start">
             {allShops.map((shop, index) => (
-              <div
-                className="merchant rounded-10 mt-4 mr-4 last:mr-0"
-                key={index}
-              >
+              <div className="merchant rounded-10 mt-4 mr-4" key={index}>
                 <div className="merchant-img w-full">
                   <img
                     className="w-full h-full object-cover"
