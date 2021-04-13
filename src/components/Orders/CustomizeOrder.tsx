@@ -1,12 +1,14 @@
 import { Formik } from 'formik'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import itemImg from '../../images/item1.webp'
 import { Checkbox } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
+import { ButtonTabs } from '../common/Tabs'
 
+const tabOptions = ['Close', 'Save Change']
 const CustomizeOrder = () => {
   const [quantity, setQuantity] = useState(Number)
+  const [openTab, setOpenTab] = useState(0)
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
       <div className="mx-auto max-w-xl">
@@ -97,20 +99,11 @@ const CustomizeOrder = () => {
             </div>
           </div>
         </div>
-        <div className="flex rounded-2xl tabs">
-          <Link
-            to="#"
-            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-          >
-            Close
-          </Link>
-          <Link
-            to="#"
-            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-          >
-            Save Changes
-          </Link>
-        </div>
+        <ButtonTabs
+          tabs={tabOptions}
+          openTab={openTab}
+          setOpenTab={setOpenTab}
+        />
       </div>
     </div>
   )

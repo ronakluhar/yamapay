@@ -9,24 +9,16 @@
   border-radius: 10px;
 }
 .navbar-container {
-  display: flex;
-  background-color: #fff;
   @media (max-width: 480px) {
     flex-direction: column;
   }
-  .navbar-logo {
-    display: flex;
-    align-items: center;
-  }
 }
 
+.search-icon {
+  color: #bbbbbc;
+}
 .search-restaurants input {
-  padding: 1rem;
-  margin: 0.75rem;
   background-color: #f4f4f8;
-  border: none;
-  border-radius: 7px;
-  outline: none;
   width: 350px;
   ::placeholder,
   ::-ms-input-placeholder {
@@ -40,10 +32,6 @@
   }
 }
 
-// merchant listing
-.merchant-listing {
-  margin: 1rem;
-}
 // Tags
 .tags-filter {
   .tag {
@@ -54,11 +42,9 @@
 }
 .promo-offers {
   h5 {
-    margin: 0 0 0.75rem;
     font-size: 15px;
   }
   img {
-    width: 100%;
     max-height: 300px;
   }
 }
@@ -110,18 +96,12 @@
 }
 
 .all-merchants {
-  .merchants {
-    @media (min-width: 768px) {
-      justify-content: flex-start;
-    }
-  }
   h5 {
     font-size: 15px;
   }
   .merchant {
     width: 335px;
     height: 250px;
-    border-radius: 10px;
     box-shadow: 0 5px 10px #1a506882;
     .merchant-info {
       height: 50px;

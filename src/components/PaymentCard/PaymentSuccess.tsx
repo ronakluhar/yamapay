@@ -1,8 +1,11 @@
 import { Email, LeftArrow } from '../common/icons'
 import paymentSuccess from '../../images/payment-success.png'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { ButtonTabs } from '../common/Tabs'
 
+const tabOptions = ['ORDER STATUS', 'BACK TO HOME']
 const InvalidCard = () => {
+  const [openTab, setOpenTab] = useState(0)
   return (
     <div className="bg-offWhite p-5 min-h-screen">
       <div className="mx-auto max-w-xl">
@@ -33,20 +36,11 @@ const InvalidCard = () => {
             <span>Email Receipt</span>
           </button>
         </div>
-        <div className="flex rounded-2xl tabs bg-white">
-          <Link
-            to="#"
-            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-          >
-            ORDER STATUS
-          </Link>
-          <Link
-            to="#"
-            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-          >
-            BACK TO HOME
-          </Link>
-        </div>
+        <ButtonTabs
+          tabs={tabOptions}
+          openTab={openTab}
+          setOpenTab={setOpenTab}
+        />
       </div>
     </div>
   )

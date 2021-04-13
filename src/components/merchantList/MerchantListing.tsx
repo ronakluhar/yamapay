@@ -10,13 +10,16 @@ const popularShops = [img1, img2, img3, img1, img2, img3]
 const allShops = [rest1, rest2, rest1, rest2]
 const MerchantListing = () => {
   return (
-    <div className="merchant-listing max-w-6xl mx-auto">
+    <div className="m-4 max-w-6xl lg:mx-auto">
       <Navigation />
       <main>
-        <Tags />
-        <div className="promo-offers">
+        <div className="mb-7">
+          <Tags />
+        </div>
+        <div className="promo-offers mb-3">
           <h5>PROMOS FOR YOU</h5>
           <img
+            className="w-full"
             src="https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png"
             alt="promo offer"
           />
@@ -47,9 +50,12 @@ const MerchantListing = () => {
         </div>
         <div className="all-merchants">
           <h5 className="mt-3 text-base">All restaurants & services</h5>
-          <div className="merchants grid grid-cols-1 md:grid-cols-3 justify-center">
+          <div className="flex flex-col md:flex-row flex-wrap items-center md:items-start">
             {allShops.map((shop, index) => (
-              <div className="merchant mt-4" key={index}>
+              <div
+                className="merchant rounded-10 mt-4 mr-4 last:mr-0"
+                key={index}
+              >
                 <div className="merchant-img w-full">
                   <img
                     className="w-full h-full object-cover"

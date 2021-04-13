@@ -1,8 +1,11 @@
 import { LeftArrow } from '../common/icons'
-import { Link } from 'react-router-dom'
 import { RestaurantInfo } from '.'
+import { useState } from 'react'
+import { ButtonTabs } from '../common/Tabs'
 
+const tabOptions = ['Cancel', 'Pay']
 const ReviewOrder = () => {
+  const [openTab, setOpenTab] = useState(0)
   return (
     <div className="bg-offWhite p-5 min-h-screen">
       <div className="mx-auto max-w-xl">
@@ -26,20 +29,11 @@ const ReviewOrder = () => {
             </div>
           </div>
         </div>
-        <div className="flex rounded-2xl tabs bg-white">
-          <Link
-            to="#"
-            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-          >
-            Cancel
-          </Link>
-          <Link
-            to="#"
-            className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-          >
-            Pay
-          </Link>
-        </div>
+        <ButtonTabs
+          tabs={tabOptions}
+          openTab={openTab}
+          setOpenTab={setOpenTab}
+        />
       </div>
     </div>
   )

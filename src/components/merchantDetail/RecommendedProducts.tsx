@@ -1,37 +1,58 @@
 // import { useState } from 'react'
+import { useState } from 'react'
 import productImg from '../../images/hotel1.jpg'
+import { Minus, Plus } from '../common/icons'
 
-const products = [
+const demoProducts = [
   {
     product_name: 'Burger Meal',
     product_desc: 'Description of Product...',
     price: '$20.45',
     product_image: productImg,
+    quantity: 1,
   },
   {
     product_name: 'Burger Meal',
     product_desc: 'Description of Product...',
     price: '$20.45',
     product_image: productImg,
+    quantity: 2,
   },
   {
     product_name: 'Burger Meal',
     product_desc: 'Description of Product...',
     price: '$20.45',
     product_image: productImg,
+    quantity: 3,
   },
   {
     product_name: 'Burger Meal',
     product_desc: 'Description of Product...',
     price: '$20.45',
     product_image: productImg,
+    quantity: 4,
   },
 ]
 const RecommendedProducts = () => {
-  // const [productQuantity, setProductQuantity] = useState(0)
-  // const increaseQuantity = () => {
-  //   setProductQuantity((state) => state + 1)
-  // }
+  const [products, setProducts] = useState(demoProducts)
+  const manageQuantity = (index: number, action: string) => {
+    setProducts((product) =>
+      product.map((el, i) =>
+        i === index
+          ? {
+              ...el,
+              quantity:
+                el.quantity +
+                parseInt(
+                  `${action === 'increment' ? 1 : el.quantity > 1 ? -1 : 0}`,
+                ),
+              // or
+              // quantity: Math.max(0, el.quantity + action === "increment" ? 1 : -1)
+            }
+          : el,
+      ),
+    )
+  }
   return (
     <div>
       <h5 className="text-base my-3">Recommended</h5>
@@ -57,17 +78,24 @@ const RecommendedProducts = () => {
               </div>
               <div className="product-quantity flex items-center">
                 {/* {productQuantity !== 0 && ( */}
-                <div className="decrease-quantity w-3 h-3 text-lightgray leading-none border border-lightgray flex justify-center items-center cursor-pointer">
-                  -
-                </div>
+                <>
+                  <div
+                    className="decrease-quantity w-3 h-3 leading-none border border-lightgray flex justify-center items-center cursor-pointer"
+                    onClick={() => manageQuantity(index, 'decrement')}
+                  >
+                    <Minus className="h-4 w-4 text-lightgray" />
+                  </div>
+                  <span className="text-xs text-black1 mx-1">
+                    {product.quantity}
+                  </span>
+                  <div
+                    className="increase-quantity w-3 h-3 leading-none bg-blue text-white flex justify-center items-center cursor-pointer"
+                    onClick={() => manageQuantity(index, 'increment')}
+                  >
+                    <Plus className="h-4 w-4 text-white" />
+                  </div>
+                </>
                 {/* )} */}
-                {/* <div>{productQuantity}</div> */}
-                <div
-                  className="increase-quantity w-3 h-3 leading-none bg-blue text-white flex justify-center items-center cursor-pointer"
-                  // onClick={increaseQuantity}
-                >
-                  +
-                </div>
               </div>
             </div>
           </div>

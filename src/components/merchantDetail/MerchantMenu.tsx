@@ -1,8 +1,11 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { CategoryWiseProducts, RecommendedProducts } from '.'
+import { ButtonTabs } from '../common/Tabs'
 import { Tags } from '../merchantList'
 
+const tabOptions = ['Dine-In', 'Takeaway']
 const MerchantMenu = () => {
+  const [openTab, setOpenTab] = useState(0)
   return (
     <div className="merchant-menu bg-white p-0 my-0 relative max-w-6xl mx-auto">
       <main>
@@ -49,20 +52,11 @@ const MerchantMenu = () => {
               </div>
             </div>
           </div>
-          <div className="flex rounded-2xl tabs mx-5 mb-8">
-            <Link
-              to="#"
-              className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-            >
-              Dine-In
-            </Link>
-            <Link
-              to="#"
-              className="rounded-2xl text-darkgray focus:text-white hover:text-white hover:bg-blue font-semibold focus:bg-blue flex-1 focus:outline-none flex items-center justify-center py-5 px-16"
-            >
-              Takeaway
-            </Link>
-          </div>
+          <ButtonTabs
+            tabs={tabOptions}
+            openTab={openTab}
+            setOpenTab={setOpenTab}
+          />
           <div className="mx-5">
             <Tags />
           </div>

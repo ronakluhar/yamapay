@@ -30,6 +30,8 @@ module.exports = {
       backgroundColor: ['checked'],
       borderColor: ['checked'],
       borderWidth: ['last'],
+      margin: ['last'],
+      textColor: ['active'],
     },
   },
   plugins: [],
