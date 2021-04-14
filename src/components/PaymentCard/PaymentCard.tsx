@@ -27,7 +27,7 @@ const PaymentCard = () => {
                 <Input type="text" name="card_number" label="Card Number" />
               </div>
               <div className="flex justify-between items-center">
-                <Input type="date" name="expiry" label="Expiry Date" />
+                <Input type="month" name="expiry" label="Expiry Date" />
                 <Input type="text" name="cvv" label="CVV" />
               </div>
             </>

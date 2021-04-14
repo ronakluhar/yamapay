@@ -10,7 +10,7 @@ const ButtonTabs = ({ tabs, openTab, setOpenTab }: ButtonTabProps) => {
         <a
           key={index}
           className={`rounded-2xl transition duration-200 ease-linear cursor-pointer select-none hover:text-white hover:bg-blue font-semibold flex-1 
-       flex items-center justify-center py-5 px-16 ${
+       flex items-center justify-center py-5 ${
          openTab === index
            ? 'bg-blue font-bold text-white'
            : 'text-darkgray border-transparent'

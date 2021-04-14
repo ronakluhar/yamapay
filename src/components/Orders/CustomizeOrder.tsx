@@ -5,7 +5,7 @@ import { Checkbox } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
-const tabOptions = ['Close', 'Save Change']
+const tabOptions = ['Close', 'Save change']
 const CustomizeOrder = () => {
   const [quantity, setQuantity] = useState(Number)
   const [openTab, setOpenTab] = useState(0)
@@ -26,25 +26,25 @@ const CustomizeOrder = () => {
             </div>
             <div className="flex items-center justify-around order-item-quantity">
               <button
-                className="px-2 my-1 border-r"
-                type="button"
-                onClick={() => {
-                  setQuantity(quantity + 1)
-                }}
-              >
-                <Plus className="w-5 h-5" />
-              </button>
-              <div>
-                <span className="px-2">{quantity}</span>
-              </div>
-              <button
-                className="px-2 my-1 border-l"
+                className="px-2 my-1 border-r focus:outline-none"
                 type="button"
                 onClick={() => {
                   quantity > 0 && setQuantity(quantity - 1)
                 }}
               >
                 <Minus className="w-5 h-5" />
+              </button>
+              <div>
+                <span className="px-2">{quantity}</span>
+              </div>
+              <button
+                className="px-2 my-1 border-l focus:outline-none"
+                type="button"
+                onClick={() => {
+                  setQuantity(quantity + 1)
+                }}
+              >
+                <Plus className="w-5 h-5" />
               </button>
             </div>
           </div>

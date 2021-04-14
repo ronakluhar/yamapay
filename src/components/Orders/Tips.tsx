@@ -30,13 +30,13 @@ const Tips = () => {
     <div className="mb-5">
       <h3 className="text-sm font-bold mb-2.5">Tips</h3>
       <div className="bg-white px-6 py-7 tips">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between mb-2 tip-box">
           {tips.map((tip, index) => (
             <div key={index}>
               <Link
                 to="#"
                 className="focus:bg-blue border border-blue text-blue focus:text-white px-3.5 
-                py-2.5 tip flex-1 focus:outline-none flex flex-col items-center justify-center"
+                py-2.5 mb-2 tip flex-1 focus:outline-none flex flex-col items-center justify-center"
               >
                 <p className="font-bold text-xs">{tip.percentage}</p>
                 <p className="font-bold text-xs">{tip.value}</p>

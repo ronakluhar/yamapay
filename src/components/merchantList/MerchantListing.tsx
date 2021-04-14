@@ -4,7 +4,7 @@ import img2 from '../../images/hotel2.jpg'
 import img3 from '../../images/hotel3.jpg'
 import rest1 from '../../images/rest1.jpg'
 import rest2 from '../../images/rest2.webp'
-import { Navigation } from '../navigation'
+import { Menu, Navigation } from '../navigation'
 
 const popularShops = [img1, img2, img3, img1, img2, img3]
 const allShops = [rest1, rest2, rest1, rest2]
@@ -48,7 +48,7 @@ const MerchantListing = () => {
             ))}
           </div>
         </div>
-        <div className="all-merchants">
+        <div className="all-merchants mb-12">
           <h5 className="mt-3 text-base">All restaurants & services</h5>
           <div className="flex flex-col md:flex-row flex-wrap items-center md:items-start">
             {allShops.map((shop, index) => (
@@ -78,6 +78,9 @@ const MerchantListing = () => {
               </div>
             ))}
           </div>
+        </div>
+        <div className="sticky bottom-7">
+          <Menu />
         </div>
       </main>
     </div>

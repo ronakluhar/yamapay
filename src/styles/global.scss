@@ -156,10 +156,6 @@
   }
   .tabs {
     box-shadow: 5px 10px 20px #b7b7b7;
-    a {
-      // height: 60px;
-      font-size: 18px;
-    }
   }
 }
 
@@ -253,6 +249,14 @@ input:checked div:parent {
   }
   .tips {
     border-radius: 30px;
+    @media (max-width: 380px) {
+      .tip-box {
+        justify-content: flex-start !important;
+        a {
+          margin-right: 0.5rem;
+        }
+      }
+    }
     .tip {
       border-radius: 10px;
     }
@@ -308,5 +312,12 @@ input:checked div:parent {
     .payment-method {
       font-size: 10px;
     }
+  }
+}
+
+.menu {
+  box-shadow: 0 10px 50px 0px #000000;
+  span {
+    font-size: 10px;
   }
 }
