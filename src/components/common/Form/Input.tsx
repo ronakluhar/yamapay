@@ -7,6 +7,8 @@ type InputProps = {
   required?: boolean
   type: string
   placeholder?: string
+  min?: string
+  error?: string
 }
 // eslint-disable-next-line react/display-name
 const Input = forwardRef(({ label, name, ...props }: InputProps, ref) => {
@@ -21,6 +23,9 @@ const Input = forwardRef(({ label, name, ...props }: InputProps, ref) => {
       </div>
       <div>
         <input className="custom-box-input" {...inputProps} {...props} />
+      </div>
+      <div>
+        <span className="text-red text-xs">{props.error}</span>
       </div>
     </div>
   )

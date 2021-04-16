@@ -52,7 +52,7 @@ const MerchantMenu = () => {
           <div className="mx-5 mb-12">
             <CategoryWiseProducts />
           </div>
-          <div className="mx-5 sticky bottom-7">
+          <div className="mx-5 sticky bottom-7 flex justify-center">
             <Menu />
           </div>
         </div>

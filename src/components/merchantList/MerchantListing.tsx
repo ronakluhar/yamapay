@@ -79,7 +79,7 @@ const MerchantListing = () => {
             ))}
           </div>
         </div>
-        <div className="sticky bottom-7">
+        <div className="sticky bottom-7 flex justify-center">
           <Menu />
         </div>
       </main>

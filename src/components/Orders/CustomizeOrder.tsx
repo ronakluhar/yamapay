@@ -6,9 +6,17 @@ import { Minus, Plus } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
 const tabOptions = ['Close', 'Save change']
+const customizeProduct = {
+  product_img: itemImg,
+  product_name: 'Burger Meal',
+  product_price: 20.45,
+  quantity: 1,
+}
 const CustomizeOrder = () => {
-  const [quantity, setQuantity] = useState(Number)
+  // eslint-disable-next-line no-unused-vars
+  const [product, setProduct] = useState(customizeProduct)
   const [openTab, setOpenTab] = useState(0)
+  const price = product.product_price * product.quantity
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
       <div className="mx-auto max-w-xl">
@@ -18,30 +26,35 @@ const CustomizeOrder = () => {
         <div className="bg-white customize-order py-5 mb-5">
           <div className="flex items-center p-5">
             <div className="mr-4">
-              <img className="w-12 h-12 order-item-img" src={itemImg} alt="" />
+              <img
+                className="w-12 h-12 order-item-img"
+                src={product.product_img}
+                alt=""
+              />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold">Burger Meal</h3>
-              <p className="text-xs">$20.45</p>
+              <h3 className="text-lg font-bold">{product.product_name}</h3>
+              <p className="text-xs">${price.toFixed(2)}</p>
             </div>
             <div className="flex items-center justify-around order-item-quantity">
               <button
                 className="px-2 my-1 border-r focus:outline-none"
                 type="button"
                 onClick={() => {
-                  quantity > 0 && setQuantity(quantity - 1)
+                  product.quantity > 1 &&
+                    setProduct({ ...product, quantity: product.quantity - 1 })
                 }}
               >
                 <Minus className="w-5 h-5" />
               </button>
               <div>
-                <span className="px-2">{quantity}</span>
+                <span className="px-2">{product.quantity}</span>
               </div>
               <button
                 className="px-2 my-1 border-l focus:outline-none"
                 type="button"
                 onClick={() => {
-                  setQuantity(quantity + 1)
+                  setProduct({ ...product, quantity: product.quantity + 1 })
                 }}
               >
                 <Plus className="w-5 h-5" />
