@@ -5,7 +5,10 @@ import { Checkbox } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
-const tabOptions = ['Close', 'Save change']
+const tabOptions = [
+  { id: 1, tabName: 'Close' },
+  { id: 2, tabName: 'Save change' },
+]
 const customizeProduct = {
   product_img: itemImg,
   product_name: 'Burger Meal',
@@ -15,7 +18,7 @@ const customizeProduct = {
 const CustomizeOrder = () => {
   // eslint-disable-next-line no-unused-vars
   const [product, setProduct] = useState(customizeProduct)
-  const [openTab, setOpenTab] = useState(0)
+  const [openTab, setOpenTab] = useState(1)
   const price = product.product_price * product.quantity
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">

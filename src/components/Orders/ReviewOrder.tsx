@@ -3,9 +3,12 @@ import { RestaurantInfo } from '.'
 import { useState } from 'react'
 import { ButtonTabs } from '../common/Tabs'
 
-const tabOptions = ['Cancel', 'Pay']
+const tabOptions = [
+  { id: 1, tabName: 'Cancel' },
+  { id: 2, tabName: 'Pay' },
+]
 const ReviewOrder = () => {
-  const [openTab, setOpenTab] = useState(0)
+  const [openTab, setOpenTab] = useState(1)
   return (
     <div className="bg-offWhite p-5 min-h-screen">
       <div className="mx-auto max-w-xl">

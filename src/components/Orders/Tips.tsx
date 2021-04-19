@@ -1,9 +1,14 @@
-import { Formik } from 'formik'
-import { Link } from 'react-router-dom'
+import { Form, Formik } from 'formik'
+import { useState } from 'react'
 import { Input } from '../common/Form'
-// import { Input } from '../common/Form'
 
-const tips = [
+type TipsProps = {
+  tip: object
+  setTip: Function
+  customtip: Number
+  setCustomtip: Function
+}
+const tipOptions = [
   {
     percentage: '10%',
     value: 12.25,
@@ -25,27 +30,63 @@ const tips = [
     value: 50.68,
   },
 ]
-const Tips = () => {
+const Tips = ({ tip, setTip, customtip, setCustomtip }: TipsProps) => {
+  const [activeTab, setActiveTab] = useState(-1)
   return (
     <div className="mb-5">
       <h3 className="text-sm font-bold mb-2.5">Tips</h3>
       <div className="bg-white px-6 py-7 tips">
         <div className="flex flex-wrap items-center justify-between mb-2 tip-box">
-          {tips.map((tip, index) => (
+          {tipOptions.map((tipOption, index) => (
             <div key={index}>
-              <Link
-                to="#"
-                className="focus:bg-blue border border-blue text-blue focus:text-white px-3.5 
-                py-2.5 mb-2 tip flex-1 focus:outline-none flex flex-col items-center justify-center"
+              <a
+                className={`border border-blue px-3.5 
+                py-2.5 mb-2 tip flex-1 focus:outline-none flex flex-col items-center justify-center 
+                cursor-pointer ${
+                  activeTab === index ? 'bg-blue text-white' : 'text-blue'
+                }`}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setActiveTab(index)
+                  setTip({
+                    tip_percentage: tipOption.percentage,
+                    tip_value: tipOption.value,
+                  })
+                  setCustomtip('')
+                }}
               >
-                <p className="font-bold text-xs">{tip.percentage}</p>
-                <p className="font-bold text-xs">{tip.value}</p>
-              </Link>
+                <p className="font-bold text-xs">{tipOption.percentage}</p>
+                <p className="font-bold text-xs">{tipOption.value}</p>
+              </a>
             </div>
           ))}
         </div>
-        <Formik initialValues={{}} onSubmit={(values) => {}}>
-          {() => <Input label="Custom Tip" type="text" name="tip" />}
+        <Formik
+          initialValues={{
+            custom_tip: '',
+          }}
+          onSubmit={(values) => {}}
+        >
+          {({ values, setFieldValue }) => (
+            <Form>
+              <Input
+                label="Custom Tip"
+                type="text"
+                name="custom_tip"
+                onChange={(event) => {
+                  setFieldValue('custom_tip', event.target.value)
+                  setCustomtip(event.target.value)
+                  if (event.target.value) {
+                    setActiveTab(-1)
+                    setTip(() => ({
+                      tip_value: event.target.value,
+                      tip_percentage: '',
+                    }))
+                  }
+                }}
+              />
+            </Form>
+          )}
         </Formik>
       </div>
     </div>

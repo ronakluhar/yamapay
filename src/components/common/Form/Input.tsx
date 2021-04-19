@@ -1,5 +1,5 @@
 import { useField } from 'formik'
-import { forwardRef } from 'react'
+import { ChangeEvent, forwardRef } from 'react'
 
 type InputProps = {
   label?: string
@@ -9,10 +9,12 @@ type InputProps = {
   placeholder?: string
   min?: string
   error?: string
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 // eslint-disable-next-line react/display-name
 const Input = forwardRef(({ label, name, ...props }: InputProps, ref) => {
-  const [inputProps] = useField(name)
+  // eslint-disable-next-line no-unused-vars
+  const [inputProps, { error }, { setValue }] = useField(name)
   return (
     <div className="custom-input">
       <div>
@@ -22,7 +24,12 @@ const Input = forwardRef(({ label, name, ...props }: InputProps, ref) => {
         </label>
       </div>
       <div>
-        <input className="custom-box-input" {...inputProps} {...props} />
+        <input
+          className="custom-box-input"
+          {...inputProps}
+          {...props}
+          onChange={props.onChange}
+        />
       </div>
       <div>
         <span className="text-red text-xs">{props.error}</span>

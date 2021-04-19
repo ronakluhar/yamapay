@@ -1,9 +1,13 @@
+import { find, sum } from 'lodash'
 import { useState } from 'react'
 import { OrderSummary, PersonalDetails, Tips } from '.'
 import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
-const tabOptions = ['Dine-In', 'Takeaway']
+const tabOptions = [
+  { id: 1, tabName: 'Dine-In' },
+  { id: 2, tabName: 'Takeaway' },
+]
 const demoProducts = [
   {
     product_name: 'Burger Meal',
@@ -32,8 +36,27 @@ const demoProducts = [
 ]
 
 const Cart = () => {
+  const [cart, setCart] = useState({})
   const [products, setProducts] = useState(demoProducts)
-  const [openTab, setOpenTab] = useState(0)
+  const [openTab, setOpenTab] = useState(1)
+  const [personalInfo, setPersonalInfo] = useState({})
+  const [tip, setTip] = useState({})
+  const [customtip, setCustomtip] = useState(Number)
+  const [subtotal, setSubtotal] = useState(
+    sum(
+      products.map((product) => {
+        return product.total_price
+      }),
+    ),
+  )
+  const updateSubTotal = async () => {
+    const subTotal = sum(
+      products.map((product) => {
+        return product.total_price
+      }),
+    )
+    setSubtotal(subTotal)
+  }
   const manageQuantity = (index: number, action: string) => {
     setProducts((product) =>
       product.map((el, i) =>
@@ -59,7 +82,22 @@ const Cart = () => {
           : el,
       ),
     )
+    updateSubTotal()
   }
+  const setCartDetails = () => {
+    const eatingMethod = find(tabOptions, { id: openTab })?.tabName
+    setCart({
+      eating_method: eatingMethod,
+      order_items: products,
+      personalInfo: personalInfo,
+      tip: tip,
+      subtotal: subtotal,
+      service_fee: 0,
+      tax: 0,
+    })
+    console.log(cart)
+  }
+
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
@@ -121,25 +159,36 @@ const Cart = () => {
                 Please write any other info we should share with the chef...
               </p>
             </div>
-            <Tips />
-            <PersonalDetails />
-            <OrderSummary />
+            <Tips
+              tip={tip}
+              setTip={setTip}
+              customtip={customtip}
+              setCustomtip={setCustomtip}
+            />
+            <PersonalDetails setPersonalInfo={setPersonalInfo} />
+            <OrderSummary subtotal={subtotal} />
           </div>
         </div>
         <div className="md:px-5">
-          <div className="bg-blue px-10 py-4 flex justify-between items-center">
-            <div className="">
-              <p className="text-lg text-white font-bold">
-                Total Cost: $206.00
-              </p>
-              <p className="text-xs text-white font-normal">
-                Confirm Your Order
-              </p>
+          <button
+            className="w-full text-left"
+            type="button"
+            onClick={setCartDetails}
+          >
+            <div className="bg-blue px-10 py-4 flex justify-between items-center">
+              <div className="">
+                <p className="text-lg text-white font-bold">
+                  Total Cost: ${subtotal}
+                </p>
+                <p className="text-xs text-white font-normal">
+                  Confirm Your Order
+                </p>
+              </div>
+              <div>
+                <ChevronRight className="h-5 w-5 text-white" />
+              </div>
             </div>
-            <div>
-              <ChevronRight className="h-5 w-5 text-white" />
-            </div>
-          </div>
+          </button>
         </div>
       </div>
     </div>

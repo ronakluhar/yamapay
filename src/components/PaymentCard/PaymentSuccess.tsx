@@ -3,9 +3,12 @@ import paymentSuccess from '../../images/payment-success.png'
 import { useState } from 'react'
 import { ButtonTabs } from '../common/Tabs'
 
-const tabOptions = ['ORDER STATUS', 'BACK TO HOME']
+const tabOptions = [
+  { id: 1, tabName: 'ORDER STATUS' },
+  { id: 2, tabName: 'BACK TO HOME' },
+]
 const InvalidCard = () => {
-  const [openTab, setOpenTab] = useState(0)
+  const [openTab, setOpenTab] = useState(1)
   return (
     <div className="bg-offWhite p-5 min-h-screen">
       <div className="mx-auto max-w-xl">

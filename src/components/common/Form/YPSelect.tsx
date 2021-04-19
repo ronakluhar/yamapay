@@ -1,6 +1,10 @@
-import Select, { OptionTypeBase } from 'react-select'
+import Select, { NamedProps, Props } from 'react-select'
 
-const YPSelect = ({ options, ...props }: OptionTypeBase) => {
+interface YPSelectProps extends NamedProps, Props {
+  name: string
+}
+
+const YPSelect = ({ options, ...props }: YPSelectProps) => {
   return <Select options={options} {...props} />
 }
 

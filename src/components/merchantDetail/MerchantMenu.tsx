@@ -5,9 +5,12 @@ import { ButtonTabs } from '../common/Tabs'
 import { Tags } from '../merchantList'
 import { Menu } from '../navigation'
 
-const tabOptions = ['Dine-In', 'Takeaway']
+const tabOptions = [
+  { id: 1, tabName: 'Dine-In' },
+  { id: 2, tabName: 'Takeaway' },
+]
 const MerchantMenu = () => {
-  const [openTab, setOpenTab] = useState(0)
+  const [openTab, setOpenTab] = useState(1)
   return (
     <div className="merchant-menu bg-white p-0 my-0 relative max-w-6xl mx-auto">
       <main>
