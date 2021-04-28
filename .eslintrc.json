@@ -21,7 +21,8 @@
     "prettier/prettier": ["error", {
       "endOfLine": "auto"
     }],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "dot-notation": [2, {"allowKeywords": false }]
   },
   "settings": {
     "react": {

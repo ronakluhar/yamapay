@@ -1,14 +1,29 @@
+import { useEffect } from 'react'
+import { connect } from 'react-redux'
 import Tags from './Tags'
 import img1 from '../../images/hotel1.jpg'
 import img2 from '../../images/hotel2.jpg'
 import img3 from '../../images/hotel3.jpg'
-import rest1 from '../../images/rest1.jpg'
-import rest2 from '../../images/rest2.webp'
 import { Menu, Navigation } from '../navigation'
+import * as action from '../../redux/merchantList/action'
 
 const popularShops = [img1, img2, img3, img1, img2, img3]
-const allShops = [rest1, rest2, rest1, rest2]
-const MerchantListing = () => {
+interface rootState {
+  loading: boolean
+  getMerChantList: Function
+  getTax: Function
+  merchantList: Array<object>
+}
+const MerchantListing = ({
+  loading,
+  getMerChantList,
+  getTax,
+  merchantList,
+}: rootState) => {
+  useEffect(() => {
+    getMerChantList()
+  }, [])
+
   return (
     <div className="m-4 max-w-6xl lg:mx-auto">
       <Navigation />
@@ -23,6 +38,12 @@ const MerchantListing = () => {
             src="https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png"
             alt="promo offer"
           />
+          <button
+            className="tag bg-lightgreen text-green mr-4 mb-2 p-2"
+            onClick={() => getTax('75206')}
+          >
+            get Tax
+          </button>
         </div>
         <div className="popular-merchants-carousal mb-8">
           <h5 className="my-3 text-base">Popular Shops</h5>
@@ -51,12 +72,12 @@ const MerchantListing = () => {
         <div className="all-merchants mb-12">
           <h5 className="mt-3 text-base">All restaurants & services</h5>
           <div className="flex flex-col md:flex-row flex-wrap items-center md:items-start">
-            {allShops.map((shop, index) => (
-              <div className="merchant rounded-10 mt-4 mr-4" key={index}>
+            {merchantList.map((shop: any) => (
+              <div className="merchant rounded-10 mt-4 mr-4" key={shop.id}>
                 <div className="merchant-img w-full">
                   <img
                     className="w-full h-full object-cover"
-                    src={shop}
+                    src={img1}
                     alt=""
                   />
                 </div>
@@ -65,7 +86,7 @@ const MerchantListing = () => {
                     <div className="merchant-name-wrapper flex items-center justify-between">
                       <div>
                         <h6 className="text-xs font-bold mb-1">
-                          American Steak House
+                          {shop.dbaName}
                         </h6>
                       </div>
                       <p className="merchant-rating">4.6 (29)</p>
@@ -86,5 +107,14 @@ const MerchantListing = () => {
     </div>
   )
 }
+const mapState = (state: any) => ({
+  loading: state.merchantListReducer.loading,
+  merchantList: state.merchantListReducer.merchantList,
+})
 
-export default MerchantListing
+const mapDispatch = (dispatch: any) => ({
+  getMerChantList: () => dispatch(action.getMerChantList()),
+  getTax: (id: string) => dispatch(action.getTax(id)),
+})
+
+export default connect(mapState, mapDispatch)(MerchantListing)
