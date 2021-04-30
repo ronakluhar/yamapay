@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { CategoryWiseProducts, RecommendedProducts } from '.'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RecommendedProducts } from '.'
+import { getProductsList } from '../../redux/merchantList/action'
 import { Clock } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 import { Tags } from '../merchantList'
@@ -9,7 +11,18 @@ const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
   { id: 2, tabName: 'Takeaway' },
 ]
-const MerchantMenu = () => {
+const MerchantMenu = (props: any) => {
+  // console.log(props.location.state[0])
+  const dispatch = useDispatch()
+  // const history = useHistory()
+  useEffect(() => {
+    dispatch(getProductsList(props.location.state[0].id))
+  }, [dispatch])
+  const { productList } = useSelector((state: any) => ({
+    productList: state.merchantListReducer.productList,
+  }))
+  // console.log(productList)
+  // const MerchantMenu = () => {
   const [openTab, setOpenTab] = useState(1)
   return (
     <div className="merchant-menu bg-white p-0 my-0 relative max-w-6xl mx-auto">
@@ -25,7 +38,9 @@ const MerchantMenu = () => {
           <div className="flex mb-8">
             <div className="merchant-detail-wrapper px-5 flex-1">
               <div className="flex justify-between items-center">
-                <h1 className="merchant-name">Zamazam</h1>
+                <h1 className="merchant-name">
+                  {props.location.state[0].store_name}
+                </h1>
                 <p className="merchant-rating">4.5</p>
               </div>
               <div className="flex justify-between items-center">
@@ -50,11 +65,9 @@ const MerchantMenu = () => {
             <Tags />
           </div>
           <div className="mx-5">
-            <RecommendedProducts />
+            <RecommendedProducts productList={productList} />
           </div>
-          <div className="mx-5 mb-12">
-            <CategoryWiseProducts />
-          </div>
+          <div className="mx-5 mb-12">{/* <CategoryWiseProducts /> */}</div>
           <div className="mx-5 sticky bottom-7 flex justify-center">
             <Menu />
           </div>

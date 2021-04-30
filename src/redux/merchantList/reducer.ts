@@ -2,6 +2,8 @@ import * as actionTypes from './actionType'
 const reducer = (
   state = {
     merchantList: [],
+    shopsList: [],
+    productList: [],
     loading: false,
   },
   action: any,
@@ -22,6 +24,38 @@ const reducer = (
         ...state,
         loading: false,
         merchantList: [...action.payload.data.merchantAppViewDTOs],
+      }
+    case actionTypes.GET_SHOPS_LIST_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_SHOPS_LIST_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_SHOPS_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        shopsList: action.payload,
+      }
+    case actionTypes.GET_SHOP_PRODUCT_LIST_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_SHOP_PRODUCT_LIST_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_SHOP_PRODUCT_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        productList: action.payload,
       }
   }
   return state
