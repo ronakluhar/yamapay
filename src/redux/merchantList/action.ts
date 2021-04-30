@@ -5,7 +5,7 @@ export const getMerChantList = () => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_MERCHANT_LIST_PENDING })
 
   api
-    .get('/initialize')
+    .get('/store/view')
     .then((res) => {
       dispatch({ type: actionTypes.GET_MERCHANT_LIST_SUCCESS, payload: res })
     })

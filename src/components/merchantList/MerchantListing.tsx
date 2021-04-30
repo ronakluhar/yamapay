@@ -33,12 +33,12 @@ const MerchantListing = () => {
             src="https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png"
             alt="promo offer"
           />
-          <button
+          {/* <button
             className="tag bg-lightgreen text-green mr-4 mb-2 p-2"
             // onClick={() => getTax('75206')}
           >
             get Tax
-          </button>
+          </button> */}
         </div>
         <div className="popular-merchants-carousal mb-8">
           <h5 className="my-3 text-base">Popular Shops</h5>
