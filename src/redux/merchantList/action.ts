@@ -30,6 +30,22 @@ export const getShopsList = () => (dispatch: any) => {
     })
 }
 
+export const getCategoryList = (restaurantId: any) => (dispatch: any) => {
+  dispatch({ type: actionTypes.GET_CATEGORY_LIST_PENDING })
+  api
+    .post(`/store/category/products`, { storeId: restaurantId })
+    .then((res) => {
+      // console.log(res.data.payload)
+      dispatch({
+        type: actionTypes.GET_CATEGORY_LIST_SUCCESS,
+        payload: res.data.payload.data,
+      })
+    })
+    .catch((err: any) => {
+      dispatch({ type: actionTypes.GET_CATEGORY_LIST_ERROR, payload: err })
+    })
+}
+
 export const getProductsList = (restaurantId: any) => (dispatch: any) => {
   // console.log(restaurantId)
   dispatch({ type: actionTypes.GET_SHOP_PRODUCT_LIST_PENDING })

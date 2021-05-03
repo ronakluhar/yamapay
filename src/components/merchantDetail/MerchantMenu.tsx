@@ -6,22 +6,22 @@ import { Clock } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 import { Tags } from '../merchantList'
 import { Menu } from '../navigation'
-
+import CategoryWiseProducts from './CategoryWiseProducts'
 const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
   { id: 2, tabName: 'Takeaway' },
 ]
+
+// const [productList, setProducts] = useState(productList)
+
 const MerchantMenu = (props: any) => {
-  // console.log(props.location.state[0])
   const dispatch = useDispatch()
-  // const history = useHistory()
   useEffect(() => {
     dispatch(getProductsList(props.location.state[0].id))
   }, [dispatch])
   const { productList } = useSelector((state: any) => ({
     productList: state.merchantListReducer.productList,
   }))
-  // console.log(productList)
   // const MerchantMenu = () => {
   const [openTab, setOpenTab] = useState(1)
   return (
@@ -67,7 +67,9 @@ const MerchantMenu = (props: any) => {
           <div className="mx-5">
             <RecommendedProducts productList={productList} />
           </div>
-          <div className="mx-5 mb-12">{/* <CategoryWiseProducts /> */}</div>
+          <div className="mx-5 mb-12">
+            <CategoryWiseProducts storeId={props.location.state[0].id} />
+          </div>
           <div className="mx-5 sticky bottom-7 flex justify-center">
             <Menu />
           </div>

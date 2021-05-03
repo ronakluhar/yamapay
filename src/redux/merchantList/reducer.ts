@@ -4,6 +4,7 @@ const reducer = (
     merchantList: [],
     shopsList: [],
     productList: [],
+    categoryList: [],
     loading: false,
   },
   action: any,
@@ -56,6 +57,22 @@ const reducer = (
         ...state,
         loading: false,
         productList: action.payload,
+      }
+    case actionTypes.GET_CATEGORY_LIST_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_CATEGORY_LIST_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_CATEGORY_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        categoryList: action.payload,
       }
   }
   return state
