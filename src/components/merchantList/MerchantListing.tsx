@@ -81,6 +81,7 @@ const MerchantListing = () => {
                 <div className="merchant-img w-full">
                   <img
                     className="merchant-img mr-5"
+                    style={{ height: '200px', width: '335px' }}
                     src={value.logo_url ? IMG_URL + value.logo_url : img1}
                     alt=""
                   />

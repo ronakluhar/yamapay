@@ -54,6 +54,7 @@ const CategoryWiseProducts = (props: any) => {
                     <div>
                       <img
                         className="product-img"
+                        style={{ height: '130px', width: '130px' }}
                         src={
                           product.image_url
                             ? IMG_URL + product.image_url
@@ -68,6 +69,45 @@ const CategoryWiseProducts = (props: any) => {
                         <p className="product-desc text-gray">
                           {product.description}
                         </p>
+                        <span className="text-blue text-sm">
+                          USD {product.price}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex-1 flex justify-end pr-2">
+                      <Plus className="text-white w-6 h-6 bg-blue rounded-lg" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ))
+        : null}
+      {categoryList.addoncategory
+        ? categoryList.addoncategory.map((categories: any, index: any) => (
+            <>
+              <h5 className="text-base my-1.5">{categories.name}</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {categories?.addons?.map((product: any, index: any) => (
+                  <div
+                    className="flex items-center bg-white product"
+                    key={index}
+                  >
+                    <div>
+                      <img
+                        className="product-img"
+                        style={{ height: '130px', width: '130px' }}
+                        src={
+                          product.image_url
+                            ? IMG_URL + product.image_url
+                            : itemImg
+                        }
+                        alt=""
+                      />
+                    </div>
+                    <div className="flex justify-between items-center pr-2 pl-5">
+                      <div>
+                        <h6 className="product-name">{product.addon_name}</h6>
                         <span className="text-blue text-sm">
                           USD {product.price}
                         </span>

@@ -35,7 +35,6 @@ export const getCategoryList = (restaurantId: any) => (dispatch: any) => {
   api
     .post(`/store/category/products`, { storeId: restaurantId })
     .then((res) => {
-      // console.log(res.data.payload)
       dispatch({
         type: actionTypes.GET_CATEGORY_LIST_SUCCESS,
         payload: res.data.payload.data,
