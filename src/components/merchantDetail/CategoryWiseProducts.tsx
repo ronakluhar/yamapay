@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import itemImg from '../../images/item1.webp'
 import { getCategoryList } from '../../redux/merchantList/action'
-import * as actionTypes from '../../redux/merchantList/actionType'
-import api from '../../utils/API'
+// import * as actionTypes from '../../redux/merchantList/actionType'
+// import api from '../../utils/API'
 import { Plus } from '../common/icons'
 const IMG_URL = 'http://127.0.0.1:8000/'
 
@@ -15,7 +15,7 @@ const CategoryWiseProducts = (props: any) => {
     price: '',
   })
   const history = useHistory()
-  const storeId = props.store.id
+  // const storeId = props.store.id
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getCategoryList(props.store.id))
@@ -23,38 +23,38 @@ const CategoryWiseProducts = (props: any) => {
   const { categoryList } = useSelector((state: any) => ({
     categoryList: state.merchantListReducer.categoryList,
   }))
-  const setLocalstorage = (res: any, product: any) => {
-    const response = res.data.payload.data
-    if (response.length === 0) {
-      // console.log('in []')
-      let a: any = []
-      a = JSON.parse(localStorage.getItem('Products') || '[]')
-      const product1 = {
-        product_name: selectedproduct.name,
-        price: selectedproduct.price,
-        total_price: selectedproduct.price,
-        quantity: 1,
-      }
-      a.push(product1)
-      localStorage.setItem('Products', JSON.stringify(a))
-    } else {
-      history.push('/customize-order', [product])
-    }
-  }
-  function getAddon(product: any, storeId: any) {
-    setSelectedproduct(product)
-    api
-      .post(`/store/product/checkaddon`, {
-        store_id: storeId,
-        product_id: product.id,
-      })
-      .then((res) => {
-        setLocalstorage(res, product)
-      })
-      .catch((err: any) => {
-        dispatch({ type: actionTypes.GET_ADDON_LIST_ERROR, payload: err })
-      })
-  }
+  // const setLocalstorage = (res: any, product: any) => {
+  //   const response = res.data.payload.data
+  //   if (response.length === 0) {
+  //     // console.log('in []')
+  //     let a: any = []
+  //     a = JSON.parse(localStorage.getItem('Products') || '[]')
+  //     const product1 = {
+  //       product_name: selectedproduct.name,
+  //       price: selectedproduct.price,
+  //       total_price: selectedproduct.price,
+  //       quantity: 1,
+  //     }
+  //     a.push(product1)
+  //     localStorage.setItem('Products', JSON.stringify(a))
+  //   } else {
+  //     history.push('/customize-order', [product])
+  //   }
+  // }
+  // function getAddon(product: any, storeId: any) {
+  //   setSelectedproduct(product)
+  //   api
+  //     .post(`/store/product/checkaddon`, {
+  //       store_id: storeId,
+  //       product_id: product.id,
+  //     })
+  //     .then((res) => {
+  //       setLocalstorage(res, product)
+  //     })
+  //     .catch((err: any) => {
+  //       dispatch({ type: actionTypes.GET_ADDON_LIST_ERROR, payload: err })
+  //     })
+  // }
 
   return (
     <div className="product-category">
@@ -96,10 +96,10 @@ const CategoryWiseProducts = (props: any) => {
                     </div>
                     <div
                       className="flex-1 flex justify-end pr-2"
-                      onClick={() => getAddon(product, storeId)}
-                      // onClick={() =>
-                      //   history.push('/customize-order', [product])
-                      // }
+                      // onClick={() => getAddon(product, storeId)}
+                      onClick={() =>
+                        history.push('/customize-order', [product])
+                      }
                     >
                       <Plus className="text-white w-6 h-6 bg-blue rounded-lg" />
                     </div>

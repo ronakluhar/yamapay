@@ -36,13 +36,11 @@ const tabOptions = [
 // ]
 
 let demoProducts: any = []
-demoProducts = localStorage.getItem('Products')
+demoProducts = localStorage.getItem('Products') || []
+demoProducts = JSON.parse(demoProducts)
 const Cart = () => {
   const [cart, setCart] = useState({})
   const [products, setProducts] = useState(demoProducts)
-  console.log('products')
-  console.log(products)
-  console.log('products')
   const [openTab, setOpenTab] = useState(1)
   const [personalInfo, setPersonalInfo] = useState({})
   const [tip, setTip] = useState({})
@@ -56,6 +54,7 @@ const Cart = () => {
         : null,
     ),
   )
+  console.log(subtotal)
   const updateSubTotal = async () => {
     const subTotal = sum(
       products.map((product: any) => {
