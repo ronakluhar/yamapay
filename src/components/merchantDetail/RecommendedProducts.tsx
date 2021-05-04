@@ -1,6 +1,6 @@
 // import { useState } from 'react'
 import productImg from '../../images/hotel1.jpg'
-import { Minus, Plus } from '../common/icons'
+// import { Minus, Plus } from '../common/icons'
 const IMG_URL = 'http://127.0.0.1:8000/'
 
 // const demoProducts = [
@@ -34,11 +34,10 @@ const IMG_URL = 'http://127.0.0.1:8000/'
 //   },
 // ]
 const RecommendedProducts = (props: any) => {
-  // console.log(props.productList)
-  // const [products, setProducts] = useState(demoProducts)
+  // const [products, setProducts] = useState(props.productList)
   // const manageQuantity = (index: number, action: string) => {
-  //   setProducts((product) =>
-  //     product.map((el, i) =>
+  //   setProducts((product: any) =>
+  //     product.map((el: any, i: any) =>
   //       i === index
   //         ? {
   //             ...el,
@@ -86,27 +85,7 @@ const RecommendedProducts = (props: any) => {
                     USD {product.price}
                   </span>
                 </div>
-                <div className="product-quantity flex items-center">
-                  {/* {productQuantity !== 0 && ( */}
-                  <>
-                    <div
-                      className="decrease-quantity w-3 h-3 leading-none border border-lightgray flex justify-center items-center cursor-pointer"
-                      // onClick={() => manageQuantity(index, 'decrement')}
-                    >
-                      <Minus className="h-4 w-4 text-lightgray" />
-                    </div>
-                    <span className="text-xs text-black1 mx-1">
-                      {product.quantity}
-                    </span>
-                    <div
-                      className="increase-quantity w-3 h-3 leading-none bg-blue text-white flex justify-center items-center cursor-pointer"
-                      // onClick={() => manageQuantity(index, 'increment')}
-                    >
-                      <Plus className="h-4 w-4 text-white" />
-                    </div>
-                  </>
-                  {/* )} */}
-                </div>
+                <div className="product-quantity flex items-center"></div>
               </div>
             </div>
           ))

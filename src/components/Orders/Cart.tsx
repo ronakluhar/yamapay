@@ -8,58 +8,65 @@ const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
   { id: 2, tabName: 'Takeaway' },
 ]
-const demoProducts = [
-  {
-    product_name: 'Burger Meal',
-    price: 20,
-    total_price: 20,
-    quantity: 1,
-  },
-  {
-    product_name: 'Burger Meal',
-    price: 20,
-    total_price: 40,
-    quantity: 2,
-  },
-  {
-    product_name: 'Burger Meal',
-    price: 20,
-    total_price: 60,
-    quantity: 3,
-  },
-  {
-    product_name: 'Burger Meal',
-    price: 20,
-    total_price: 80,
-    quantity: 4,
-  },
-]
+// const demoProducts = [
+//   {
+//     product_name: 'Burger Meal',
+//     price: 20,
+//     total_price: 20,
+//     quantity: 1,
+//   },
+//   {
+//     product_name: 'Burger Meal',
+//     price: 20,
+//     total_price: 40,
+//     quantity: 2,
+//   },
+//   {
+//     product_name: 'Burger Meal',
+//     price: 20,
+//     total_price: 60,
+//     quantity: 3,
+//   },
+//   {
+//     product_name: 'Burger Meal',
+//     price: 20,
+//     total_price: 80,
+//     quantity: 4,
+//   },
+// ]
 
+let demoProducts: any = []
+demoProducts = localStorage.getItem('Products')
 const Cart = () => {
   const [cart, setCart] = useState({})
   const [products, setProducts] = useState(demoProducts)
+  console.log('products')
+  console.log(products)
+  console.log('products')
   const [openTab, setOpenTab] = useState(1)
   const [personalInfo, setPersonalInfo] = useState({})
   const [tip, setTip] = useState({})
   const [customtip, setCustomtip] = useState(Number)
   const [subtotal, setSubtotal] = useState(
     sum(
-      products.map((product) => {
-        return product.total_price
-      }),
+      products
+        ? products.map((product: any) => {
+            return product.total_price
+          })
+        : null,
     ),
   )
   const updateSubTotal = async () => {
     const subTotal = sum(
-      products.map((product) => {
+      products.map((product: any) => {
         return product.total_price
       }),
     )
     setSubtotal(subTotal)
   }
   const manageQuantity = (index: number, action: string) => {
-    setProducts((product) =>
-      product.map((el, i) =>
+    setProducts((product: any) =>
+      product.map((el: any, i: any) =>
         i === index
           ? {
               ...el,
@@ -72,8 +79,8 @@ const Cart = () => {
           : el,
       ),
     )
-    setProducts((product) =>
-      product.map((el, i) =>
+    setProducts((product: any) =>
+      product.map((el: any, i: any) =>
         i === index
           ? {
               ...el,
@@ -113,7 +120,7 @@ const Cart = () => {
           <div className="py-5">
             <h3 className="text-sm font-bold">Items in Cart</h3>
             <div className="px-4 bg-white mt-2.5 cart-items">
-              {products.map((product, index) => (
+              {products.map((product: any, index: any) => (
                 <div
                   className="border-b last:border-0 border-border border-dashed py-8"
                   key={index}

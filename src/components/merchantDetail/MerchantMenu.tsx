@@ -15,9 +15,11 @@ const tabOptions = [
 // const [productList, setProducts] = useState(productList)
 
 const MerchantMenu = (props: any) => {
+  const shop = props.location.state[0]
   const dispatch = useDispatch()
+  // console.log(shop)
   useEffect(() => {
-    dispatch(getProductsList(props.location.state[0].id))
+    dispatch(getProductsList(shop.id))
   }, [dispatch])
   const { productList } = useSelector((state: any) => ({
     productList: state.merchantListReducer.productList,
@@ -38,9 +40,7 @@ const MerchantMenu = (props: any) => {
           <div className="flex mb-8">
             <div className="merchant-detail-wrapper px-5 flex-1">
               <div className="flex justify-between items-center">
-                <h1 className="merchant-name">
-                  {props.location.state[0].store_name}
-                </h1>
+                <h1 className="merchant-name">{shop.store_name}</h1>
                 <p className="merchant-rating">4.5</p>
               </div>
               <div className="flex justify-between items-center">
@@ -68,7 +68,7 @@ const MerchantMenu = (props: any) => {
             <RecommendedProducts productList={productList} />
           </div>
           <div className="mx-5 mb-12">
-            <CategoryWiseProducts storeId={props.location.state[0].id} />
+            <CategoryWiseProducts store={shop} />
           </div>
           <div className="mx-5 sticky bottom-7 flex justify-center">
             <Menu />

@@ -62,6 +62,26 @@ export const getProductsList = (restaurantId: any) => (dispatch: any) => {
     })
 }
 
+export const getAddonList = (restaurantId: any, productId: any) => (
+  dispatch: any,
+) => {
+  dispatch({ type: actionTypes.GET_ADDON_LIST_PENDING })
+  api
+    .post(`/store/product/checkaddon`, {
+      store_id: restaurantId,
+      product_id: productId,
+    })
+    .then((res) => {
+      dispatch({
+        type: actionTypes.GET_ADDON_LIST_SUCCESS,
+        payload: res.data.payload.data,
+      })
+    })
+    .catch((err: any) => {
+      dispatch({ type: actionTypes.GET_ADDON_LIST_ERROR, payload: err })
+    })
+}
+
 export const getTax = (textId: string) => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_TAX_PENDING })
   api

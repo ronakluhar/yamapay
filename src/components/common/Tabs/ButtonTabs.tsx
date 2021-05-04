@@ -5,8 +5,14 @@ type ButtonTabProps = {
   }[]
   openTab: Number
   setOpenTab: Function
+  setLocalStorage?: Function
 }
-const ButtonTabs = ({ tabs, openTab, setOpenTab }: ButtonTabProps) => {
+const ButtonTabs = ({
+  tabs,
+  openTab,
+  setOpenTab,
+  setLocalStorage,
+}: ButtonTabProps) => {
   return (
     <div className="flex rounded-2xl mb-8 tabs">
       {tabs.map((tab) => (
@@ -21,6 +27,7 @@ const ButtonTabs = ({ tabs, openTab, setOpenTab }: ButtonTabProps) => {
           onClick={(e) => {
             e.preventDefault()
             setOpenTab(tab.id)
+            setLocalStorage && setLocalStorage()
           }}
           data-toggle="tab"
           role="tab"

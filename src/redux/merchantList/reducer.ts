@@ -5,6 +5,7 @@ const reducer = (
     shopsList: [],
     productList: [],
     categoryList: [],
+    addonList: [],
     loading: false,
   },
   action: any,
@@ -73,6 +74,22 @@ const reducer = (
         ...state,
         loading: false,
         categoryList: action.payload,
+      }
+    case actionTypes.GET_ADDON_LIST_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_ADDON_LIST_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_ADDON_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        addonList: action.payload,
       }
   }
   return state
