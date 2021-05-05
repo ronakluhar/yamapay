@@ -1,6 +1,10 @@
-import { find, sum } from 'lodash'
-import { useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { filter, find, findIndex, sum } from 'lodash'
+import { Fragment, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
 import { OrderSummary, PersonalDetails, Tips } from '.'
+import { placeOrder } from '../../redux/merchantList/action'
 import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
@@ -36,14 +40,24 @@ const tabOptions = [
 // ]
 
 let demoProducts: any = []
-demoProducts = localStorage.getItem('Products') || []
-demoProducts = JSON.parse(demoProducts)
+demoProducts = localStorage.getItem('CartProducts')
+demoProducts = demoProducts ? JSON.parse(demoProducts) : []
 const Cart = () => {
   const [cart, setCart] = useState({})
+  // const [personalDetails, setPersonalDetails] = useState({
+  //   name: '',
+  //   phone: '',
+  //   comment: '',
+  //   selected_table: '',
+  // })
   const [products, setProducts] = useState(demoProducts)
   const [openTab, setOpenTab] = useState(1)
   const [personalInfo, setPersonalInfo] = useState({})
-  const [tip, setTip] = useState({})
+  const [ShowDeleteModal, setShowDeleteModal] = useState(false)
+  // console.log(ShowAddonModal)
+  // console.log('personalInfo', personalInfo)
+  const [tip, setTip] = useState({ tip_value: 0 })
+  // console.log('tip', tip)
   const [customtip, setCustomtip] = useState(Number)
   const [subtotal, setSubtotal] = useState(
     sum(
@@ -54,17 +68,40 @@ const Cart = () => {
         : null,
     ),
   )
-  console.log(subtotal)
-  const updateSubTotal = async () => {
+
+  useEffect(() => {
+    localStorage.setItem('subTotal', subtotal.toString())
+  }, [])
+  const updateSubTotal = () => {
     const subTotal = sum(
       products.map((product: any) => {
+        let a: any = []
+        a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+        // console.log(a)
+        const product1 = {
+          productId: product.productId,
+          addonId: product.addonId,
+          addonName: product.addonName,
+          addonPrice: product.addonPrice,
+          product_name: product.product_name,
+          price: product.price,
+          total_price: product.total_price,
+          // total_price: price,
+          quantity: product.quantity,
+        }
+        const existingProduct = filter(a, function (o: any) {
+          return o.productId !== product.productId
+        })
+        existingProduct.splice(existingProduct.length, 0, product1)
+        localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
         return product.total_price
       }),
     )
+    localStorage.setItem('subTotal', subTotal.toString())
     setSubtotal(subTotal)
   }
-  const manageQuantity = (index: number, action: string) => {
-    setProducts((product: any) =>
+  const manageQuantity = async (index: number, action: string) => {
+    await setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
           ? {
@@ -78,7 +115,7 @@ const Cart = () => {
           : el,
       ),
     )
-    setProducts((product: any) =>
+    await setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
           ? {
@@ -90,6 +127,7 @@ const Cart = () => {
     )
     updateSubTotal()
   }
+  const dispatch = useDispatch()
   const setCartDetails = () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
     setCart({
@@ -101,9 +139,31 @@ const Cart = () => {
       service_fee: 0,
       tax: 0,
     })
-    console.log(cart)
+    dispatch(placeOrder(cart))
+    // console.log(cart)
   }
 
+  const history = useHistory()
+  const editProduct = (product: any) => {
+    history.push('customize-order', product)
+  }
+  const deleteProduct = (product: any) => {
+    // setShowDeleteModal(true)
+    let a: any = []
+    a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+    const existingProduct = findIndex(a, function (o: any) {
+      return o.productId === product.productId
+    })
+    a.splice(existingProduct, 1)
+    console.log('existingProduct', existingProduct)
+    localStorage.setItem('CartProducts', JSON.stringify(a))
+    setProducts(a)
+  }
+  const deleteProductFromCart = (product: any) => {
+    setShowDeleteModal(true)
+    deleteProduct(product)
+    setShowDeleteModal(false)
+  }
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
@@ -125,10 +185,23 @@ const Cart = () => {
                   key={index}
                 >
                   <div className="py-2 flex justify-between items-center">
-                    <h4 className="text-base">{product.product_name}</h4>
+                    <h4 className="text-base">
+                      {product.product_name} <b>{' $ ' + product.price}</b>
+                      <br />
+                      {product.addonName ? (
+                        <span className="text-base">
+                          {product.addonName}{' '}
+                          <b>{'  $' + product.addonPrice}</b>
+                        </span>
+                      ) : null}
+                    </h4>
                     <div className="flex">
-                      <Pencil className="h-4 w-4 mr-2.5" />
-                      <Trash className="h-4 w-4 text-red" />
+                      <span onClick={() => editProduct(product)}>
+                        <Pencil className="h-4 w-4 mr-2.5" />
+                      </span>
+                      <span onClick={() => deleteProductFromCart(product)}>
+                        <Trash className="h-4 w-4 text-red" />
+                      </span>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
@@ -170,6 +243,7 @@ const Cart = () => {
               setTip={setTip}
               customtip={customtip}
               setCustomtip={setCustomtip}
+              setSubtotal={setSubtotal}
             />
             <PersonalDetails setPersonalInfo={setPersonalInfo} />
             <OrderSummary subtotal={subtotal} />
@@ -197,6 +271,82 @@ const Cart = () => {
           </button>
         </div>
       </div>
+      {ShowDeleteModal ? (
+        <Transition.Root show={ShowDeleteModal} as={Fragment}>
+          <Dialog
+            as="div"
+            static
+            className="fixed z-10 inset-0 overflow-y-auto"
+            // initialFocus={cancelButtonRef}
+            open={ShowDeleteModal}
+            onClose={setShowDeleteModal}
+          >
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+              </Transition.Child>
+              <span
+                className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"></div>
+                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg leading-6 font-medium text-gray-900"
+                        >
+                          Addon
+                        </Dialog.Title>
+                        <div className="mt-2">
+                          <div className="flex flex-wrap"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      onClick={() => deleteProduct('123')}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      onClick={() => setShowDeleteModal(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition.Root>
+      ) : null}
     </div>
   )
 }

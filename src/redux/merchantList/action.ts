@@ -82,6 +82,21 @@ export const getAddonList = (restaurantId: any, productId: any) => (
     })
 }
 
+export const placeOrder = (cartDetails: any) => (dispatch: any) => {
+  dispatch({ type: actionTypes.PLACE_ORDER_PENDING })
+  api
+    .post(`/web/store/create/order`, cartDetails)
+    .then((res) => {
+      dispatch({
+        type: actionTypes.PLACE_ORDER_SUCCESS,
+        payload: res.data.payload.data,
+      })
+    })
+    .catch((err: any) => {
+      dispatch({ type: actionTypes.PLACE_ORDER_ERROR, payload: err })
+    })
+}
+
 export const getTax = (textId: string) => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_TAX_PENDING })
   api

@@ -20,6 +20,10 @@ const MerchantListing = () => {
   const { shopsList } = useSelector((state: any) => ({
     shopsList: state.merchantListReducer.shopsList,
   }))
+  const getProduct = (shop: any) => {
+    localStorage.setItem('shop', JSON.stringify(shop))
+    history.push('restaurant', shop)
+  }
   return (
     <div className="m-4 max-w-6xl lg:mx-auto">
       <Navigation />
@@ -76,7 +80,7 @@ const MerchantListing = () => {
               <div
                 className="merchant rounded-10 mt-4 mr-4"
                 key={index}
-                onClick={() => history.push('restaurant', [value])}
+                onClick={() => getProduct(value)}
               >
                 <div className="merchant-img w-full">
                   <img

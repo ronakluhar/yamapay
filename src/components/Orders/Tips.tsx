@@ -1,4 +1,5 @@
 import { Form, Formik } from 'formik'
+// import { parse } from 'postcss'
 import { useState } from 'react'
 import { Input } from '../common/Form'
 
@@ -7,6 +8,7 @@ type TipsProps = {
   setTip: Function
   customtip: Number
   setCustomtip: Function
+  setSubtotal: Function
 }
 const tipOptions = [
   {
@@ -30,7 +32,13 @@ const tipOptions = [
     value: 50.68,
   },
 ]
-const Tips = ({ tip, setTip, customtip, setCustomtip }: TipsProps) => {
+const Tips = ({
+  tip,
+  setTip,
+  customtip,
+  setCustomtip,
+  setSubtotal,
+}: TipsProps) => {
   const [activeTab, setActiveTab] = useState(-1)
   return (
     <div className="mb-5">
@@ -52,6 +60,11 @@ const Tips = ({ tip, setTip, customtip, setCustomtip }: TipsProps) => {
                     tip_percentage: tipOption.percentage,
                     tip_value: tipOption.value,
                   })
+                  setSubtotal(
+                    (prev: any) =>
+                      parseInt(localStorage.getItem('subTotal') || '0') +
+                      tipOption.value,
+                  )
                   setCustomtip('')
                 }}
               >

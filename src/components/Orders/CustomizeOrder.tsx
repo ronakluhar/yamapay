@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import itemImg from '../../images/item1.webp'
 import { Radio } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
-import { useHistory } from 'react-router'
+// import { useHistory } from 'react-router'
 import { ButtonTabs } from '../common/Tabs'
 import { getAddonList } from '../../redux/merchantList/action'
+import { filter } from 'lodash'
 const IMG_URL = 'http://127.0.0.1:8000/'
 
 const tabOptions = [
@@ -14,35 +15,57 @@ const tabOptions = [
   { id: 2, tabName: 'Save change' },
 ]
 const CustomizeOrder = (props: any) => {
+  let shop: any = []
+  shop = JSON.parse(localStorage.getItem('shop') || '[]')
+  let productId: any = 0
+  let storeId: any = 0
+  storeId = shop.id
+  productId = props.location.state.productId
+
+  if (props.location.state[0]) {
+    productId = props.location.state[0].id
+  }
   const setLocalStorage = (addon: any, product: any) => {
+    // console.log(product.id)
+    // if (openTab === 1) {
+    //   console.log(openTab)
+    // } else {
+    //   console.log(openTab)
+    // }
     const str = addon
     const array = str.split(',')
     let a: any = []
-    a = JSON.parse(localStorage.getItem('Products') || '[]')
+    a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const product1 = {
-      addonName: array[0],
-      addonPrice: array[1],
-      product_name: product.name,
-      price: product.price,
-      total_price: product.price * product.quantity,
-      quantity: product.quantity,
+      productId: productId,
+      addonId: array[2] || '',
+      addonName: array[0] || '',
+      addonPrice: parseInt(array[1]) || '',
+      product_name: product.name || props.location.state.product_name,
+      price: product.price || props.location.state.price,
+      total_price:
+        price + (parseInt(array[1]) || 0) || props.location.state.total_price,
+      // total_price: price,
+      quantity: product.quantity || props.location.state.quantity,
     }
-    a.push(product1)
-    localStorage.setItem('Products', JSON.stringify(a))
+    const existingProduct = filter(a, function (o: any) {
+      return o.productId !== productId
+    })
+    existingProduct.splice(existingProduct.length, 0, product1)
+    localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
   }
 
-  const history = useHistory()
+  // const history = useHistory()
   let customizeProduct = []
-  customizeProduct = props.location.state[0]
-  customizeProduct = { ...customizeProduct, quantity: 1 }
+  customizeProduct = props.location.state[0] || props.location.state
+  customizeProduct = {
+    ...customizeProduct,
+    quantity: props.location.state.quantity ? props.location.state.quantity : 1,
+  }
+
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(
-      getAddonList(
-        props.location.state[0].store_id,
-        props.location.state[0].id,
-      ),
-    )
+    dispatch(getAddonList(storeId, productId))
   }, [dispatch])
   const { addonList } = useSelector((state: any) => ({
     addonList: state.merchantListReducer.addonList,
@@ -51,13 +74,7 @@ const CustomizeOrder = (props: any) => {
   const [addon, setAddon] = useState('')
   const [product, setProduct] = useState(customizeProduct)
   const [openTab, setOpenTab] = useState(2)
-  if (openTab === 1) {
-    history.goBack()
-  }
   const price = product.price * product.quantity
-  // const formik = useFormik({
-  //   initialValues:
-  // })
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
       <div className="mx-auto max-w-xl">
@@ -74,7 +91,9 @@ const CustomizeOrder = (props: any) => {
               />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold">{product.name}</h3>
+              <h3 className="text-lg font-bold">
+                {product.name || product.product_name}
+              </h3>
               <p className="text-xs">${price}</p>
             </div>
             <div className="flex items-center justify-around order-item-quantity">
@@ -122,7 +141,13 @@ const CustomizeOrder = (props: any) => {
                             <Radio
                               name="addon"
                               label={data.addon_name}
-                              value={data.addon_name + ',' + data.price}
+                              value={
+                                data.addon_name +
+                                ',' +
+                                data.price +
+                                ',' +
+                                data.id
+                              }
                               onChange={(e: any) => setAddon(e.target.value)}
                             />
                             <p className="text-right py-2" key={index}>

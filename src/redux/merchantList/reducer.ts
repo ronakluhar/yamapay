@@ -6,6 +6,7 @@ const reducer = (
     productList: [],
     categoryList: [],
     addonList: [],
+    orderDetails: [],
     loading: false,
   },
   action: any,
@@ -90,6 +91,22 @@ const reducer = (
         ...state,
         loading: false,
         addonList: action.payload,
+      }
+    case actionTypes.PLACE_ORDER_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.PLACE_ORDER_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.PLACE_ORDER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        orderDetails: action.payload,
       }
   }
   return state

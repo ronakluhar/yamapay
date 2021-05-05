@@ -15,7 +15,8 @@ const tabOptions = [
 // const [productList, setProducts] = useState(productList)
 
 const MerchantMenu = (props: any) => {
-  const shop = props.location.state[0]
+  let shop: any = []
+  shop = JSON.parse(localStorage.getItem('shop') || '[]')
   const dispatch = useDispatch()
   // console.log(shop)
   useEffect(() => {
