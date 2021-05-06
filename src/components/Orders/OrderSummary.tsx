@@ -1,8 +1,8 @@
 type OrderSummaryProps = {
   subtotal: Number
+  Tax: Number
 }
-
-const OrderSummary = ({ subtotal }: OrderSummaryProps) => {
+const OrderSummary = ({ subtotal, Tax }: OrderSummaryProps) => {
   return (
     <div>
       <h3 className="text-sm font-bold mb-2.5">Order Summary</h3>
@@ -17,7 +17,7 @@ const OrderSummary = ({ subtotal }: OrderSummaryProps) => {
         </div>
         <div className="flex justify-between items-center pt-5 pb-3.5">
           <p>Tax(%)</p>
-          <p>0.0</p>
+          <p>{Tax || 0.0}</p>
         </div>
       </div>
     </div>

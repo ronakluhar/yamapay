@@ -1,10 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { filter, find, findIndex, sum } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { OrderSummary, PersonalDetails, Tips } from '.'
-import { placeOrder } from '../../redux/merchantList/action'
+import { getTax, placeOrder } from '../../redux/merchantList/action'
 import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
@@ -38,26 +38,35 @@ const tabOptions = [
 //     quantity: 4,
 //   },
 // ]
-
-let demoProducts: any = []
-demoProducts = localStorage.getItem('CartProducts')
-demoProducts = demoProducts ? JSON.parse(demoProducts) : []
+const style = { border: '2px solid red', borderRadius: '2%' }
+console.log(style)
 const Cart = () => {
-  const [cart, setCart] = useState({})
-  // const [personalDetails, setPersonalDetails] = useState({
-  //   name: '',
-  //   phone: '',
-  //   comment: '',
-  //   selected_table: '',
-  // })
+  const zipcode: any = '75206'
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getTax(zipcode))
+  }, [dispatch])
+  const { taxDetails } = useSelector((state: any) => ({
+    taxDetails: state.merchantListReducer.taxDetails,
+  }))
+  let demoProducts: any = []
+  demoProducts = localStorage.getItem('CartProducts')
+  demoProducts = demoProducts ? JSON.parse(demoProducts) : []
+  useEffect(() => {
+    localStorage.setItem('subTotal', subtotal.toString())
+  }, [])
   const [products, setProducts] = useState(demoProducts)
+  const [selectedProduct, setSelectedProduct] = useState({ product_name: '' })
+  const [cart, setCart] = useState({})
   const [openTab, setOpenTab] = useState(1)
-  const [personalInfo, setPersonalInfo] = useState({})
+  const [personalInfo, setPersonalInfo] = useState({
+    name: '',
+    phone: '',
+    comment: '',
+    selected_table: '',
+  })
   const [ShowDeleteModal, setShowDeleteModal] = useState(false)
-  // console.log(ShowAddonModal)
-  // console.log('personalInfo', personalInfo)
   const [tip, setTip] = useState({ tip_value: 0 })
-  // console.log('tip', tip)
   const [customtip, setCustomtip] = useState(Number)
   const [subtotal, setSubtotal] = useState(
     sum(
@@ -68,17 +77,41 @@ const Cart = () => {
         : null,
     ),
   )
+  const tipOptions = [
+    {
+      percentage: '10%',
+      value: (parseInt(localStorage.getItem('subTotal') || '0') * 10) / 100,
+    },
+    {
+      percentage: '20%',
+      value: (parseInt(localStorage.getItem('subTotal') || '0') * 20) / 100,
+    },
+    {
+      percentage: '25%',
+      value: (parseInt(localStorage.getItem('subTotal') || '0') * 25) / 100,
+    },
+    {
+      percentage: '30%',
+      value: (parseInt(localStorage.getItem('subTotal') || '0') * 30) / 100,
+    },
+    {
+      percentage: '35%',
+      value: (parseInt(localStorage.getItem('subTotal') || '0') * 35) / 100,
+    },
+  ]
 
-  useEffect(() => {
-    localStorage.setItem('subTotal', subtotal.toString())
-  }, [])
   const updateSubTotal = () => {
     const subTotal = sum(
       products.map((product: any) => {
         let a: any = []
         a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-        // console.log(a)
         const product1 = {
+          _id: 1620034398738,
+          storeId: '1',
+          itemId: product.productId,
+          count: product.quantity || product.quantity,
+          addon: product.addonId,
+          extra: null,
           productId: product.productId,
           addonId: product.addonId,
           addonName: product.addonName,
@@ -100,7 +133,23 @@ const Cart = () => {
     localStorage.setItem('subTotal', subTotal.toString())
     setSubtotal(subTotal)
   }
+
   const manageQuantity = async (index: number, action: string) => {
+    // const newProduct = products.map((el: any, i: any) => {
+    // products.map((el: any, i: any) =>
+    // return i === index
+    //   ? {
+    //       ...el,
+    //       quantity:
+    //         el.quantity +
+    //         parseInt(
+    //           `${action === 'increment' ? 1 : el.quantity > 1 ? -1 : 0}`,
+    //         ),
+    //     }
+    //   : el
+    // ),
+    // })
+    // setProducts(newProduct)
     await setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
@@ -127,20 +176,34 @@ const Cart = () => {
     )
     updateSubTotal()
   }
-  const dispatch = useDispatch()
   const setCartDetails = () => {
-    const eatingMethod = find(tabOptions, { id: openTab })?.tabName
-    setCart({
-      eating_method: eatingMethod,
-      order_items: products,
-      personalInfo: personalInfo,
-      tip: tip,
-      subtotal: subtotal,
-      service_fee: 0,
-      tax: 0,
-    })
-    dispatch(placeOrder(cart))
-    // console.log(cart)
+    let isValidate = 0
+    if (!personalInfo.name) {
+      console.log('here')
+      isValidate = 0
+    }
+    if (isValidate) {
+      const eatingMethod = find(tabOptions, { id: openTab })?.tabName
+      setCart({
+        store_id: localStorage.getItem('store_id') || 1,
+        table_no: null,
+        customer_name: personalInfo.name || '',
+        customer_phone: personalInfo.phone || '',
+        comments: personalInfo.comment || '',
+        total: subtotal,
+        cart: products,
+        store_charge: 0,
+        tax: parseFloat(taxDetails.stateRate),
+        sub_total: subtotal,
+        // tip: parseFloat(tip.tip_value.toString()),
+        // service_fee: 0,
+        // eating_method: eatingMethod,
+      })
+      console.log('eatingMethod', eatingMethod)
+    }
+    console.log('cart', cart)
+    console.log('placeOrder', placeOrder)
+    // dispatch(placeOrder(cart))
   }
 
   const history = useHistory()
@@ -149,21 +212,24 @@ const Cart = () => {
   }
   const deleteProduct = (product: any) => {
     // setShowDeleteModal(true)
+    setSelectedProduct(product)
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const existingProduct = findIndex(a, function (o: any) {
       return o.productId === product.productId
     })
     a.splice(existingProduct, 1)
-    console.log('existingProduct', existingProduct)
+    // console.log('existingProduct', existingProduct)
+    // console.log('selected', selectedProduct)
     localStorage.setItem('CartProducts', JSON.stringify(a))
     setProducts(a)
   }
-  const deleteProductFromCart = (product: any) => {
-    setShowDeleteModal(true)
-    deleteProduct(product)
-    setShowDeleteModal(false)
-  }
+  // const deleteProductFromCart = (product: any) => {
+  //   setShowDeleteModal(true)
+  //   // deleteProduct(product)
+  //   // setShowDeleteModal(false)
+  // }
+  // console.log(deleteProductFromCart)
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
@@ -199,7 +265,7 @@ const Cart = () => {
                       <span onClick={() => editProduct(product)}>
                         <Pencil className="h-4 w-4 mr-2.5" />
                       </span>
-                      <span onClick={() => deleteProductFromCart(product)}>
+                      <span onClick={() => deleteProduct(product)}>
                         <Trash className="h-4 w-4 text-red" />
                       </span>
                     </div>
@@ -240,13 +306,14 @@ const Cart = () => {
             </div>
             <Tips
               tip={tip}
+              tipOptions={tipOptions}
               setTip={setTip}
               customtip={customtip}
               setCustomtip={setCustomtip}
               setSubtotal={setSubtotal}
             />
             <PersonalDetails setPersonalInfo={setPersonalInfo} />
-            <OrderSummary subtotal={subtotal} />
+            <OrderSummary subtotal={subtotal} Tax={taxDetails.stateRate} />
           </div>
         </div>
         <div className="md:px-5">
@@ -317,10 +384,12 @@ const Cart = () => {
                           as="h3"
                           className="text-lg leading-6 font-medium text-gray-900"
                         >
-                          Addon
+                          Delete Product
                         </Dialog.Title>
                         <div className="mt-2">
-                          <div className="flex flex-wrap"></div>
+                          <div className="flex flex-wrap">
+                            {selectedProduct.product_name}
+                          </div>
                         </div>
                       </div>
                     </div>

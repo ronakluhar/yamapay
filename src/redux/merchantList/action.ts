@@ -97,14 +97,21 @@ export const placeOrder = (cartDetails: any) => (dispatch: any) => {
     })
 }
 
-export const getTax = (textId: string) => (dispatch: any) => {
+export const getTax = (zipcode: string) => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_TAX_PENDING })
   api
-    .get(`/tax/${textId}`)
+    .get(`http://gateway.yamapay.com/reporting/mobile/tax/${zipcode}`)
     .then((res) => {
-      dispatch({ type: actionTypes.GET_MERCHANT_LIST_SUCCESS, payload: res })
+      dispatch({
+        type: actionTypes.GET_TAX_SUCCESS,
+        payload: res.data,
+      })
     })
     .catch((err: any) => {
-      dispatch({ type: actionTypes.GET_MERCHANT_LIST_ERROR, payload: err })
+      dispatch({ type: actionTypes.GET_TAX_ERROR, payload: err })
     })
+}
+
+export const setLocalStorage = (action: any) => (dispatch: any) => {
+  dispatch({ type: actionTypes.SET_LOCAL_STORAGE })
 }

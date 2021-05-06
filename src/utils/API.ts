@@ -1,11 +1,14 @@
 import axios from 'axios'
 
 // const token: string | null = localStorage.getItem('token')
+// https://railsapi.yamapay.com:443/api/v1/sign_in
+// user[email] = ronakmethan@gmail.com
+// user[password] = RonMet123#
 
 const headers = {
   'Content-Type': 'application/json',
   Authorization:
-    'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiWE0ySmFiTGJVRWp4TGh0VFdRVDNnU040Iiwic3ViIjoiMTE0Iiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNjE5NTg4NjQwLCJleHAiOjE2MTk1OTIyNDAsImp0aSI6IjllNGM1ZGIwLTU3ODMtNDBhNC05YzRmLTk4ZTU4YTcwYTNlMiJ9.1hN0cYQrPZLPH9tnMraGNrwdNS6Kh3u1opRhszWJM9k',
+    'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiWE0ySmFiTGJVRWp4TGh0VFdRVDNnU040Iiwic3ViIjoiMTE0Iiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNjIwMjk1NzMwLCJleHAiOjE2MjAyOTkzMzAsImp0aSI6ImIyMGYxY2Q4LWQyYTItNDE3MC04MjZlLTNiOWU5ODQ0MDkyOCJ9.Du5x93KXrPJz3K06EuoDD7uz8KAahmOIKPqyvCSkLrk',
 }
 
 const axiosApi = axios.create({

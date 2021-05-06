@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import itemImg from '../../images/item1.webp'
 import { Radio } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
-// import { useHistory } from 'react-router'
+import { useHistory } from 'react-router'
 import { ButtonTabs } from '../common/Tabs'
 import { getAddonList } from '../../redux/merchantList/action'
 import { filter } from 'lodash'
@@ -27,16 +27,17 @@ const CustomizeOrder = (props: any) => {
   }
   const setLocalStorage = (addon: any, product: any) => {
     // console.log(product.id)
-    // if (openTab === 1) {
-    //   console.log(openTab)
-    // } else {
-    //   console.log(openTab)
-    // }
     const str = addon
     const array = str.split(',')
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const product1 = {
+      _id: 1620034398738,
+      storeId: '1',
+      itemId: productId,
+      count: product.quantity || props.location.state.quantity,
+      addon: array[2] || '',
+      extra: null,
       productId: productId,
       addonId: array[2] || '',
       addonName: array[0] || '',
@@ -55,7 +56,7 @@ const CustomizeOrder = (props: any) => {
     localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
   }
 
-  // const history = useHistory()
+  const history = useHistory()
   let customizeProduct = []
   customizeProduct = props.location.state[0] || props.location.state
   customizeProduct = {
@@ -73,7 +74,15 @@ const CustomizeOrder = (props: any) => {
   // eslint-disable-next-line no-unused-vars
   const [addon, setAddon] = useState('')
   const [product, setProduct] = useState(customizeProduct)
-  const [openTab, setOpenTab] = useState(2)
+  const [openTab, setOpenTab] = useState()
+  if (openTab === 1) {
+    history.goBack()
+    console.log('openTab', openTab)
+  }
+  if (openTab === 2) {
+    history.push('/cart')
+    console.log('openTab', openTab)
+  }
   const price = product.price * product.quantity
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
@@ -165,7 +174,7 @@ const CustomizeOrder = (props: any) => {
         </div>
         <ButtonTabs
           tabs={tabOptions}
-          openTab={openTab}
+          openTab={openTab || 1}
           setOpenTab={setOpenTab}
           setLocalStorage={() => setLocalStorage(addon, product)}
         />

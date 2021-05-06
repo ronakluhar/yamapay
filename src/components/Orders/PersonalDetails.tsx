@@ -6,6 +6,29 @@ type Props = {
   setPersonalInfo: Function
 }
 
+// const validate = (values: any) => {
+//   const errors = {}
+//   if (!values.firstName) {
+//     errors.firstName = 'Required'
+//   } else if (values.firstName.length > 15) {
+//     errors.firstName = 'Must be 15 characters or less'
+//   }
+
+//   if (!values.lastName) {
+//     errors.lastName = 'Required'
+//   } else if (values.lastName.length > 20) {
+//     errors.lastName = 'Must be 20 characters or less'
+//   }
+
+//   if (!values.email) {
+//     errors.email = 'Required'
+//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+//     errors.email = 'Invalid email address'
+//   }
+
+//   return errors
+// }
+
 const PersonalDetails = ({ setPersonalInfo }: Props) => {
   const customTheme = (theme: any) => {
     return {
@@ -42,7 +65,9 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
             comment: '',
             selected_table: '',
           }}
-          onSubmit={(values) => {}}
+          onSubmit={(values) => {
+            alert(JSON.stringify(values))
+          }}
         >
           {({ values, setFieldValue }) => (
             <Form>
@@ -52,8 +77,13 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                   name="name"
                   placeholder="Name*"
                   onChange={(event) => {
-                    setFieldValue('name', event.target.value)
-                    setPersonalInfo({ ...values })
+                    if (event.target.value && event.target.value !== '') {
+                      setFieldValue('name', event.target.value)
+                      setPersonalInfo({ ...values })
+                    }
+                    if (event.target.value.length === 0) {
+                      alert('name empty')
+                    }
                   }}
                 />
               </div>
@@ -63,8 +93,17 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                   name="phone"
                   placeholder="Phone Number*"
                   onChange={(event) => {
-                    setFieldValue('phone', event.target.value)
-                    setPersonalInfo({ ...values })
+                    const re = /^[0-9\b]+$/
+                    if (
+                      event.target.value !== '' &&
+                      re.test(event.target.value)
+                    ) {
+                      setFieldValue('phone', event.target.value)
+                      setPersonalInfo({ ...values })
+                    } else {
+                      setFieldValue('phone', '')
+                      setPersonalInfo({ ...values })
+                    }
                   }}
                 />
               </div>

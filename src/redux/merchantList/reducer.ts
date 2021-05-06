@@ -7,6 +7,8 @@ const reducer = (
     categoryList: [],
     addonList: [],
     orderDetails: [],
+    newProduct: [],
+    taxDetails: [],
     loading: false,
   },
   action: any,
@@ -107,6 +109,28 @@ const reducer = (
         ...state,
         loading: false,
         orderDetails: action.payload,
+      }
+    case actionTypes.SET_LOCAL_STORAGE:
+      return {
+        ...state,
+        loading: false,
+        newProduct: action.payload,
+      }
+    case actionTypes.GET_TAX_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_TAX_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_TAX_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        taxDetails: action.payload,
       }
   }
   return state
