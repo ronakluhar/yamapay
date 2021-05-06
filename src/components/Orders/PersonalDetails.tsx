@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik'
 // import { ThemeConfig } from 'react-select/src/theme'
 import { Input, YPSelect } from '../common/Form'
-
+import * as Yup from 'yup'
 type Props = {
   setPersonalInfo: Function
 }
@@ -30,6 +30,11 @@ type Props = {
 // }
 
 const PersonalDetails = ({ setPersonalInfo }: Props) => {
+  const PersonalDetailsSchema = Yup.object().shape({
+    name: Yup.string().required('Name is Required Field'),
+    phone: Yup.number().required('Phone is Required Field'),
+    comment: Yup.string().required('Comment is Required Field'),
+  })
   const customTheme = (theme: any) => {
     return {
       ...theme,
@@ -68,25 +73,26 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
           onSubmit={(values) => {
             alert(JSON.stringify(values))
           }}
+          validationSchema={PersonalDetailsSchema}
         >
-          {({ values, setFieldValue }) => (
+          {({ values, errors, touched, setFieldValue }) => (
             <Form>
               <div className="my-3">
                 <Input
                   type="text"
                   name="name"
+                  // id="name"
                   placeholder="Name*"
                   onChange={(event) => {
-                    if (event.target.value && event.target.value !== '') {
-                      setFieldValue('name', event.target.value)
-                      setPersonalInfo({ ...values })
-                    }
-                    if (event.target.value.length === 0) {
-                      alert('name empty')
-                    }
+                    setFieldValue('name', event.target.value)
+                    setPersonalInfo({ ...values })
                   }}
                 />
+                {errors.name && touched.name ? (
+                  <span className="text-red">{errors.name}</span>
+                ) : null}
               </div>
+
               <div className="my-3">
                 <Input
                   type="text"
@@ -106,6 +112,9 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                     }
                   }}
                 />
+                {errors.phone && touched.phone ? (
+                  <span className="text-red">{errors.phone}</span>
+                ) : null}
               </div>
               <div className="my-3">
                 <Input
@@ -117,6 +126,9 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                     setPersonalInfo({ ...values })
                   }}
                 />
+                {errors.comment && touched.comment ? (
+                  <span className="text-red">{errors.comment}</span>
+                ) : null}
               </div>
               <div>
                 <YPSelect

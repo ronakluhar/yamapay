@@ -38,8 +38,6 @@ const tabOptions = [
 //     quantity: 4,
 //   },
 // ]
-const style = { border: '2px solid red', borderRadius: '2%' }
-console.log(style)
 const Cart = () => {
   const zipcode: any = '75206'
   const dispatch = useDispatch()
@@ -65,6 +63,31 @@ const Cart = () => {
     comment: '',
     selected_table: '',
   })
+  const tipsOption = () => {
+    return [
+      {
+        percentage: '10%',
+        value: (parseFloat(localStorage.getItem('subTotal') || '0') * 10) / 100,
+      },
+      {
+        percentage: '20%',
+        value: (parseFloat(localStorage.getItem('subTotal') || '0') * 20) / 100,
+      },
+      {
+        percentage: '25%',
+        value: (parseFloat(localStorage.getItem('subTotal') || '0') * 25) / 100,
+      },
+      {
+        percentage: '30%',
+        value: (parseFloat(localStorage.getItem('subTotal') || '0') * 30) / 100,
+      },
+      {
+        percentage: '35%',
+        value: (parseFloat(localStorage.getItem('subTotal') || '0') * 35) / 100,
+      },
+    ]
+  }
+  const [tipOptions, setTipOptions] = useState(tipsOption())
   const [ShowDeleteModal, setShowDeleteModal] = useState(false)
   const [tip, setTip] = useState({ tip_value: 0 })
   const [customtip, setCustomtip] = useState(Number)
@@ -77,28 +100,20 @@ const Cart = () => {
         : null,
     ),
   )
-  const tipOptions = [
-    {
-      percentage: '10%',
-      value: (parseInt(localStorage.getItem('subTotal') || '0') * 10) / 100,
-    },
-    {
-      percentage: '20%',
-      value: (parseInt(localStorage.getItem('subTotal') || '0') * 20) / 100,
-    },
-    {
-      percentage: '25%',
-      value: (parseInt(localStorage.getItem('subTotal') || '0') * 25) / 100,
-    },
-    {
-      percentage: '30%',
-      value: (parseInt(localStorage.getItem('subTotal') || '0') * 30) / 100,
-    },
-    {
-      percentage: '35%',
-      value: (parseInt(localStorage.getItem('subTotal') || '0') * 35) / 100,
-    },
-  ]
+  useEffect(() => {
+    setSubtotal(
+      sum(
+        products
+          ? products.map((product: any) => {
+              return product.total_price
+            })
+          : null,
+      ),
+    )
+    localStorage.setItem('subTotal', subtotal.toString())
+    // console.log(setTipOptions)
+    setTipOptions(tipsOption())
+  }, [products.length])
 
   const updateSubTotal = () => {
     const subTotal = sum(
@@ -132,6 +147,7 @@ const Cart = () => {
     )
     localStorage.setItem('subTotal', subTotal.toString())
     setSubtotal(subTotal)
+    setTipOptions(tipsOption())
   }
 
   const manageQuantity = async (index: number, action: string) => {
@@ -177,33 +193,32 @@ const Cart = () => {
     updateSubTotal()
   }
   const setCartDetails = () => {
-    let isValidate = 0
-    if (!personalInfo.name) {
-      console.log('here')
-      isValidate = 0
+    const eatingMethod = find(tabOptions, { id: openTab })?.tabName
+    setCart({
+      store_id: localStorage.getItem('store_id') || 1,
+      table_no: null,
+      customer_name: personalInfo.name || '',
+      customer_phone: personalInfo.phone || '',
+      comments: personalInfo.comment || '',
+      total: subtotal,
+      cart: products,
+      store_charge: 0,
+      tax: parseFloat(taxDetails.stateRate),
+      sub_total: subtotal,
+      tip: parseFloat(tip.tip_value.toString()),
+      service_fee: 0,
+      eating_method: eatingMethod,
+    })
+    if (cart) {
+      dispatch(placeOrder(cart))
     }
-    if (isValidate) {
-      const eatingMethod = find(tabOptions, { id: openTab })?.tabName
-      setCart({
-        store_id: localStorage.getItem('store_id') || 1,
-        table_no: null,
-        customer_name: personalInfo.name || '',
-        customer_phone: personalInfo.phone || '',
-        comments: personalInfo.comment || '',
-        total: subtotal,
-        cart: products,
-        store_charge: 0,
-        tax: parseFloat(taxDetails.stateRate),
-        sub_total: subtotal,
-        // tip: parseFloat(tip.tip_value.toString()),
-        // service_fee: 0,
-        // eating_method: eatingMethod,
-      })
-      console.log('eatingMethod', eatingMethod)
-    }
-    console.log('cart', cart)
-    console.log('placeOrder', placeOrder)
-    // dispatch(placeOrder(cart))
+    console.log(cart)
+    console.log('eatingMethod', eatingMethod)
+    history.push('/payment-success')
+    // const { orderDetails } = useSelector((state: any) => ({
+    //   orderDetails: state.merchantListReducer.orderDetails,
+    // }))
+    // console.log('orderDetails', orderDetails)
   }
 
   const history = useHistory()
@@ -223,6 +238,7 @@ const Cart = () => {
     // console.log('selected', selectedProduct)
     localStorage.setItem('CartProducts', JSON.stringify(a))
     setProducts(a)
+    // setSubtotal(a)
   }
   // const deleteProductFromCart = (product: any) => {
   //   setShowDeleteModal(true)

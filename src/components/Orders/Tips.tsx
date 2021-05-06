@@ -65,7 +65,7 @@ const Tips = ({
                   })
                   setSubtotal(
                     (prev: any) =>
-                      parseInt(localStorage.getItem('subTotal') || '0') +
+                      parseFloat(localStorage.getItem('subTotal') || '0') +
                       tipOption.value,
                   )
                   setCustomtip('')
@@ -107,7 +107,7 @@ const Tips = ({
                   } else if (!re.test(event.target.value)) {
                     setFieldValue('custom_tip', '')
                     setSubtotal((prev: any) =>
-                      parseInt(localStorage.getItem('subTotal') || '0'),
+                      parseFloat(localStorage.getItem('subTotal') || '0'),
                     )
                   }
                 }}
