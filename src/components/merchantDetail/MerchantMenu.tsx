@@ -11,9 +11,6 @@ const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
   { id: 2, tabName: 'Takeaway' },
 ]
-
-// const [productList, setProducts] = useState(productList)
-
 const MerchantMenu = (props: any) => {
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')

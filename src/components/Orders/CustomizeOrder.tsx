@@ -2,19 +2,21 @@ import { Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import itemImg from '../../images/item1.webp'
-import { Radio } from '../common/Form'
+import { Radio, Checkbox, Input } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
 import { useHistory } from 'react-router'
 import { ButtonTabs } from '../common/Tabs'
 import { getAddonList } from '../../redux/merchantList/action'
-import { filter } from 'lodash'
-const IMG_URL = 'http://127.0.0.1:8000/'
+import { filter, findIndex, sum } from 'lodash'
 
+const IMG_URL = 'http://127.0.0.1:8000/'
+const extra: any = []
 const tabOptions = [
   { id: 1, tabName: 'Close' },
   { id: 2, tabName: 'Save change' },
 ]
 const CustomizeOrder = (props: any) => {
+  const [comment, setCommments] = useState('')
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')
   let productId: any = 0
@@ -24,36 +26,6 @@ const CustomizeOrder = (props: any) => {
 
   if (props.location.state[0]) {
     productId = props.location.state[0].id
-  }
-  const setLocalStorage = (addon: any, product: any) => {
-    // console.log(product.id)
-    const str = addon
-    const array = str.split(',')
-    let a: any = []
-    a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-    const product1 = {
-      _id: 1620034398738,
-      storeId: '1',
-      itemId: productId,
-      count: product.quantity || props.location.state.quantity,
-      addon: array[2] || '',
-      extra: null,
-      productId: productId,
-      addonId: array[2] || '',
-      addonName: array[0] || '',
-      addonPrice: parseInt(array[1]) || '',
-      product_name: product.name || props.location.state.product_name,
-      price: product.price || props.location.state.price,
-      total_price:
-        price + (parseInt(array[1]) || 0) || props.location.state.total_price,
-      // total_price: price,
-      quantity: product.quantity || props.location.state.quantity,
-    }
-    const existingProduct = filter(a, function (o: any) {
-      return o.productId !== productId
-    })
-    existingProduct.splice(existingProduct.length, 0, product1)
-    localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
   }
 
   const history = useHistory()
@@ -75,15 +47,82 @@ const CustomizeOrder = (props: any) => {
   const [addon, setAddon] = useState('')
   const [product, setProduct] = useState(customizeProduct)
   const [openTab, setOpenTab] = useState()
+  const [addonTotal, setAaddonTotal] = useState(0)
+  let total: any
+  const setAddonValue = (value: any) => {
+    const checkArray = value.split(',')
+    const existingAddon = findIndex(extra, function (o: any) {
+      return o.addon_id === parseInt(checkArray[2])
+    })
+    if (existingAddon > -1) {
+      extra.splice(existingAddon, 1)
+      total = sum(
+        extra
+          ? extra.map((value: any) => {
+              return value.addon_price
+            })
+          : null,
+      )
+      setAaddonTotal(total)
+    } else {
+      const arrayToPush = {
+        addon_name: checkArray[0],
+        addon_price: parseInt(checkArray[1]),
+        count: 1,
+        addon_id: parseInt(checkArray[2]),
+      }
+      extra.push(arrayToPush)
+      total = sum(
+        extra
+          ? extra.map((value: any) => {
+              return value.addon_price
+            })
+          : null,
+      )
+    }
+    setAaddonTotal(total)
+  }
   if (openTab === 1) {
     history.goBack()
-    console.log('openTab', openTab)
   }
   if (openTab === 2) {
     history.push('/cart')
-    console.log('openTab', openTab)
   }
   const price = product.price * product.quantity
+  console.log('addonTotal', addonTotal)
+  const setLocalStorage = (addon: any, product: any) => {
+    const addonValue = addon
+    const array = addonValue.split(',')
+    let a: any = []
+    a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+    let shopId: any = 1
+    shopId = JSON.parse(localStorage.getItem('shop') || '')
+    const product1 = {
+      _id: 1620034398738,
+      storeId: shopId.id,
+      itemId: productId,
+      count: product.quantity || props.location.state.quantity,
+      addon: array[2] || '',
+      extra: extra || null,
+      productId: productId,
+      addonId: parseInt(array[2]) || '',
+      addonName: array[0] || '',
+      addonPrice: parseInt(array[1]) || '',
+      product_name: product.name || props.location.state.product_name,
+      price: product.price || props.location.state.price,
+      product_comments: comment || '',
+      total_price:
+        price + (parseInt(array[1]) || 0) + addonTotal ||
+        props.location.state.total_price + addonTotal,
+      // total_price: price,
+      quantity: product.quantity || props.location.state.quantity,
+    }
+    const existingProduct = filter(a, function (o: any) {
+      return o.productId !== productId
+    })
+    existingProduct.splice(existingProduct.length, 0, product1)
+    localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
+  }
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
       <div className="mx-auto max-w-xl">
@@ -144,21 +183,51 @@ const CustomizeOrder = (props: any) => {
                 {() => (
                   // <Form>
                   <>
+                    <div className="my-3">
+                      <Input
+                        type="text"
+                        name="comment"
+                        // value={comment}
+                        placeholder="Comment*"
+                        onChange={(event) => {
+                          setCommments(event.target.value)
+                        }}
+                      />
+                    </div>
+
                     {addonList
                       ? addonList.map((data: any, index: number) => (
-                          <div className="grid grid-cols-2" key={index}>
-                            <Radio
-                              name="addon"
-                              label={data.addon_name}
-                              value={
-                                data.addon_name +
-                                ',' +
-                                data.price +
-                                ',' +
-                                data.id
-                              }
-                              onChange={(e: any) => setAddon(e.target.value)}
-                            />
+                          <div className="grid grid-cols-2" key={data.id}>
+                            {data.type === 'SNG' ? (
+                              <Radio
+                                name="addon"
+                                label={data.addon_name}
+                                value={
+                                  data.addon_name +
+                                  ',' +
+                                  data.price +
+                                  ',' +
+                                  data.id
+                                }
+                                onChange={(e: any) => setAddon(e.target.value)}
+                              />
+                            ) : (
+                              <Checkbox
+                                name={'addon_' + data.id}
+                                value={
+                                  data.addon_name +
+                                  ',' +
+                                  data.price +
+                                  ',' +
+                                  data.id
+                                }
+                                // defaultChecked={false}
+                                label={data.addon_name}
+                                onChange={(e: any) =>
+                                  setAddonValue(e.target.value)
+                                }
+                              />
+                            )}
                             <p className="text-right py-2" key={index}>
                               ${data.price}
                             </p>
@@ -166,6 +235,7 @@ const CustomizeOrder = (props: any) => {
                         ))
                       : null}
                   </>
+                  // {' '}
                   // </Form>
                 )}
               </Formik>

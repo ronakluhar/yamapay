@@ -2,17 +2,29 @@ import { Email, LeftArrow } from '../common/icons'
 import paymentSuccess from '../../images/payment-success.png'
 import { useState } from 'react'
 import { ButtonTabs } from '../common/Tabs'
+import { useHistory } from 'react-router'
 
 const tabOptions = [
   { id: 1, tabName: 'ORDER STATUS' },
   { id: 2, tabName: 'BACK TO HOME' },
 ]
-const InvalidCard = () => {
-  const [openTab, setOpenTab] = useState(1)
+const InvalidCard = (props: any) => {
+  const history = useHistory()
+  const [openTab, setOpenTab] = useState()
+  if (openTab === 2) {
+    history.goBack()
+  }
+  if (openTab === 1) {
+    localStorage.removeItem('CartProducts')
+    history.push('/order-status')
+  }
   return (
     <div className="bg-offWhite p-5 min-h-screen">
       <div className="mx-auto max-w-xl">
-        <div className="relative text-center mb-12">
+        <div
+          className="relative text-center mb-12"
+          onClick={() => history.goBack()}
+        >
           <LeftArrow className="h-5 w-5 absolute" />
           <h2 className="text-sm font-bold">Thank You</h2>
         </div>
@@ -23,7 +35,7 @@ const InvalidCard = () => {
           <div className="mb-7">
             <p className="font-bold text-2xl text-blue">Payment Success !!</p>
             <p className="text-lg text-lightblack ">
-              You just paid Zamzam Restaurant $95.69
+              You just paid Zamzam Restaurant $ {props.location.state}
             </p>
           </div>
           <div className="bg-lightblue border border-dashed border-blue rounded-full py-3 px-6 mb-5">
@@ -41,7 +53,7 @@ const InvalidCard = () => {
         </div>
         <ButtonTabs
           tabs={tabOptions}
-          openTab={openTab}
+          openTab={openTab || 1}
           setOpenTab={setOpenTab}
         />
       </div>

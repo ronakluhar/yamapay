@@ -1,10 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react'
+import { Form, Formik } from 'formik'
 import { filter, find, findIndex, sum } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { OrderSummary, PersonalDetails, Tips } from '.'
 import { getTax, placeOrder } from '../../redux/merchantList/action'
+import { Input } from '../common/Form'
 import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 
@@ -39,6 +41,8 @@ const tabOptions = [
 //   },
 // ]
 const Cart = () => {
+  const [orderComment, setOrderComment] = useState('')
+  console.log('orderComment', orderComment)
   const zipcode: any = '75206'
   const dispatch = useDispatch()
   useEffect(() => {
@@ -192,14 +196,16 @@ const Cart = () => {
     )
     updateSubTotal()
   }
-  const setCartDetails = () => {
+  const setCartDetails = async () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
+    let shopId: any = 1
+    shopId = JSON.parse(localStorage.getItem('shop') || '')
     setCart({
-      store_id: localStorage.getItem('store_id') || 1,
+      store_id: shopId.id,
       table_no: null,
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
-      comments: personalInfo.comment || '',
+      comment: personalInfo.comment || '',
       total: subtotal,
       cart: products,
       store_charge: 0,
@@ -208,16 +214,15 @@ const Cart = () => {
       tip: parseFloat(tip.tip_value.toString()),
       service_fee: 0,
       eating_method: eatingMethod,
+      comments: orderComment,
     })
-    if (cart) {
-      dispatch(placeOrder(cart))
-    }
-    console.log(cart)
-    console.log('eatingMethod', eatingMethod)
-    history.push('/payment-success')
-    // const { orderDetails } = useSelector((state: any) => ({
-    //   orderDetails: state.merchantListReducer.orderDetails,
-    // }))
+    // const orderDetails = await dispatch(placeOrder(cart))
+    await dispatch(placeOrder(cart))
+    const { orderDetails } = useSelector((state: any) => ({
+      orderDetails: state.merchantListReducer.orderDetails,
+    }))
+    console.log(orderDetails)
+    // history.push('/payment-success', [subtotal, orderDetails])
     // console.log('orderDetails', orderDetails)
   }
 
@@ -268,7 +273,8 @@ const Cart = () => {
                 >
                   <div className="py-2 flex justify-between items-center">
                     <h4 className="text-base">
-                      {product.product_name} <b>{' $ ' + product.price}</b>
+                      {product.product_name} <b>{' $ ' + product.price}</b>{' '}
+                      {product.product_comments}
                       <br />
                       {product.addonName ? (
                         <span className="text-base">
@@ -276,6 +282,15 @@ const Cart = () => {
                           <b>{'  $' + product.addonPrice}</b>
                         </span>
                       ) : null}
+                      {product.extra != null
+                        ? product.extra.map((value: any) => (
+                            <span className="text-base" key={value.addon_id}>
+                              {value.addon_name}{' '}
+                              <b>{'  $' + value.addon_price}</b>
+                              <br />
+                            </span>
+                          ))
+                        : null}
                     </h4>
                     <div className="flex">
                       <span onClick={() => editProduct(product)}>
@@ -316,10 +331,28 @@ const Cart = () => {
             </div>
             <div className="my-5 bg-white border border-blue p-6 other-info flex items-center">
               <Chat className="h-6 w-6 text-blue mr-1.5" />
+
               <p className="text-xs">
                 Please write any other info we should share with the chef...
               </p>
             </div>
+            <Formik initialValues={{}} onSubmit={(values) => {}}>
+              {({ values }) => (
+                <Form>
+                  <div className="my-3">
+                    <Input
+                      type="text"
+                      name="order_comments"
+                      // id="name"
+                      placeholder="Comments*"
+                      onChange={(event) => {
+                        setOrderComment(event.target.value)
+                      }}
+                    />
+                  </div>
+                </Form>
+              )}
+            </Formik>
             <Tips
               tip={tip}
               tipOptions={tipOptions}

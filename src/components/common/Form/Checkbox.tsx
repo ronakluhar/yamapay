@@ -1,21 +1,27 @@
-import { Field, useField } from 'formik'
-import { forwardRef } from 'react'
+import { useField } from 'formik'
+import { forwardRef, ChangeEvent } from 'react'
 
 type CheckboxProps = {
   label?: string
   name: string
+  value: string
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 // eslint-disable-next-line react/display-name
-const Checkbox = forwardRef(({ label, name }: CheckboxProps) => {
-  const [checkboxProps, { value }] = useField(name)
+const Checkbox = forwardRef(({ label, name, ...props }: CheckboxProps) => {
+  const [checkboxProps] = useField(name)
   return (
     <label className="flex justify-start items-center py-2">
       <div className="checkbox-container bg-white border rounded w-4 h-4 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue">
-        <Field
+        <input
           type="checkbox"
           className="opacity-0 absolute"
-          checked={value}
+          defaultChecked={false}
+          // checked={value}
+          // {...RadioProps}
           {...checkboxProps}
+          {...props}
+          onChange={props.onChange}
         />
         <svg
           className="fill-current hidden w-2 h-2 text-blue pointer-events-none"
