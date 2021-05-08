@@ -1,6 +1,7 @@
 import itemImg from '../../images/item1.webp'
 
-const OrderDetails = () => {
+const OrderDetails = (props: any) => {
+  console.log('props', props.lastOrder)
   return (
     <div className="flex py-5 mx-5 justify-between items-center order-items border-b border-dashed border-border last:border-0">
       <div className="flex">
@@ -16,7 +17,9 @@ const OrderDetails = () => {
         <p className="text-sm">x1</p>
       </div>
       <div>
-        <p className="text-sm font-bold">$133.00</p>
+        <p className="text-sm font-bold">
+          ${props.lastOrder ? props.lastOrder.total : 0}
+        </p>
       </div>
     </div>
   )

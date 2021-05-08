@@ -1,4 +1,4 @@
-const PaymentDetails = () => {
+const PaymentDetails = (props: any) => {
   return (
     <div>
       <div className="flex justify-between items-center border-b border-border border-dashed p-5">
@@ -12,19 +12,21 @@ const PaymentDetails = () => {
       <div className="bg-white order-summary">
         <div className="flex justify-between items-center py-5 mx-5 border-b border-dashed border-border">
           <p>Item Total</p>
-          <p>$133.00</p>
+          <p>${props.lastOrder ? props.lastOrder.total : 0}</p>
         </div>
         <div className="flex justify-between items-center py-5 mx-5 border-b border-dashed border-border">
           <p>Tips</p>
-          <p>$5.0</p>
+          <p>${props.lastOrder ? props.lastOrder.tip : 0}</p>
         </div>
         <div className="flex justify-between items-center py-5 mx-5 border-b border-dashed border-border">
           <p>Tax</p>
-          <p>$5.0</p>
+          <p>${props.lastOrder ? props.lastOrder.tax : 0}</p>
         </div>
         <div className="flex justify-between items-center py-5 mx-5">
           <p className="font-bold text-base">Total</p>
-          <p className="font-bold text-base">$125.56</p>
+          <p className="font-bold text-base">
+            ${props.lastOrder ? props.lastOrder.sub_total : 0}
+          </p>
         </div>
       </div>
     </div>

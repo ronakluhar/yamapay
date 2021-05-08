@@ -9,13 +9,18 @@ const tabOptions = [
   { id: 2, tabName: 'BACK TO HOME' },
 ]
 const InvalidCard = (props: any) => {
+  if (props.location.state) {
+    localStorage.setItem(
+      'orderDetails',
+      JSON.stringify(props.location.state.orderDetails),
+    )
+  }
   const history = useHistory()
   const [openTab, setOpenTab] = useState()
   if (openTab === 2) {
-    history.goBack()
+    history.push('/')
   }
   if (openTab === 1) {
-    localStorage.removeItem('CartProducts')
     history.push('/order-status')
   }
   return (
@@ -23,7 +28,7 @@ const InvalidCard = (props: any) => {
       <div className="mx-auto max-w-xl">
         <div
           className="relative text-center mb-12"
-          onClick={() => history.goBack()}
+          onClick={() => history.push('cart')}
         >
           <LeftArrow className="h-5 w-5 absolute" />
           <h2 className="text-sm font-bold">Thank You</h2>
@@ -35,7 +40,8 @@ const InvalidCard = (props: any) => {
           <div className="mb-7">
             <p className="font-bold text-2xl text-blue">Payment Success !!</p>
             <p className="text-lg text-lightblack ">
-              You just paid Zamzam Restaurant $ {props.location.state}
+              You just paid Zamzam Restaurant ${' '}
+              {props.location.state ? props.location.state.subtotal : 0}
             </p>
           </div>
           <div className="bg-lightblue border border-dashed border-blue rounded-full py-3 px-6 mb-5">

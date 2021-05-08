@@ -1,14 +1,15 @@
-import { Dialog, Transition } from '@headlessui/react'
 import { Form, Formik } from 'formik'
 import { filter, find, findIndex, sum } from 'lodash'
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { OrderSummary, PersonalDetails, Tips } from '.'
-import { getTax, placeOrder } from '../../redux/merchantList/action'
+import { getTax } from '../../redux/merchantList/action'
+// import { actionTypes } from '../../redux/merchantList/actionType'
 import { Input } from '../common/Form'
 import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
+import api from '../../utils/API'
 
 const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
@@ -42,9 +43,9 @@ const tabOptions = [
 // ]
 const Cart = () => {
   const [orderComment, setOrderComment] = useState('')
-  console.log('orderComment', orderComment)
   const zipcode: any = '75206'
   const dispatch = useDispatch()
+  const history = useHistory()
   useEffect(() => {
     dispatch(getTax(zipcode))
   }, [dispatch])
@@ -58,9 +59,8 @@ const Cart = () => {
     localStorage.setItem('subTotal', subtotal.toString())
   }, [])
   const [products, setProducts] = useState(demoProducts)
-  const [selectedProduct, setSelectedProduct] = useState({ product_name: '' })
-  const [cart, setCart] = useState({})
   const [openTab, setOpenTab] = useState(1)
+  const [cart, setCart] = useState({})
   const [personalInfo, setPersonalInfo] = useState({
     name: '',
     phone: '',
@@ -92,7 +92,6 @@ const Cart = () => {
     ]
   }
   const [tipOptions, setTipOptions] = useState(tipsOption())
-  const [ShowDeleteModal, setShowDeleteModal] = useState(false)
   const [tip, setTip] = useState({ tip_value: 0 })
   const [customtip, setCustomtip] = useState(Number)
   const [subtotal, setSubtotal] = useState(
@@ -115,61 +114,10 @@ const Cart = () => {
       ),
     )
     localStorage.setItem('subTotal', subtotal.toString())
-    // console.log(setTipOptions)
     setTipOptions(tipsOption())
   }, [products.length])
 
-  const updateSubTotal = () => {
-    const subTotal = sum(
-      products.map((product: any) => {
-        let a: any = []
-        a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-        const product1 = {
-          _id: 1620034398738,
-          storeId: '1',
-          itemId: product.productId,
-          count: product.quantity || product.quantity,
-          addon: product.addonId,
-          extra: null,
-          productId: product.productId,
-          addonId: product.addonId,
-          addonName: product.addonName,
-          addonPrice: product.addonPrice,
-          product_name: product.product_name,
-          price: product.price,
-          total_price: product.total_price,
-          // total_price: price,
-          quantity: product.quantity,
-        }
-        const existingProduct = filter(a, function (o: any) {
-          return o.productId !== product.productId
-        })
-        existingProduct.splice(existingProduct.length, 0, product1)
-        localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
-        return product.total_price
-      }),
-    )
-    localStorage.setItem('subTotal', subTotal.toString())
-    setSubtotal(subTotal)
-    setTipOptions(tipsOption())
-  }
-
   const manageQuantity = async (index: number, action: string) => {
-    // const newProduct = products.map((el: any, i: any) => {
-    // products.map((el: any, i: any) =>
-    // return i === index
-    //   ? {
-    //       ...el,
-    //       quantity:
-    //         el.quantity +
-    //         parseInt(
-    //           `${action === 'increment' ? 1 : el.quantity > 1 ? -1 : 0}`,
-    //         ),
-    //     }
-    //   : el
-    // ),
-    // })
-    // setProducts(newProduct)
     await setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
@@ -196,7 +144,80 @@ const Cart = () => {
     )
     updateSubTotal()
   }
-  const setCartDetails = async () => {
+  const updateSubTotal = () => {
+    const subTotal = sum(
+      products.map((product: any) => {
+        let a: any = []
+        a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+        const product1 = {
+          _id: 1620034398738,
+          storeId: '1',
+          itemId: product.productId,
+          count: product.quantity || product.quantity,
+          addon: product.addonId,
+          extra: product.extra || null,
+          productId: product.productId,
+          addonId: product.addonId,
+          addonName: product.addonName,
+          addonPrice: product.addonPrice,
+          product_name: product.product_name,
+          price: product.price,
+          total_price: product.total_price,
+          // total_price: price,
+          quantity: product.quantity,
+        }
+        const existingProduct = filter(a, function (o: any) {
+          return o.productId !== product.productId
+        })
+        existingProduct.splice(existingProduct.length, 0, product1)
+        localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
+        let addonTotal: any = 0
+        if (product.extra) {
+          addonTotal = sum(
+            product.extra.map((value: any) => {
+              return value.addon_price
+            }),
+          )
+        }
+        console.log('addontotal', addonTotal)
+        return product.total_price + addonTotal + product.addonPrice || 0
+      }),
+    )
+    localStorage.setItem('subTotal', subTotal.toString())
+    setSubtotal(subTotal)
+    setTipOptions(tipsOption())
+  }
+  console.log('subtotal', subtotal)
+
+  // const manageQuantity = async (index: number, action: string) => {
+  //   // await setProducts((product: any) =>
+  //   const products1 = products.map((el: any, i: any) =>
+  //     i === index
+  //       ? {
+  //           ...el,
+  //           quantity:
+  //             el.quantity +
+  //             parseInt(
+  //               `${action === 'increment' ? 1 : el.quantity > 1 ? -1 : 0}`,
+  //             ),
+  //         }
+  //       : el,
+  //   )
+
+  //   await setProducts(products1)
+  //   await setProducts((product: any) =>
+  //     product.map((el: any, i: any) =>
+  //       i === index
+  //         ? {
+  //             ...el,
+  //             total_price: el.price * el.quantity,
+  //           }
+  //         : el,
+  //     ),
+  //   )
+  //   updateSubTotal()
+  // }
+  const setCartDetails = () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
     let shopId: any = 1
     shopId = JSON.parse(localStorage.getItem('shop') || '')
@@ -209,48 +230,45 @@ const Cart = () => {
       total: subtotal,
       cart: products,
       store_charge: 0,
-      tax: parseFloat(taxDetails.stateRate),
+      tax: parseFloat(taxDetails.stateRate) || 0,
       sub_total: subtotal,
       tip: parseFloat(tip.tip_value.toString()),
       service_fee: 0,
       eating_method: eatingMethod,
       comments: orderComment,
     })
-    // const orderDetails = await dispatch(placeOrder(cart))
-    await dispatch(placeOrder(cart))
-    const { orderDetails } = useSelector((state: any) => ({
-      orderDetails: state.merchantListReducer.orderDetails,
-    }))
-    console.log(orderDetails)
-    // history.push('/payment-success', [subtotal, orderDetails])
-    // console.log('orderDetails', orderDetails)
   }
 
-  const history = useHistory()
+  if (Object.keys(cart).length !== 0) {
+    api
+      .post(`/web/store/create/order`, cart)
+      .then((res) => {
+        if (res.data.payload.data) {
+          const orderDetails = res.data.payload.data
+          // console.log('orderDetails', orderDetails)
+          localStorage.removeItem('CartProducts')
+          history.push('/payment-success', { subtotal, orderDetails })
+        }
+      })
+      .catch((err: any) => {
+        console.log(err)
+      })
+  }
+
   const editProduct = (product: any) => {
     history.push('customize-order', product)
   }
   const deleteProduct = (product: any) => {
-    // setShowDeleteModal(true)
-    setSelectedProduct(product)
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const existingProduct = findIndex(a, function (o: any) {
       return o.productId === product.productId
     })
     a.splice(existingProduct, 1)
-    // console.log('existingProduct', existingProduct)
-    // console.log('selected', selectedProduct)
     localStorage.setItem('CartProducts', JSON.stringify(a))
     setProducts(a)
     // setSubtotal(a)
   }
-  // const deleteProductFromCart = (product: any) => {
-  //   setShowDeleteModal(true)
-  //   // deleteProduct(product)
-  //   // setShowDeleteModal(false)
-  // }
-  // console.log(deleteProductFromCart)
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
@@ -387,84 +405,6 @@ const Cart = () => {
           </button>
         </div>
       </div>
-      {ShowDeleteModal ? (
-        <Transition.Root show={ShowDeleteModal} as={Fragment}>
-          <Dialog
-            as="div"
-            static
-            className="fixed z-10 inset-0 overflow-y-auto"
-            // initialFocus={cancelButtonRef}
-            open={ShowDeleteModal}
-            onClose={setShowDeleteModal}
-          >
-            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-              </Transition.Child>
-              <span
-                className="hidden sm:inline-block sm:align-middle sm:h-screen"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enterTo="opacity-100 translate-y-0 sm:scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              >
-                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"></div>
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <Dialog.Title
-                          as="h3"
-                          className="text-lg leading-6 font-medium text-gray-900"
-                        >
-                          Delete Product
-                        </Dialog.Title>
-                        <div className="mt-2">
-                          <div className="flex flex-wrap">
-                            {selectedProduct.product_name}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button
-                      type="button"
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => deleteProduct('123')}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      type="button"
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => setShowDeleteModal(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </Transition.Child>
-            </div>
-          </Dialog>
-        </Transition.Root>
-      ) : null}
     </div>
   )
 }

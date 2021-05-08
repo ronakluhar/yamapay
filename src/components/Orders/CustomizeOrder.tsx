@@ -95,11 +95,9 @@ const CustomizeOrder = (props: any) => {
     const array = addonValue.split(',')
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-    let shopId: any = 1
-    shopId = JSON.parse(localStorage.getItem('shop') || '')
     const product1 = {
       _id: 1620034398738,
-      storeId: shopId.id,
+      storeId: shop.id,
       itemId: productId,
       count: product.quantity || props.location.state.quantity,
       addon: array[2] || '',

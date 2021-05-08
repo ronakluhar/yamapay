@@ -27,6 +27,7 @@ const MerchantListing = () => {
     if (shop.id !== shopId.id) {
       alert('cart clear ...')
       localStorage.removeItem('CartProducts')
+      localStorage.removeItem('orderDetails')
     }
     localStorage.setItem('shop', JSON.stringify(shop))
     history.push('restaurant', shop)
