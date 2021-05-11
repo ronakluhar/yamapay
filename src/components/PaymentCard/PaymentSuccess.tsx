@@ -41,7 +41,9 @@ const InvalidCard = (props: any) => {
             <p className="font-bold text-2xl text-blue">Payment Success !!</p>
             <p className="text-lg text-lightblack ">
               You just paid Zamzam Restaurant ${' '}
-              {props.location.state ? props.location.state.subtotal : 0}
+              {props.location.state
+                ? props.location.state.orderDetails.total_price
+                : 0}
             </p>
           </div>
           <div className="bg-lightblue border border-dashed border-blue rounded-full py-3 px-6 mb-5">

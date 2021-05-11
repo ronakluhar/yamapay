@@ -1,5 +1,6 @@
 import * as actionTypes from './actionType'
 import api from '../../utils/API'
+import { useHistory } from 'react-router'
 
 export const getMerChantList = () => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_MERCHANT_LIST_PENDING })
@@ -87,10 +88,18 @@ export const placeOrder = (cartDetails: any) => (dispatch: any) => {
   api
     .post(`/web/store/create/order`, cartDetails)
     .then((res) => {
-      dispatch({
-        type: actionTypes.PLACE_ORDER_SUCCESS,
-        payload: res.data.payload.data,
-      })
+      const history = useHistory()
+      if (res.data.payload.data) {
+        const orderDetails = res.data.payload.data
+        console.log('orderDetails', orderDetails)
+        localStorage.setItem('lastOrderProducts', JSON.stringify(cartDetails))
+        localStorage.removeItem('CartProducts')
+        history.push('/payment-success', { orderDetails })
+      }
+      // dispatch({
+      //   type: actionTypes.PLACE_ORDER_SUCCESS,
+      //   payload: res.data.payload.data,
+      // })
     })
     .catch((err: any) => {
       dispatch({ type: actionTypes.PLACE_ORDER_ERROR, payload: err })
@@ -112,10 +121,19 @@ export const getTax = (zipcode: string) => (dispatch: any) => {
     })
 }
 
-export const setLocalStorage = (action: any) => (dispatch: any) => {
+export const setLocalStorageForCart = (products: any) => (dispatch: any) => {
+  let a: any = []
+  a = localStorage.getItem('CartProducts')
+  console.log('a', a)
+  a.push(products)
+  localStorage.setItem('CartProducts', JSON.stringify(a))
   dispatch({ type: actionTypes.SET_LOCAL_STORAGE })
 }
 export const setProducts = (products: any) => (dispatch: any) => {
   // console.log('products', products)
-  dispatch({ type: actionTypes.SET_PRODUCT, payload: products })
+  // products = localStorage.getItem('CartProducts')
+  dispatch({
+    type: actionTypes.SET_PRODUCT,
+    payload: JSON.parse(products || []),
+  })
 }

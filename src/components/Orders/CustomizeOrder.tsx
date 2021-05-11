@@ -6,25 +6,33 @@ import { Radio, Checkbox, Input } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
 import { useHistory } from 'react-router'
 import { ButtonTabs } from '../common/Tabs'
-import { getAddonList, setProducts } from '../../redux/merchantList/action'
+import {
+  getAddonList,
+  // setProducts,
+  // setLocalStorageForCart,
+} from '../../redux/merchantList/action'
 import { filter, findIndex, sum } from 'lodash'
+import { Menu } from '../navigation'
 
 const IMG_URL = 'http://127.0.0.1:8000/'
-const extra: any = []
 const tabOptions = [
   { id: 1, tabName: 'Close' },
   { id: 2, tabName: 'Save change' },
 ]
 const CustomizeOrder = (props: any) => {
+  const extra: any = props.location.state.extra
+    ? props.location.state.extra
+    : []
+  console.log('extra', extra)
   const [comment, setCommments] = useState('')
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')
   let productId: any = 0
   let storeId: any = 0
   storeId = shop.id
-  productId = props.location.state.productId
+  productId = props.location.state ? props.location.state.productId : 0
 
-  if (props.location.state[0]) {
+  if (props.location.state && props.location.state[0]) {
     productId = props.location.state[0].id
   }
 
@@ -48,12 +56,30 @@ const CustomizeOrder = (props: any) => {
   const [product, setProduct] = useState(customizeProduct)
   const [openTab, setOpenTab] = useState()
   const [addonTotal, setAaddonTotal] = useState(0)
-  let total: any
+  // const checkboxAddon = false
+  const addonExit = (addonId: any) => {
+    return extra.some(function (el: any) {
+      return el.addon_id === addonId
+    })
+  }
+  let total: any = sum(
+    extra
+      ? extra.map((value: any) => {
+          return value.addon_price
+        })
+      : 0,
+  )
+  useEffect(() => {
+    setAaddonTotal(total || 0)
+  })
+  console.log('total', total)
   const setAddonValue = (value: any) => {
+    console.log('value', value)
     const checkArray = value.split(',')
     const existingAddon = findIndex(extra, function (o: any) {
       return o.addon_id === parseInt(checkArray[2])
     })
+    console.log('existingAddon', existingAddon)
     if (existingAddon > -1) {
       extra.splice(existingAddon, 1)
       total = sum(
@@ -67,8 +93,11 @@ const CustomizeOrder = (props: any) => {
     } else {
       const arrayToPush = {
         addon_name: checkArray[0],
-        addon_price: parseInt(checkArray[1]),
-        count: 1,
+        addonprice: parseInt(checkArray[1]),
+        addon_price:
+          parseInt(checkArray[1]) *
+          (product.quantity || props.location.state.quantity),
+        count: product.quantity || props.location.state.quantity,
         addon_id: parseInt(checkArray[2]),
       }
       extra.push(arrayToPush)
@@ -83,7 +112,7 @@ const CustomizeOrder = (props: any) => {
     setAaddonTotal(total)
   }
   if (openTab === 1) {
-    history.goBack()
+    history.push('/restaurant')
   }
   if (openTab === 2) {
     history.push('/cart')
@@ -93,34 +122,46 @@ const CustomizeOrder = (props: any) => {
   const setLocalStorage = (addon: any, product: any) => {
     const addonValue = addon
     const array = addonValue.split(',')
+    // console.log('product', product)
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const product1 = {
-      _id: 1620034398738,
+      _id: product._id || new Date().getTime(),
       storeId: shop.id,
       itemId: productId,
       count: product.quantity || props.location.state.quantity,
-      addon: array[2] || '',
-      extra: extra || null,
+      addon: parseFloat(array[2])
+        ? parseFloat(array[2])
+        : props.location.state.addonId || '',
+      extra: extra,
       productId: productId,
-      addonId: parseInt(array[2]) || '',
-      addonName: array[0] || '',
-      addonPrice: parseInt(array[1]) || '',
+      addonId: parseFloat(array[2])
+        ? parseFloat(array[2])
+        : props.location.state.addonId,
+      addonName: array[0] ? array[0] : props.location.state.addonName,
+      addonPrice: parseFloat(array[1])
+        ? parseFloat(array[1])
+        : props.location.state.addonPrice,
       product_name: product.name || props.location.state.product_name,
       price: product.price || props.location.state.price,
-      product_comments: comment || '',
+      product_comments: props.location.state.product_comments || comment,
       total_price:
-        price + (parseInt(array[1]) || 0) + addonTotal ||
+        price + (parseFloat(array[1]) * product.quantity || 0) + addonTotal ||
         props.location.state.total_price + addonTotal,
       // total_price: price,
       quantity: product.quantity || props.location.state.quantity,
     }
+    console.log('product1', product1)
     const existingProduct = filter(a, function (o: any) {
-      return o.productId !== productId
+      return o._id !== product1._id
     })
     existingProduct.splice(existingProduct.length, 0, product1)
     console.log('existingProduct', existingProduct)
-    dispatch(setProducts(existingProduct))
+    // a.splice(a.length, 0, product1)
+    // a.push(product1)
+    localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
+    // dispatch(setProducts(existingProduct))
+    // dispatch(setLocalStorageForCart(product1))
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
@@ -186,7 +227,7 @@ const CustomizeOrder = (props: any) => {
                       <Input
                         type="text"
                         name="comment"
-                        // value={comment}
+                        value={comment || props.location.state.product_comments}
                         placeholder="Comment*"
                         onChange={(event) => {
                           setCommments(event.target.value)
@@ -201,6 +242,9 @@ const CustomizeOrder = (props: any) => {
                               <Radio
                                 name="addon"
                                 label={data.addon_name}
+                                checked={
+                                  data.id === props.location.state.addonId
+                                }
                                 value={
                                   data.addon_name +
                                   ',' +
@@ -220,10 +264,13 @@ const CustomizeOrder = (props: any) => {
                                   ',' +
                                   data.id
                                 }
-                                // defaultChecked={false}
+                                checked={addonExit(data.id)}
+                                // defaultChecked={true}
                                 label={data.addon_name}
                                 onChange={(e: any) =>
-                                  setAddonValue(e.target.value)
+                                  e.target.checked
+                                    ? setAddonValue(e.target.value)
+                                    : setAddonValue(e.target.value)
                                 }
                               />
                             )}
@@ -247,6 +294,9 @@ const CustomizeOrder = (props: any) => {
           setOpenTab={setOpenTab}
           setLocalStorage={() => setLocalStorage(addon, product)}
         />
+      </div>
+      <div className="mx-5 sticky bottom-7 flex justify-center">
+        <Menu />
       </div>
     </div>
   )

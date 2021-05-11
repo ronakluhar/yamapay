@@ -5,6 +5,7 @@ type CheckboxProps = {
   label?: string
   name: string
   value: string
+  checked?: any
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 // eslint-disable-next-line react/display-name
@@ -12,12 +13,12 @@ const Checkbox = forwardRef(({ label, name, ...props }: CheckboxProps) => {
   const [checkboxProps] = useField(name)
   return (
     <label className="flex justify-start items-center py-2">
+      {/* <div className="checkbox-container bg-white border rounded w-4 h-4 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue"> */}
       <div className="checkbox-container bg-white border rounded w-4 h-4 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-blue">
         <input
           type="checkbox"
           className="opacity-0 absolute"
-          defaultChecked={false}
-          // checked={value}
+          // defaultChecked={value}
           // {...RadioProps}
           {...checkboxProps}
           {...props}
