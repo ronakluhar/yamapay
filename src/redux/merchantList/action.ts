@@ -115,3 +115,7 @@ export const getTax = (zipcode: string) => (dispatch: any) => {
 export const setLocalStorage = (action: any) => (dispatch: any) => {
   dispatch({ type: actionTypes.SET_LOCAL_STORAGE })
 }
+export const setProducts = (products: any) => (dispatch: any) => {
+  // console.log('products', products)
+  dispatch({ type: actionTypes.SET_PRODUCT, payload: products })
+}

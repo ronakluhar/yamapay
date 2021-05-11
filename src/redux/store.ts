@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import { RootReducers } from './RootReducer'
+import { persistStore } from 'redux-persist'
+import persistedReducer from './RootReducer'
 
 declare global {
   export interface Window {
@@ -12,7 +13,11 @@ const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose
 
-export const store = createStore(
-  RootReducers,
+const store = createStore(
+  persistedReducer,
+  // {},
   composeEnhancers(applyMiddleware(thunk)),
 )
+const persistor = persistStore(store)
+
+export { store, persistor }

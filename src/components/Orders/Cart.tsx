@@ -1,15 +1,19 @@
 import { Form, Formik } from 'formik'
-import { filter, find, findIndex, sum } from 'lodash'
+import { find, findIndex, sum } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { OrderSummary, PersonalDetails, Tips } from '.'
-import { getTax } from '../../redux/merchantList/action'
+import {
+  getTax,
+  placeOrder,
+  setProducts,
+} from '../../redux/merchantList/action'
 // import { actionTypes } from '../../redux/merchantList/actionType'
 import { Input } from '../common/Form'
 import { Chat, ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
-import api from '../../utils/API'
+// import api from '../../utils/API'
 
 const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
@@ -42,6 +46,7 @@ const tabOptions = [
 //   },
 // ]
 const Cart = () => {
+  const shopId = JSON.parse(localStorage.getItem('shop') || '')
   const [orderComment, setOrderComment] = useState('')
   const zipcode: any = '75206'
   const dispatch = useDispatch()
@@ -49,16 +54,17 @@ const Cart = () => {
   useEffect(() => {
     dispatch(getTax(zipcode))
   }, [dispatch])
-  const { taxDetails } = useSelector((state: any) => ({
+  const { taxDetails, products } = useSelector((state: any) => ({
     taxDetails: state.merchantListReducer.taxDetails,
+    products: state.merchantListReducer.products,
   }))
-  let demoProducts: any = []
-  demoProducts = localStorage.getItem('CartProducts')
-  demoProducts = demoProducts ? JSON.parse(demoProducts) : []
+  // let demoProducts: any = []
+  // demoProducts = localStorage.getItem('CartProducts')
+  // demoProducts = demoProducts ? JSON.parse(demoProducts) : []
   useEffect(() => {
     localStorage.setItem('subTotal', subtotal.toString())
   }, [])
-  const [products, setProducts] = useState(demoProducts)
+  // const [products, setProducts] = useState(demoProducts)
   const [openTab, setOpenTab] = useState(1)
   const [cart, setCart] = useState({})
   const [personalInfo, setPersonalInfo] = useState({
@@ -98,7 +104,7 @@ const Cart = () => {
     sum(
       products
         ? products.map((product: any) => {
-            return product.total_price
+            return parseFloat(product.total_price)
           })
         : null,
     ),
@@ -108,7 +114,7 @@ const Cart = () => {
       sum(
         products
           ? products.map((product: any) => {
-              return product.total_price
+              return parseFloat(product.total_price)
             })
           : null,
       ),
@@ -117,8 +123,8 @@ const Cart = () => {
     setTipOptions(tipsOption())
   }, [products.length])
 
-  const manageQuantity = async (index: number, action: string) => {
-    await setProducts((product: any) =>
+  const manageQuantity = (index: number, action: string) => {
+    setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
           ? {
@@ -132,55 +138,72 @@ const Cart = () => {
           : el,
       ),
     )
-    await setProducts((product: any) =>
+    setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
           ? {
               ...el,
-              total_price: el.price * el.quantity,
+              total_price:
+                el.price * el.quantity +
+                (el.addonPrice ||
+                  0 +
+                    (el.extra
+                      ? sum(
+                          el.extra.map((data: any) => {
+                            return data.addon_price
+                          }),
+                        )
+                      : 0)),
             }
           : el,
       ),
     )
     updateSubTotal()
+    console.log('products', products)
   }
   const updateSubTotal = () => {
+    // localStorage.setItem('CartProducts', JSON.stringify(products))
+    dispatch(setProducts(products))
     const subTotal = sum(
       products.map((product: any) => {
-        let a: any = []
-        a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-        const product1 = {
-          _id: 1620034398738,
-          storeId: '1',
-          itemId: product.productId,
-          count: product.quantity || product.quantity,
-          addon: product.addonId,
-          extra: product.extra || null,
-          productId: product.productId,
-          addonId: product.addonId,
-          addonName: product.addonName,
-          addonPrice: product.addonPrice,
-          product_name: product.product_name,
-          price: product.price,
-          total_price: product.total_price,
-          // total_price: price,
-          quantity: product.quantity,
-        }
-        const existingProduct = filter(a, function (o: any) {
-          return o.productId !== product.productId
-        })
-        existingProduct.splice(existingProduct.length, 0, product1)
-        localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
-        let addonTotal: any = 0
-        if (product.extra) {
-          addonTotal = sum(
-            product.extra.map((value: any) => {
-              return value.addon_price
-            }),
-          )
-        }
-        console.log('addontotal', addonTotal)
-        return product.total_price + addonTotal + product.addonPrice || 0
+        // let a: any = []
+        // a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+        // const product1 = {
+        //   _id: 1620034398738,
+        //   storeId: shopId.id,
+        //   itemId: product.productId,
+        //   count: product.quantity,
+        //   addon: product.addonId,
+        //   extra: product.extra || null,
+        //   productId: product.productId,
+        //   addonId: product.addonId,
+        //   addonName: product.addonName,
+        //   addonPrice: product.addonPrice,
+        //   product_name: product.product_name,
+        //   price: product.price,
+        //   total_price: product.total_price,
+        //   // total_price: price,
+        //   quantity: product.quantity,
+        // }
+        // const existingProduct = filter(a, function (o: any) {
+        //   return o.productId !== product.productId
+        // })
+        // existingProduct.splice(existingProduct.length, 0, product1)
+        // localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
+        // let addonTotal: any = 0
+        // if (product.extra) {
+        //   addonTotal = sum(
+        //     product.extra.map((value: any) => {
+        //       return value.addon_price
+        //     }),
+        //   )
+        // }
+        // console.log('addontotal', addonTotal)
+        return (
+          parseFloat(product.total_price) +
+          parseFloat('0') +
+          parseFloat(product.addonPrice || '0')
+        )
       }),
     )
     localStorage.setItem('subTotal', subTotal.toString())
@@ -219,15 +242,13 @@ const Cart = () => {
   // }
   const setCartDetails = () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
-    let shopId: any = 1
-    shopId = JSON.parse(localStorage.getItem('shop') || '')
     setCart({
       store_id: shopId.id,
       table_no: null,
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      total: subtotal,
+      total: subtotal - parseFloat(tip.tip_value.toString()),
       cart: products,
       store_charge: 0,
       tax: parseFloat(taxDetails.stateRate) || 0,
@@ -237,23 +258,25 @@ const Cart = () => {
       eating_method: eatingMethod,
       comments: orderComment,
     })
+    dispatch(placeOrder(cart))
   }
 
-  if (Object.keys(cart).length !== 0) {
-    api
-      .post(`/web/store/create/order`, cart)
-      .then((res) => {
-        if (res.data.payload.data) {
-          const orderDetails = res.data.payload.data
-          // console.log('orderDetails', orderDetails)
-          localStorage.removeItem('CartProducts')
-          history.push('/payment-success', { subtotal, orderDetails })
-        }
-      })
-      .catch((err: any) => {
-        console.log(err)
-      })
-  }
+  // if (Object.keys(cart).length !== 0) {
+  //   api
+  //     .post(`/web/store/create/order`, cart)
+  //     .then((res) => {
+  //       if (res.data.payload.data) {
+  //         const orderDetails = res.data.payload.data
+  //         console.log('orderDetails', orderDetails)
+  //         localStorage.setItem('lastOrderProducts', JSON.stringify(products))
+  //         // localStorage.removeItem('CartProducts')
+  //         // history.push('/payment-success', { subtotal, orderDetails })
+  //       }
+  //     })
+  //     .catch((err: any) => {
+  //       console.log(err)
+  //     })
+  // }
 
   const editProduct = (product: any) => {
     history.push('customize-order', product)
@@ -265,9 +288,8 @@ const Cart = () => {
       return o.productId === product.productId
     })
     a.splice(existingProduct, 1)
-    localStorage.setItem('CartProducts', JSON.stringify(a))
+    dispatch(setProducts(a))
     setProducts(a)
-    // setSubtotal(a)
   }
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">

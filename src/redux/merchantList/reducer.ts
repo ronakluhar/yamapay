@@ -9,6 +9,7 @@ const reducer = (
     orderDetails: [],
     newProduct: [],
     taxDetails: [],
+    products: [],
     loading: false,
   },
   action: any,
@@ -115,6 +116,12 @@ const reducer = (
         ...state,
         loading: false,
         newProduct: action.payload,
+      }
+    case actionTypes.SET_PRODUCT:
+      return {
+        ...state,
+        loading: false,
+        products: action.payload,
       }
     case actionTypes.GET_TAX_PENDING:
       return {

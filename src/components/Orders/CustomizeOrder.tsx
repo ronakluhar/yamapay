@@ -6,7 +6,7 @@ import { Radio, Checkbox, Input } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
 import { useHistory } from 'react-router'
 import { ButtonTabs } from '../common/Tabs'
-import { getAddonList } from '../../redux/merchantList/action'
+import { getAddonList, setProducts } from '../../redux/merchantList/action'
 import { filter, findIndex, sum } from 'lodash'
 
 const IMG_URL = 'http://127.0.0.1:8000/'
@@ -89,7 +89,7 @@ const CustomizeOrder = (props: any) => {
     history.push('/cart')
   }
   const price = product.price * product.quantity
-  console.log('addonTotal', addonTotal)
+  // console.log('addonTotal', addonTotal)
   const setLocalStorage = (addon: any, product: any) => {
     const addonValue = addon
     const array = addonValue.split(',')
@@ -119,7 +119,8 @@ const CustomizeOrder = (props: any) => {
       return o.productId !== productId
     })
     existingProduct.splice(existingProduct.length, 0, product1)
-    localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
+    console.log('existingProduct', existingProduct)
+    dispatch(setProducts(existingProduct))
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
