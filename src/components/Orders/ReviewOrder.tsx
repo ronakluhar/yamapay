@@ -18,7 +18,7 @@ const ReviewOrder = (props: any) => {
     history.push('/cart')
   }
   if (openTab === 2) {
-    dispatch(placeOrder(props.location.state[0] || []))
+    dispatch(placeOrder(props.location.state[0] || [], history))
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen">

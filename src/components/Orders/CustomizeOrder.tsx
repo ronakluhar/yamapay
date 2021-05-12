@@ -19,11 +19,10 @@ const tabOptions = [
   { id: 1, tabName: 'Close' },
   { id: 2, tabName: 'Save change' },
 ]
+// eslint-disable-next-line no-unused-vars
+// const extraForward = []
 const CustomizeOrder = (props: any) => {
-  const extra: any = props.location.state.extra
-    ? props.location.state.extra
-    : []
-  console.log('extra', extra)
+  const extra = props.location.state.extra
   const [comment, setCommments] = useState('')
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')
@@ -57,7 +56,7 @@ const CustomizeOrder = (props: any) => {
   const [openTab, setOpenTab] = useState()
   const [addonTotal, setAaddonTotal] = useState(0)
   // const checkboxAddon = false
-  const addonExit = (addonId: any) => {
+  const addonExist = (addonId: any) => {
     return extra.some(function (el: any) {
       return el.addon_id === addonId
     })
@@ -72,7 +71,7 @@ const CustomizeOrder = (props: any) => {
   useEffect(() => {
     setAaddonTotal(total || 0)
   })
-  console.log('total', total)
+  // console.log('total', total)
   const setAddonValue = (value: any) => {
     console.log('value', value)
     const checkArray = value.split(',')
@@ -111,14 +110,14 @@ const CustomizeOrder = (props: any) => {
     }
     setAaddonTotal(total)
   }
+
   if (openTab === 1) {
     history.push('/restaurant')
   }
   if (openTab === 2) {
-    history.push('/cart')
+    // history.push('/cart')
   }
   const price = product.price * product.quantity
-  // console.log('addonTotal', addonTotal)
   const setLocalStorage = (addon: any, product: any) => {
     const addonValue = addon
     const array = addonValue.split(',')
@@ -137,11 +136,11 @@ const CustomizeOrder = (props: any) => {
       productId: productId,
       addonId: parseFloat(array[2])
         ? parseFloat(array[2])
-        : props.location.state.addonId,
-      addonName: array[0] ? array[0] : props.location.state.addonName,
+        : props.location.state.addonId || '',
+      addonName: array[0] ? array[0] : props.location.state.addonName || '',
       addonPrice: parseFloat(array[1])
         ? parseFloat(array[1])
-        : props.location.state.addonPrice,
+        : props.location.state.addonPrice || '',
       product_name: product.name || props.location.state.product_name,
       price: product.price || props.location.state.price,
       product_comments: props.location.state.product_comments || comment,
@@ -243,7 +242,8 @@ const CustomizeOrder = (props: any) => {
                                 name="addon"
                                 label={data.addon_name}
                                 checked={
-                                  data.id === props.location.state.addonId
+                                  data.id === props.location.state.addonId ||
+                                  null
                                 }
                                 value={
                                   data.addon_name +
@@ -264,7 +264,7 @@ const CustomizeOrder = (props: any) => {
                                   ',' +
                                   data.id
                                 }
-                                checked={addonExit(data.id)}
+                                checked={addonExist(data.id) || null}
                                 // defaultChecked={true}
                                 label={data.addon_name}
                                 onChange={(e: any) =>

@@ -43,8 +43,8 @@ const Tips = ({
   setSubtotal,
 }: TipsProps) => {
   const [activeTab, setActiveTab] = useState(-1)
-  let cartDetails: any = []
-  cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
+  // let cartDetails: any = []
+  // cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
   return (
     <div className="mb-5">
       <h3 className="text-sm font-bold mb-2.5">Tips</h3>
@@ -70,7 +70,7 @@ const Tips = ({
                       parseFloat(localStorage.getItem('subTotal') || '0') +
                       parseFloat(tipOption.value),
                   )
-                  setCustomtip('')
+                  setCustomtip(0)
                 }}
               >
                 <p className="font-bold text-xs">{tipOption.percentage}</p>
@@ -91,7 +91,7 @@ const Tips = ({
                 label="Custom Tip"
                 type="text"
                 name="custom_tip"
-                value={cartDetails.tip}
+                value={customtip}
                 onChange={(event) => {
                   const re = /^[0-9\b]+$/
                   setFieldValue('custom_tip', event.target.value)

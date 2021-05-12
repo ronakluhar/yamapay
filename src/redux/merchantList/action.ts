@@ -1,6 +1,5 @@
 import * as actionTypes from './actionType'
 import api from '../../utils/API'
-import { useHistory } from 'react-router'
 
 export const getMerChantList = () => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_MERCHANT_LIST_PENDING })
@@ -83,18 +82,19 @@ export const getAddonList = (restaurantId: any, productId: any) => (
     })
 }
 
-export const placeOrder = (cartDetails: any) => (dispatch: any) => {
+export const placeOrder = (cartDetails: any, history: any) => (
+  dispatch: any,
+) => {
   dispatch({ type: actionTypes.PLACE_ORDER_PENDING })
   api
     .post(`/web/store/create/order`, cartDetails)
     .then((res) => {
-      const history = useHistory()
-      if (res.data.payload.data) {
-        const orderDetails = res.data.payload.data
+      if (res.data.success) {
+        const orderDetails = res.data.payload
         console.log('orderDetails', orderDetails)
         localStorage.setItem('lastOrderProducts', JSON.stringify(cartDetails))
-        localStorage.removeItem('CartProducts')
-        history.push('/payment-success', { orderDetails })
+        // localStorage.removeItem('CartProducts')
+        // history.push('/payment-success', { orderDetails })
       }
       // dispatch({
       //   type: actionTypes.PLACE_ORDER_SUCCESS,

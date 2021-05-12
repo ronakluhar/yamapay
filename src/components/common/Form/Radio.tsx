@@ -5,7 +5,7 @@ type RadioProps = {
   label?: string
   name: string
   value: string
-  checked?: boolean
+  checked?: any
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 // eslint-disable-next-line react/display-name

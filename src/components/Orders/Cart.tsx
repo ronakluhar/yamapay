@@ -13,6 +13,7 @@ import { Input } from '../common/Form'
 import { ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
 // import api from '../../utils/API'
+import { Menu } from '../navigation'
 
 const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
@@ -46,10 +47,10 @@ const tabOptions = [
 // ]
 const Cart = () => {
   const shopId = JSON.parse(localStorage.getItem('shop') || '')
-  let cartDetails: any = []
-  cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
-  console.log('cartDetails', cartDetails)
-  const [orderComment, setOrderComment] = useState(cartDetails.comments || '')
+  // let cartDetails: any = []
+  // cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
+  // console.log('cartDetails', cartDetails)
+  const [orderComment, setOrderComment] = useState('')
   const zipcode: any = '75206'
   const dispatch = useDispatch()
   const history = useHistory()
@@ -66,6 +67,12 @@ const Cart = () => {
   useEffect(() => {
     localStorage.setItem('subTotal', subtotal.toString())
   }, [])
+  // useEffect(() => {
+  //   dispatch(setProducts(products))
+  // }, [products])
+  // const { products } = useSelector((state: any) => ({
+  //   products: state.merchantListReducer.products || [],
+  // }))
   const [products, setProducts] = useState(demoProducts)
   const [openTab, setOpenTab] = useState(1)
   const [cart, setCart] = useState({})
@@ -178,6 +185,7 @@ const Cart = () => {
           : el,
       ),
     )
+    tipsOption()
     updateSubTotal()
     // console.log('products', products)
   }
@@ -252,9 +260,9 @@ const Cart = () => {
       comments: orderComment,
     })
     // dispatch(placeOrder(cart))
+    // console.log('cart', cart)
     history.push('/review-order', [cart, subtotal])
   }
-  console.log('cart', cart)
 
   const editProduct = (product: any) => {
     history.push('customize-order', product)
@@ -269,6 +277,7 @@ const Cart = () => {
     localStorage.setItem('CartProducts', JSON.stringify(a))
     // dispatch(setProducts(a))
     setProducts(a)
+    tipsOption()
   }
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
@@ -293,20 +302,23 @@ const Cart = () => {
                   <div className="py-2 flex justify-between items-center">
                     <h4 className="text-base">
                       {product.product_name} <b>{'$' + product.price}</b>{' '}
-                      {product.product_comments}
-                      <br />
+                      <p className="text-sm">{product.product_comments}</p>
+                      {/* <br /> */}
                       {product.addonName ? (
-                        <span className="text-base">
+                        <p className="text-base">
                           {product.addonName} <b>{'$' + product.addonPrice}</b>
-                        </span>
+                        </p>
                       ) : null}
                       {product.extra != null
                         ? product.extra.map((value: any) => (
-                            <span className="text-base" key={value.addon_id}>
+                            <p
+                              className="product-desc font-normal leading-none mb-1"
+                              key={value.addon_id}
+                            >
                               {value.addon_name}{' '}
                               <b>{'  $' + value.addonprice}</b>
-                              <br />
-                            </span>
+                              {/* <br /> */}
+                            </p>
                           ))
                         : null}
                     </h4>
@@ -399,6 +411,9 @@ const Cart = () => {
             </div>
           </button>
         </div>
+      </div>
+      <div className="mx-5 sticky bottom-7 flex justify-center">
+        <Menu />
       </div>
     </div>
   )

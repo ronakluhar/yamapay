@@ -9,7 +9,7 @@ type InputProps = {
   placeholder?: string
   min?: string
   error?: string
-  value?: string
+  value?: any
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 // eslint-disable-next-line react/display-name
