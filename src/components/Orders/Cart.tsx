@@ -19,37 +19,11 @@ const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
   { id: 2, tabName: 'Takeaway' },
 ]
-// const demoProducts = [
-//   {
-//     product_name: 'Burger Meal',
-//     price: 20,
-//     total_price: 20,
-//     quantity: 1,
-//   },
-//   {
-//     product_name: 'Burger Meal',
-//     price: 20,
-//     total_price: 40,
-//     quantity: 2,
-//   },
-//   {
-//     product_name: 'Burger Meal',
-//     price: 20,
-//     total_price: 60,
-//     quantity: 3,
-//   },
-//   {
-//     product_name: 'Burger Meal',
-//     price: 20,
-//     total_price: 80,
-//     quantity: 4,
-//   },
-// ]
+
 const Cart = () => {
   const shopId = JSON.parse(localStorage.getItem('shop') || '')
   // let cartDetails: any = []
   // cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
-  // console.log('cartDetails', cartDetails)
   const [orderComment, setOrderComment] = useState('')
   const zipcode: any = '75206'
   const dispatch = useDispatch()
@@ -67,9 +41,6 @@ const Cart = () => {
   useEffect(() => {
     localStorage.setItem('subTotal', subtotal.toString())
   }, [])
-  // useEffect(() => {
-  //   dispatch(setProducts(products))
-  // }, [products])
   // const { products } = useSelector((state: any) => ({
   //   products: state.merchantListReducer.products || [],
   // }))
@@ -82,6 +53,9 @@ const Cart = () => {
     comment: '',
     selected_table: '',
   })
+  useEffect(() => {
+    updateSubTotal()
+  }, [products])
   const tipsOption = () => {
     return [
       {
@@ -148,9 +122,9 @@ const Cart = () => {
   }, [products.length])
 
   const manageQuantity = (index: number, action: string) => {
-    let a: any = []
-    a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-    setProducts(a)
+    // let a: any = []
+    // a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+    // setProducts(a)
     setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
@@ -186,7 +160,6 @@ const Cart = () => {
       ),
     )
     tipsOption()
-    updateSubTotal()
     // console.log('products', products)
   }
   const updateSubTotal = () => {
@@ -197,22 +170,8 @@ const Cart = () => {
         let a: any = []
         a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
         const product1 = {
-          _id: product._id,
+          ...product,
           storeId: shopId.id,
-          itemId: product.productId,
-          count: product.quantity,
-          addon: product.addonId,
-          extra: product.extra || null,
-          productId: product.productId,
-          addonId: product.addonId,
-          addonName: product.addonName,
-          addonPrice: product.addonPrice,
-          product_name: product.product_name,
-          product_comments: product.product_comments,
-          price: product.price,
-          total_price: product.total_price,
-          // total_price: price,
-          quantity: product.quantity,
         }
         const existingProduct = filter(a, function (o: any) {
           return o._id !== product1._id

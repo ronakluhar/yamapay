@@ -19,10 +19,9 @@ const tabOptions = [
   { id: 1, tabName: 'Close' },
   { id: 2, tabName: 'Save change' },
 ]
-// eslint-disable-next-line no-unused-vars
 // const extraForward = []
 const CustomizeOrder = (props: any) => {
-  const extra = props.location.state.extra
+  const [extra, setExtra] = useState(props.location.state.extra || [])
   const [comment, setCommments] = useState('')
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')
@@ -71,16 +70,14 @@ const CustomizeOrder = (props: any) => {
   useEffect(() => {
     setAaddonTotal(total || 0)
   })
-  // console.log('total', total)
   const setAddonValue = (value: any) => {
-    console.log('value', value)
     const checkArray = value.split(',')
     const existingAddon = findIndex(extra, function (o: any) {
       return o.addon_id === parseInt(checkArray[2])
     })
-    console.log('existingAddon', existingAddon)
     if (existingAddon > -1) {
       extra.splice(existingAddon, 1)
+      setExtra(extra)
       total = sum(
         extra
           ? extra.map((value: any) => {
@@ -99,7 +96,7 @@ const CustomizeOrder = (props: any) => {
         count: product.quantity || props.location.state.quantity,
         addon_id: parseInt(checkArray[2]),
       }
-      extra.push(arrayToPush)
+      setExtra((prev: any) => [...prev, { ...arrayToPush }])
       total = sum(
         extra
           ? extra.map((value: any) => {
@@ -121,7 +118,6 @@ const CustomizeOrder = (props: any) => {
   const setLocalStorage = (addon: any, product: any) => {
     const addonValue = addon
     const array = addonValue.split(',')
-    // console.log('product', product)
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const product1 = {
@@ -150,12 +146,10 @@ const CustomizeOrder = (props: any) => {
       // total_price: price,
       quantity: product.quantity || props.location.state.quantity,
     }
-    console.log('product1', product1)
     const existingProduct = filter(a, function (o: any) {
       return o._id !== product1._id
     })
     existingProduct.splice(existingProduct.length, 0, product1)
-    console.log('existingProduct', existingProduct)
     // a.splice(a.length, 0, product1)
     // a.push(product1)
     localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
