@@ -26,8 +26,8 @@ const Tips = ({
   const [activeTab, setActiveTab] = useState(selectedTip.tip_index)
   useEffect(() => {
     const totalWithTip =
-      JSON.parse(localStorage.getItem('subTotal') || '0') +
-      selectedTip.tip_value
+      parseFloat(localStorage.getItem('subTotal') || '0') +
+      parseFloat(selectedTip.tip_value)
     console.log('totalWithTip', totalWithTip)
     setSubtotal(totalWithTip)
   }, [])

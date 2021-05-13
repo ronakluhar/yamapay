@@ -45,11 +45,6 @@ const Cart = () => {
   })
   useEffect(() => {
     updateSubTotal()
-    // setTip({
-    //   tip_index: -1,
-    //   tip_value: 0,
-    //   tip_percentage: '',
-    // })
   }, [products])
   const tipsOption = () => {
     return [
@@ -120,6 +115,7 @@ const Cart = () => {
   useEffect(() => {
     localStorage.setItem('subTotal', subtotal.toString())
   }, [])
+  console.log('tip', tip)
   useEffect(() => {
     setSubtotal(
       sum(
@@ -265,7 +261,7 @@ const Cart = () => {
                         {product.product_comments}
                       </p>
                       {product.addonName ? (
-                        <p className="text-base text-darkgray">
+                        <p className="text-sm text-darkgray">
                           {product.addonName}{' '}
                           <b>{'$' + product.addonPrice.toFixed(2)}</b>
                         </p>
@@ -375,7 +371,7 @@ const Cart = () => {
           </button>
         </div>
       </div>
-      <div className="mx-5 sticky bottom-7 flex justify-center">
+      <div className="mx-5 sticky bottom-7 flex justify-center mb-10">
         <Menu />
       </div>
     </div>

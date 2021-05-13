@@ -81,7 +81,7 @@ const CustomizeOrder = (props: any) => {
             })
           : null,
       )
-      setAaddonTotal(total)
+      // setAaddonTotal(total)
     } else {
       const arrayToPush = {
         addon_name: checkArray[0],
@@ -92,6 +92,8 @@ const CustomizeOrder = (props: any) => {
         count: product.quantity || props.location.state.quantity,
         addon_id: parseInt(checkArray[2]),
       }
+      console.log('arrayToPush', arrayToPush)
+      console.log('product.quantity', product.quantity)
       setExtra((prev: any) => [...prev, { ...arrayToPush }])
       total = sum(
         extra
@@ -103,12 +105,13 @@ const CustomizeOrder = (props: any) => {
     }
     setAaddonTotal(total)
   }
+  console.log('extra', extra)
 
   if (openTab === 1) {
     history.push('/restaurant')
   }
   if (openTab === 2) {
-    history.push('/cart')
+    // history.push('/cart')
   }
   const price = product.price * product.quantity
   const setLocalStorage = (addon: any, product: any) => {
