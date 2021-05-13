@@ -17,10 +17,15 @@ const OrderDetails = (props: any) => {
                 />
                 <div>
                   <p className="text-sm">{index.product_name}</p>
-                  <p className="item-desc">{index.product_comments}</p>
+                  <p className="item-desc text-darkgray">
+                    {index.product_comments}
+                  </p>
                   {index.extra != null
                     ? index.extra.map((value: any) => (
-                        <p className="item-desc" key={value.addon}>
+                        <p
+                          className="item-desc text-darkgray"
+                          key={value.addon}
+                        >
                           Extra {value.addon_name + '  $' + value.addon_price}
                         </p>
                       ))

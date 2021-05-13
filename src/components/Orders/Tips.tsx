@@ -27,11 +27,11 @@ const Tips = ({
   useEffect(() => {
     const totalWithTip =
       JSON.parse(localStorage.getItem('subTotal') || '0') +
-      JSON.parse(selectedTip.tip_value)
+      selectedTip.tip_value
     console.log('totalWithTip', totalWithTip)
     setSubtotal(totalWithTip)
   }, [])
-  console.log('TIP', JSON.parse(selectedTip.tip_value))
+  // console.log('TIP', JSON.parse(selectedTip.tip_value))
   return (
     <div className="mb-5">
       <h3 className="text-sm font-bold mb-2.5">Tips</h3>

@@ -25,7 +25,7 @@ const MerchantListing = () => {
     let shopId: any = ''
     shopId = JSON.parse(localStorage.getItem('shop') || '[]')
     if (shop.id !== shopId.id) {
-      alert('cart clear ...')
+      // alert('cart clear ...')
       localStorage.removeItem('CartProducts')
       localStorage.removeItem('orderDetails')
     }
