@@ -6,11 +6,7 @@ import { Radio, Checkbox, Input } from '../common/Form'
 import { Minus, Plus } from '../common/icons'
 import { useHistory } from 'react-router'
 import { ButtonTabs } from '../common/Tabs'
-import {
-  getAddonList,
-  // setProducts,
-  // setLocalStorageForCart,
-} from '../../redux/merchantList/action'
+import { getAddonList } from '../../redux/merchantList/action'
 import { filter, findIndex, sum } from 'lodash'
 import { Menu } from '../navigation'
 
@@ -112,7 +108,7 @@ const CustomizeOrder = (props: any) => {
     history.push('/restaurant')
   }
   if (openTab === 2) {
-    // history.push('/cart')
+    history.push('/cart')
   }
   const price = product.price * product.quantity
   const setLocalStorage = (addon: any, product: any) => {
@@ -150,11 +146,7 @@ const CustomizeOrder = (props: any) => {
       return o._id !== product1._id
     })
     existingProduct.splice(existingProduct.length, 0, product1)
-    // a.splice(a.length, 0, product1)
-    // a.push(product1)
     localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
-    // dispatch(setProducts(existingProduct))
-    // dispatch(setLocalStorageForCart(product1))
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">

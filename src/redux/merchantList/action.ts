@@ -19,7 +19,6 @@ export const getShopsList = () => (dispatch: any) => {
   api
     .get('/store/view')
     .then((res) => {
-      // console.log(res.data.payload.data)
       dispatch({
         type: actionTypes.GET_SHOPS_LIST_SUCCESS,
         payload: res.data.payload.data,
@@ -46,12 +45,10 @@ export const getCategoryList = (restaurantId: any) => (dispatch: any) => {
 }
 
 export const getProductsList = (restaurantId: any) => (dispatch: any) => {
-  // console.log(restaurantId)
   dispatch({ type: actionTypes.GET_SHOP_PRODUCT_LIST_PENDING })
   api
     .post(`/store/product/view`, { shopId: restaurantId })
     .then((res) => {
-      // console.log(res.data.payload)
       dispatch({
         type: actionTypes.GET_SHOP_PRODUCT_LIST_SUCCESS,
         payload: res.data.payload.data,
@@ -82,19 +79,27 @@ export const getAddonList = (restaurantId: any, productId: any) => (
     })
 }
 
-export const placeOrder = (cartDetails: any, history: any) => (
+export const placeOrder = (cartDetails: any, history: any, tip: any) => (
   dispatch: any,
 ) => {
   dispatch({ type: actionTypes.PLACE_ORDER_PENDING })
   api
     .post(`/web/store/create/order`, cartDetails)
     .then((res) => {
+      console.log('res', res.data.success)
       if (res.data.success) {
         const orderDetails = res.data.payload
-        console.log('orderDetails', orderDetails)
-        localStorage.setItem('lastOrderProducts', JSON.stringify(cartDetails))
-        // localStorage.removeItem('CartProducts')
-        // history.push('/payment-success', { orderDetails })
+        cartDetails.tip_percentage = tip.tip_percentage
+        cartDetails.tip_value = tip.tip_value
+        localStorage.setItem('lastCartDetails', JSON.stringify(cartDetails))
+        localStorage.setItem('orderDetails', JSON.stringify(orderDetails))
+        localStorage.removeItem('CartProducts')
+        localStorage.removeItem('personalInfoName')
+        localStorage.removeItem('personalInfoComment')
+        localStorage.removeItem('personalInfoPhone')
+        localStorage.removeItem('orderComment')
+        localStorage.removeItem('tip')
+        history.push('/payment-success', { orderDetails })
       }
       // dispatch({
       //   type: actionTypes.PLACE_ORDER_SUCCESS,
@@ -130,8 +135,6 @@ export const setLocalStorageForCart = (products: any) => (dispatch: any) => {
   dispatch({ type: actionTypes.SET_LOCAL_STORAGE })
 }
 export const setProducts = (products: any) => (dispatch: any) => {
-  // console.log('products', products)
-  // products = localStorage.getItem('CartProducts')
   dispatch({
     type: actionTypes.SET_PRODUCT,
     payload: JSON.parse(products || []),

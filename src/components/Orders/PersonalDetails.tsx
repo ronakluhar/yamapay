@@ -6,32 +6,7 @@ type Props = {
   setPersonalInfo: Function
 }
 
-// const validate = (values: any) => {
-//   const errors = {}
-//   if (!values.firstName) {
-//     errors.firstName = 'Required'
-//   } else if (values.firstName.length > 15) {
-//     errors.firstName = 'Must be 15 characters or less'
-//   }
-
-//   if (!values.lastName) {
-//     errors.lastName = 'Required'
-//   } else if (values.lastName.length > 20) {
-//     errors.lastName = 'Must be 20 characters or less'
-//   }
-
-//   if (!values.email) {
-//     errors.email = 'Required'
-//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-//     errors.email = 'Invalid email address'
-//   }
-
-//   return errors
-// }
-
 const PersonalDetails = ({ setPersonalInfo }: Props) => {
-  let cartDetails: any = []
-  cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
   const PersonalDetailsSchema = Yup.object().shape({
     name: Yup.string().required('Name is Required Field'),
     phone: Yup.number().required('Phone is Required Field'),
@@ -67,9 +42,9 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
       <div className="bg-white px-5 py-10 rounded-30">
         <Formik
           initialValues={{
-            name: cartDetails.customer_name || '',
-            phone: cartDetails.customer_phone || '',
-            comment: cartDetails.comment || '',
+            name: localStorage.getItem('personalInfoName') || '',
+            phone: localStorage.getItem('personalInfoComment') || '',
+            comment: localStorage.getItem('personalInfoPhone') || '',
             selected_table: '',
           }}
           onSubmit={(values) => {
@@ -88,6 +63,7 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                   onChange={(event) => {
                     setFieldValue('name', event.target.value)
                     setPersonalInfo({ ...values })
+                    localStorage.setItem('personalInfoName', event.target.value)
                   }}
                 />
                 {errors.name && touched.name ? (
@@ -108,6 +84,10 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                     ) {
                       setFieldValue('phone', event.target.value)
                       setPersonalInfo({ ...values })
+                      localStorage.setItem(
+                        'personalInfoPhone',
+                        event.target.value,
+                      )
                     } else {
                       setFieldValue('phone', '')
                       setPersonalInfo({ ...values })
@@ -126,6 +106,10 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
                   onChange={(event) => {
                     setFieldValue('comment', event.target.value)
                     setPersonalInfo({ ...values })
+                    localStorage.setItem(
+                      'personalInfoComment',
+                      event.target.value,
+                    )
                   }}
                 />
                 {errors.comment && touched.comment ? (

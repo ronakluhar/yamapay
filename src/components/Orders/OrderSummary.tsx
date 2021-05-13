@@ -9,15 +9,15 @@ const OrderSummary = ({ subtotal, Tax }: OrderSummaryProps) => {
       <div className="bg-white px-5 py-3.5 order-summary">
         <div className="flex justify-between items-center pt-5 pb-3.5 border-b border-dashed border-border">
           <p>Subtotal</p>
-          <p>${subtotal}</p>
+          <p>${subtotal.toFixed(2)}</p>
         </div>
         <div className="flex justify-between items-center pt-5 pb-3.5 border-b border-dashed border-border">
           <p>Service Fee</p>
-          <p>0.0</p>
+          <p>$0.00</p>
         </div>
         <div className="flex justify-between items-center pt-5 pb-3.5">
           <p>Tax(%)</p>
-          <p>{Tax ? parseFloat(Tax.toString()).toFixed(2) : 0.0}</p>
+          <p>${Tax ? parseFloat(Tax.toString()).toFixed(2) : 0.0}</p>
         </div>
       </div>
     </div>

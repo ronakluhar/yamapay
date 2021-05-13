@@ -11,14 +11,15 @@ const tabOptions = [
 ]
 const ReviewOrder = (props: any) => {
   const dispatch = useDispatch()
-  // console.log('props', props.location.state[0])
   const history = useHistory()
+  // console.log('props', props.location.state)
+  const tip = props.location.state ? props.location.state[1] : []
   const [openTab, setOpenTab] = useState()
   if (openTab === 1) {
     history.push('/cart')
   }
   if (openTab === 2) {
-    dispatch(placeOrder(props.location.state[0] || [], history))
+    dispatch(placeOrder(props.location.state[0] || [], history, tip))
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen">
@@ -35,7 +36,7 @@ const ReviewOrder = (props: any) => {
           <div className="border border-dashed order-total flex px-6 py-5 justify-between items-center">
             <h4 className="text-sm font-bold">Order Total</h4>
             <p className="text-base">
-              ${props.location.state ? props.location.state[1] : 0}
+              ${props.location.state ? props.location.state[0].total : 0}
             </p>
           </div>
           <div className="px-6 py-7">
@@ -50,7 +51,7 @@ const ReviewOrder = (props: any) => {
         </div>
         <ButtonTabs
           tabs={tabOptions}
-          openTab={openTab || 1}
+          openTab={openTab || 0}
           setOpenTab={setOpenTab}
         />
       </div>

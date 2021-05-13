@@ -5,7 +5,6 @@ import { useHistory } from 'react-router'
 
 const OrderStatus = () => {
   const history = useHistory()
-  // let lastOrder: any
   const [lastOrder, setLastOrder] = useState({
     comment: '',
     comments: null,
@@ -29,9 +28,9 @@ const OrderStatus = () => {
   })
   useEffect(() => {
     const totalOrder = JSON.parse(localStorage.getItem('orderDetails') || '[]')
-    if (totalOrder) {
-      console.log('totalOrder', totalOrder)
-      setLastOrder(totalOrder.pop())
+    if (totalOrder.new_order) {
+      console.log('totalOrder', totalOrder.new_order)
+      setLastOrder(totalOrder.new_order)
     }
     console.log('lastOrder', lastOrder)
   }, [])

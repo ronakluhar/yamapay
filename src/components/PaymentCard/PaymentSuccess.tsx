@@ -9,12 +9,6 @@ const tabOptions = [
   { id: 2, tabName: 'BACK TO HOME' },
 ]
 const InvalidCard = (props: any) => {
-  if (props.location.state) {
-    localStorage.setItem(
-      'orderDetails',
-      JSON.stringify(props.location.state.orderDetails),
-    )
-  }
   const history = useHistory()
   const [openTab, setOpenTab] = useState()
   if (openTab === 2) {
@@ -41,8 +35,8 @@ const InvalidCard = (props: any) => {
             <p className="font-bold text-2xl text-blue">Payment Success !!</p>
             <p className="text-lg text-lightblack ">
               You just paid Zamzam Restaurant ${' '}
-              {props.location.state
-                ? props.location.state.orderDetails.total_price
+              {props.location.state.orderDetails
+                ? props.location.state.orderDetails.new_order.total
                 : 0}
             </p>
           </div>

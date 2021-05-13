@@ -4,15 +4,10 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { OrderSummary, PersonalDetails, Tips } from '.'
-import {
-  getTax,
-  // placeOrder,
-  // setProducts,
-} from '../../redux/merchantList/action'
+import { getTax } from '../../redux/merchantList/action'
 import { Input } from '../common/Form'
 import { ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
-// import api from '../../utils/API'
 import { Menu } from '../navigation'
 
 const tabOptions = [
@@ -22,9 +17,9 @@ const tabOptions = [
 
 const Cart = () => {
   const shopId = JSON.parse(localStorage.getItem('shop') || '')
-  // let cartDetails: any = []
-  // cartDetails = JSON.parse(localStorage.getItem('Cart') || '[]')
-  const [orderComment, setOrderComment] = useState('')
+  const [orderComment, setOrderComment] = useState(
+    localStorage.getItem('orderComment') || '',
+  )
   const zipcode: any = '75206'
   const dispatch = useDispatch()
   const history = useHistory()
@@ -33,28 +28,28 @@ const Cart = () => {
   }, [dispatch])
   const { taxDetails } = useSelector((state: any) => ({
     taxDetails: state.merchantListReducer.taxDetails,
-    // products: state.merchantListReducer.products || [],
   }))
+  console.log('taxDetails', taxDetails.stateRate)
   let demoProducts: any = []
   demoProducts = localStorage.getItem('CartProducts')
   demoProducts = demoProducts ? JSON.parse(demoProducts) : []
-  useEffect(() => {
-    localStorage.setItem('subTotal', subtotal.toString())
-  }, [])
-  // const { products } = useSelector((state: any) => ({
-  //   products: state.merchantListReducer.products || [],
-  // }))
+
   const [products, setProducts] = useState(demoProducts)
   const [openTab, setOpenTab] = useState(1)
   const [cart, setCart] = useState({})
   const [personalInfo, setPersonalInfo] = useState({
-    name: '',
-    phone: '',
-    comment: '',
+    name: localStorage.getItem('personalInfoName') || '',
+    phone: localStorage.getItem('personalInfoPhone') || '',
+    comment: localStorage.getItem('personalInfoComment') || '',
     selected_table: '',
   })
   useEffect(() => {
     updateSubTotal()
+    // setTip({
+    //   tip_index: -1,
+    //   tip_value: 0,
+    //   tip_percentage: '',
+    // })
   }, [products])
   const tipsOption = () => {
     return [
@@ -95,8 +90,23 @@ const Cart = () => {
       },
     ]
   }
+  const tipSet = JSON.parse(localStorage.getItem('tip') || '[]')
   const [tipOptions, setTipOptions] = useState(tipsOption())
-  const [tip, setTip] = useState({ tip_value: 0 })
+  const [tip, setTip] = useState({
+    tip_index: tipSet ? tipSet.tip_index : -1,
+    tip_value: tipSet ? tipSet.tip_value : 0,
+    tip_percentage: tipSet ? tipSet.tip_percentage : '',
+  })
+  console.log(
+    'total',
+    sum(
+      products
+        ? products.map((product: any) => {
+            return parseFloat(product.total_price)
+          })
+        : null,
+    ) + parseFloat(taxDetails.stateRate || 0),
+  )
   const [customtip, setCustomtip] = useState(Number)
   const [subtotal, setSubtotal] = useState(
     sum(
@@ -107,6 +117,9 @@ const Cart = () => {
         : null,
     ),
   )
+  useEffect(() => {
+    localStorage.setItem('subTotal', subtotal.toString())
+  }, [])
   useEffect(() => {
     setSubtotal(
       sum(
@@ -122,9 +135,6 @@ const Cart = () => {
   }, [products.length])
 
   const manageQuantity = (index: number, action: string) => {
-    // let a: any = []
-    // a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-    // setProducts(a)
     setProducts((product: any) =>
       product.map((el: any, i: any) =>
         i === index
@@ -160,11 +170,8 @@ const Cart = () => {
       ),
     )
     tipsOption()
-    // console.log('products', products)
   }
   const updateSubTotal = () => {
-    // localStorage.setItem('CartProducts', JSON.stringify(products))
-    // dispatch(setProducts(products))
     const subTotal = sum(
       products.map((product: any) => {
         let a: any = []
@@ -178,15 +185,6 @@ const Cart = () => {
         })
         existingProduct.splice(existingProduct.length, 0, product1)
         localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
-        let addonTotal: any = 0
-        if (product.extra) {
-          addonTotal = sum(
-            product.extra.map((value: any) => {
-              return value.addon_price
-            }),
-          )
-        }
-        console.log('addontotal', addonTotal)
         return (
           parseFloat(product.total_price) +
           parseFloat('0') +
@@ -198,31 +196,33 @@ const Cart = () => {
     setSubtotal(subTotal)
     setTipOptions(tipsOption())
   }
-  // console.log('subtotal', subtotal)
 
   const setCartDetails = () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
+    console.log('subtotal', subtotal)
     setCart({
       store_id: shopId.id,
       table_no: null,
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      total: subtotal - parseFloat(tip.tip_value.toString() || '0'),
+      total: (subtotal + parseFloat(taxDetails.stateRate || 0)).toFixed(2),
       cart: products,
       store_charge: 0,
-      tax: taxDetails.stateRate || 0,
-      sub_total: subtotal,
-      tip: parseFloat(tip.tip_value.toString()).toFixed(2),
+      tax: taxDetails.stateRate ? taxDetails.stateRate : 0,
+      sub_total: (
+        subtotal -
+        parseFloat(tip.tip_value.toString() || '0') +
+        parseFloat(taxDetails.stateRate || 0)
+      ).toFixed(2),
+      tip: parseFloat(tip.tip_value).toFixed(2),
       service_fee: 0,
       eating_method: eatingMethod,
       comments: orderComment,
     })
-    // dispatch(placeOrder(cart))
-    // console.log('cart', cart)
-    history.push('/review-order', [cart, subtotal])
+    console.log('cart', cart)
+    // history.push('/review-order', [cart, tip])
   }
-
   const editProduct = (product: any) => {
     history.push('customize-order', product)
   }
@@ -234,7 +234,6 @@ const Cart = () => {
     })
     a.splice(existingProduct, 1)
     localStorage.setItem('CartProducts', JSON.stringify(a))
-    // dispatch(setProducts(a))
     setProducts(a)
     tipsOption()
   }
@@ -260,23 +259,25 @@ const Cart = () => {
                 >
                   <div className="py-2 flex justify-between items-center">
                     <h4 className="text-base">
-                      {product.product_name} <b>{'$' + product.price}</b>{' '}
-                      <p className="text-sm">{product.product_comments}</p>
-                      {/* <br /> */}
+                      {product.product_name}{' '}
+                      <b>{'$' + product.price.toFixed(2)}</b>{' '}
+                      <p className="text-sm text-darkgray">
+                        {product.product_comments}
+                      </p>
                       {product.addonName ? (
-                        <p className="text-base">
-                          {product.addonName} <b>{'$' + product.addonPrice}</b>
+                        <p className="text-base text-darkgray">
+                          {product.addonName}{' '}
+                          <b>{'$' + product.addonPrice.toFixed(2)}</b>
                         </p>
                       ) : null}
                       {product.extra != null
                         ? product.extra.map((value: any) => (
                             <p
-                              className="product-desc font-normal leading-none mb-1"
+                              className="product-desc font-normal leading-none mb-1 text-darkgray"
                               key={value.addon_id}
                             >
                               {value.addon_name}{' '}
-                              <b>{'  $' + value.addonprice}</b>
-                              {/* <br /> */}
+                              <b>{'  $' + value.addonprice.toFixed(2)}</b>
                             </p>
                           ))
                         : null}
@@ -312,7 +313,9 @@ const Cart = () => {
                       </button>
                     </div>
                     <div>
-                      <p className="text-base">${product.total_price}</p>
+                      <p className="text-base">
+                        ${product.total_price.toFixed(2)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -330,6 +333,7 @@ const Cart = () => {
                         'Please write any other info we should share with the chef...*'
                       }
                       onChange={(event) => {
+                        localStorage.setItem('orderComment', event.target.value)
                         setOrderComment(event.target.value)
                       }}
                     />
@@ -358,7 +362,7 @@ const Cart = () => {
             <div className="bg-blue px-10 py-4 flex justify-between items-center">
               <div className="">
                 <p className="text-lg text-white font-bold">
-                  Total Cost: ${subtotal}
+                  Total Cost: ${subtotal.toFixed(2)}
                 </p>
                 <p className="text-xs text-white font-normal">
                   Confirm Your Order
