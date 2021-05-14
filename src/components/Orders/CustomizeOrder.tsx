@@ -264,7 +264,7 @@ const CustomizeOrder = (props: any) => {
                               />
                             )}
                             <p className="text-right py-2" key={index}>
-                              ${data.price}
+                              ${parseFloat(data.price.toString()).toFixed(2)}
                             </p>
                           </div>
                         ))

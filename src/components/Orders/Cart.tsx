@@ -240,11 +240,11 @@ const Cart = () => {
                     <h4 className="text-base">
                       {product.product_name}{' '}
                       <b>{'$' + product.price.toFixed(2)}</b>{' '}
-                      <p className="text-sm text-darkgray">
+                      <p className="product-desc font-normal leading-none mb-1 text-darkgray">
                         {product.product_comments}
                       </p>
                       {product.addonName ? (
-                        <p className="product-desc text-darkgray font-normal leading-none">
+                        <p className="product-desc font-normal leading-none mb-1 text-darkgray">
                           {product.addonName}{' '}
                           <b>{'$' + product.addonPrice.toFixed(2)}</b>
                         </p>
