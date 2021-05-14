@@ -118,6 +118,8 @@ const Cart = () => {
   useEffect(() => {
     Object.keys(cart).length > 0 && history.push('/review-order', [cart, tip])
   }, [cart])
+  // console.log('cart', cart)
+  // console.log('subtotal', cart)
   const manageQuantity = (index: number, action: string) => {
     setProducts((product: any) =>
       product.map((el: any, i: any) =>
@@ -185,18 +187,14 @@ const Cart = () => {
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      total: (subtotal + taxDetails.stateRate
-        ? parseFloat(taxDetails.stateRate || 0)
-        : 0
-      ).toFixed(2),
+      total: subtotal + parseFloat(taxDetails.stateRate || 0),
       cart: products,
       store_charge: 0,
       tax: taxDetails.stateRate ? taxDetails.stateRate : 0,
-      sub_total: (subtotal - tip.tip_value
-        ? parseFloat(tip.tip_value.toString() || '0')
-        : 0 + taxDetails.stateRate
-        ? parseFloat(taxDetails.stateRate || 0)
-        : 0
+      sub_total: (
+        subtotal -
+        parseFloat(tip.tip_value.toString() || '0') +
+        parseFloat(taxDetails.stateRate || 0)
       ).toFixed(2),
       tip: parseFloat(tip.tip_value).toFixed(2),
       service_fee: 0,

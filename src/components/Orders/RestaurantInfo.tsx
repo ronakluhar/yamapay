@@ -1,6 +1,7 @@
 import { LocationMarker, Star } from '../common/icons'
 import itemImg from '../../images/item1.webp'
 const IMG_URL = 'http://127.0.0.1:8000/'
+const MAX_LENGTH = 20
 
 const RestaurantInfo = () => {
   let shop: any = []
@@ -16,15 +17,29 @@ const RestaurantInfo = () => {
       <div>
         <h3 className="text-base md:text-xl font-bold">{shop.store_name}</h3>
         <p className="product-desc font-normal">
-          {shop.description || 'Restaurant, American Food, Chinese'}
+          {shop.description ? (
+            shop.description.length > MAX_LENGTH ? (
+              <div>{`${shop.description.substring(0, MAX_LENGTH)}...`}</div>
+            ) : (
+              <p>{shop.description}</p>
+            )
+          ) : null}
+          {/* {shop.description || 'Restaurant, American Food, Chinese'} */}
         </p>
         <div className="flex items-center mb-1">
           <div className="h-4 w-4 mr-2">
             <LocationMarker className="h-4 w-4 text-blue" />
           </div>
           <p className="text-border product-desc">
-            {shop.address ||
-              'opp. MLA Hostel, University of Kerala Senate House'}
+            {shop.address ? (
+              shop.address.length > MAX_LENGTH ? (
+                <div>{`${shop.address.substring(0, MAX_LENGTH)}...`}</div>
+              ) : (
+                <p>{shop.address}</p>
+              )
+            ) : null}
+            {/* {shop.address ||
+              'opp. MLA Hostel, University of Kerala Senate House'} */}
           </p>
         </div>
         <div className="flex items-center">
