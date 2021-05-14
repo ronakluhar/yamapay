@@ -12,14 +12,16 @@ const tabOptions = [
 const ReviewOrder = (props: any) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  // console.log('props', props.location.state)
+  console.log('props', props.location.state)
   const tip = props.location.state ? props.location.state[1] : []
   const [openTab, setOpenTab] = useState()
   if (openTab === 1) {
     history.push('/cart')
   }
   if (openTab === 2) {
-    dispatch(placeOrder(props.location.state[0] || [], history, tip))
+    if (props.location.state) {
+      dispatch(placeOrder(props.location.state[0] || [], history, tip))
+    }
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen">

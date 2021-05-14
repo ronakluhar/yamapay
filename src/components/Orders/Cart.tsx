@@ -8,7 +8,6 @@ import { getTax } from '../../redux/merchantList/action'
 import { Input } from '../common/Form'
 import { ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
-import { Menu } from '../navigation'
 
 const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
@@ -186,14 +185,18 @@ const Cart = () => {
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      total: (subtotal + parseFloat(taxDetails.stateRate || 0)).toFixed(2),
+      total: (subtotal + taxDetails.stateRate
+        ? parseFloat(taxDetails.stateRate || 0)
+        : 0
+      ).toFixed(2),
       cart: products,
       store_charge: 0,
       tax: taxDetails.stateRate ? taxDetails.stateRate : 0,
-      sub_total: (
-        subtotal -
-        parseFloat(tip.tip_value.toString() || '0') +
-        parseFloat(taxDetails.stateRate || 0)
+      sub_total: (subtotal - tip.tip_value
+        ? parseFloat(tip.tip_value.toString() || '0')
+        : 0 + taxDetails.stateRate
+        ? parseFloat(taxDetails.stateRate || 0)
+        : 0
       ).toFixed(2),
       tip: parseFloat(tip.tip_value).toFixed(2),
       service_fee: 0,
@@ -334,7 +337,7 @@ const Cart = () => {
         </div>
         <div className="md:px-5">
           <button
-            className="w-full text-left"
+            className="w-full text-left mb-10"
             type="button"
             onClick={setCartDetails}
           >
@@ -352,10 +355,15 @@ const Cart = () => {
               </div>
             </div>
           </button>
+          <div className="bg-offWhite px-5 py-10 rounded-30">
+            <button
+              className="rounded-2xl w-full bg-blue text-white font-semibold focus:outline-none py-5 px-10"
+              onClick={() => history.push('/')}
+            >
+              BACK TO HOME
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="mx-5 sticky bottom-7 flex justify-center mb-10">
-        <Menu />
       </div>
     </div>
   )

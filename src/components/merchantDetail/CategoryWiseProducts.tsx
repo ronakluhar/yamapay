@@ -28,39 +28,6 @@ const CategoryWiseProducts = (props: any) => {
   const { categoryList } = useSelector((state: any) => ({
     categoryList: state.merchantListReducer.categoryList,
   }))
-  // const setLocalstorage = (res: any, product: any) => {
-  //   const response = res.data.payload.data
-  //   if (response.length === 0) {
-  //     // console.log('in []')
-  //     let a: any = []
-  //     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
-  //     const product1 = {
-  //       product_name: selectedproduct.name,
-  //       price: selectedproduct.price,
-  //       total_price: selectedproduct.price,
-  //       quantity: 1,
-  //     }
-  //     a.push(product1)
-  //     localStorage.setItem('CartProducts', JSON.stringify(a))
-  //   } else {
-  //     history.push('/customize-order', [product])
-  //   }
-  // }
-  // function getAddon(product: any, storeId: any) {
-  //   setSelectedproduct(product)
-  //   api
-  //     .post(`/store/product/checkaddon`, {
-  //       store_id: storeId,
-  //       product_id: product.id,
-  //     })
-  //     .then((res) => {
-  //       setLocalstorage(res, product)
-  //     })
-  //     .catch((err: any) => {
-  //       dispatch({ type: actionTypes.GET_ADDON_LIST_ERROR, payload: err })
-  //     })
-  // }
-
   return (
     <div className="product-category">
       {categoryList.categories
@@ -69,12 +36,12 @@ const CategoryWiseProducts = (props: any) => {
               <h5 className="text-base my-1.5">{categories.name}</h5>
               <div
                 className="grid grid-cols-1 md:grid-cols-2 gap-3"
-                key={index}
+                key={categories.id}
               >
                 {categories?.productinfos?.map((product: any, index: any) => (
                   <div
                     className="flex items-center bg-white product"
-                    key={index}
+                    key={product.id}
                   >
                     <div>
                       <img
@@ -101,7 +68,6 @@ const CategoryWiseProducts = (props: any) => {
                     </div>
                     <div
                       className="flex-1 flex justify-end pr-2"
-                      // onClick={() => getAddon(product, storeId)}
                       onClick={() =>
                         history.push('/customize-order', [product])
                       }

@@ -43,8 +43,8 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
         <Formik
           initialValues={{
             name: localStorage.getItem('personalInfoName') || '',
-            phone: localStorage.getItem('personalInfoComment') || '',
-            comment: localStorage.getItem('personalInfoPhone') || '',
+            phone: localStorage.getItem('personalInfoPhone') || '',
+            comment: localStorage.getItem('personalInfoComment') || '',
             selected_table: '',
           }}
           onSubmit={(values) => {

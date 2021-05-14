@@ -31,7 +31,7 @@ const Menu = () => {
         <span>Cart</span>
       </Link>
       <Link
-        to={'/order-status'}
+        to={'/order-list'}
         className={`flex flex-col items-center ${
           currentPath === '/order-status' ? 'text-blue' : 'text-gray'
         }`}

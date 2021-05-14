@@ -15,12 +15,13 @@ const tabOptions = [
   { id: 1, tabName: 'Close' },
   { id: 2, tabName: 'Save change' },
 ]
-// const extraForward = []
 const CustomizeOrder = (props: any) => {
   const history = useHistory()
   const dispatch = useDispatch()
   const [extra, setExtra] = useState(props.location.state.extra || [])
-  const [comment, setCommments] = useState('')
+  const [comment, setCommments] = useState(
+    props.location.state.product_comments || '',
+  )
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')
   let productId: any = 0
@@ -86,7 +87,6 @@ const CustomizeOrder = (props: any) => {
             })
           : null,
       )
-      // setAaddonTotal(total)
     } else {
       const arrayToPush = {
         addon_name: checkArray[0],
@@ -113,7 +113,7 @@ const CustomizeOrder = (props: any) => {
     history.push('/restaurant')
   }
   if (openTab === 2) {
-    // history.push('/cart')
+    history.push('/cart')
   }
   const price = product.price * product.quantity
   const setLocalStorage = (addon: any, product: any) => {
@@ -140,7 +140,7 @@ const CustomizeOrder = (props: any) => {
         : props.location.state.addonPrice || '',
       product_name: product.name || props.location.state.product_name,
       price: product.price || props.location.state.price,
-      product_comments: props.location.state.product_comments || comment,
+      product_comments: comment,
       total_price:
         price + (parseFloat(array[1]) * product.quantity || 0) + addonTotal ||
         props.location.state.total_price + addonTotal,
@@ -217,7 +217,7 @@ const CustomizeOrder = (props: any) => {
                       <Input
                         type="text"
                         name="comment"
-                        value={comment || props.location.state.product_comments}
+                        value={comment}
                         placeholder="Comment*"
                         onChange={(event) => {
                           setCommments(event.target.value)

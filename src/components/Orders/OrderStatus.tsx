@@ -3,9 +3,8 @@ import { LeftArrow } from '../common/icons'
 import { useHistory } from 'react-router'
 
 const OrderStatus = (props: any) => {
-  const orderDetails = props.location.state
-    ? props.location.state.orderDetails
-    : []
+  const orderDetails = props.location.state.orderDetails || []
+  // console.log('orderDetails', orderDetails.data[0])
   const history = useHistory()
   return (
     <div className="bg-offWhite p-5 min-h-screen order-status">
@@ -38,9 +37,7 @@ const OrderStatus = (props: any) => {
               Order Details
             </div>
             <div>
-              <OrderDetails
-                orderDetails={orderDetails.data ? orderDetails.data[0] : []}
-              />
+              <OrderDetails orderDetails={orderDetails.data[0] || []} />
             </div>
             <div className="px-5 mb-4">
               <p className="text-sm">
@@ -50,6 +47,7 @@ const OrderStatus = (props: any) => {
                 </button>
               </p>
             </div>
+            ,
           </div>
           <div className="payment-details">
             <div className="border border-dashed border-border order-status-subheader px-5 py-2">

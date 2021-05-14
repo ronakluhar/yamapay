@@ -21,11 +21,9 @@ const MerchantListing = () => {
     shopsList: state.merchantListReducer.shopsList,
   }))
   const getProduct = (shop: any) => {
-    console.log('shop.id', shop.id)
     let shopId: any = ''
     shopId = JSON.parse(localStorage.getItem('shop') || '[]')
     if (shop.id !== shopId.id) {
-      // alert('cart clear ...')
       localStorage.removeItem('CartProducts')
       localStorage.removeItem('orderDetails')
     }
