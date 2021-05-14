@@ -8,6 +8,7 @@ import {
   CustomizeOrder,
   OrderStatus,
   ReviewOrder,
+  OrderList,
 } from './components/Orders'
 import {
   InvalidCard,
@@ -33,6 +34,7 @@ const App = () => {
               <Route path="/invalid-card" component={InvalidCard} />
               <Route path="/payment-success" component={PaymentSuccess} />
               <Route path="/payment-card" component={PaymentCard} />
+              <Route path="/order-list" component={OrderList} />
               <Route path="/order-status" component={OrderStatus} />
             </Switch>
           </BrowserRouter>

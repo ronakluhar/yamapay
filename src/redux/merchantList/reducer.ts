@@ -10,6 +10,8 @@ const reducer = (
     newProduct: [],
     taxDetails: [],
     products: [],
+    allOrderDetails: [],
+    detailsOfOrder: [],
     loading: false,
   },
   action: any,
@@ -138,6 +140,38 @@ const reducer = (
         ...state,
         loading: false,
         taxDetails: action.payload,
+      }
+    case actionTypes.GET_ORDERS_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_ORDERS_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_ORDERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        allOrderDetails: action.payload,
+      }
+    case actionTypes.GET_ORDER_DETAILS_PENDING:
+      return {
+        ...state,
+        loading: true,
+      }
+    case actionTypes.GET_ORDER_DETAILS_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+    case actionTypes.GET_ORDER_DETAILS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        detailsOfOrder: action.payload,
       }
   }
   return state

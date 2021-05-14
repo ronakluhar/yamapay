@@ -15,7 +15,7 @@ const InvalidCard = (props: any) => {
     history.push('/')
   }
   if (openTab === 1) {
-    history.push('/order-status')
+    history.push('/order-list')
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen">

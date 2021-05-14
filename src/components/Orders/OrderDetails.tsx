@@ -1,12 +1,13 @@
 import itemImg from '../../images/item1.webp'
 
 const OrderDetails = (props: any) => {
-  const products = JSON.parse(localStorage.getItem('lastCartDetails') || '[]')
-  console.log('products', products)
+  // console.log('props', props.orderDetails.order_details)
+  const products = props.orderDetails || []
+  console.log('products 12', products)
   return (
     <>
-      {products
-        ? products.cart.map((index: any, value: any) => (
+      {products.order_details
+        ? products.order_details.map((index: any, value: any) => (
             // eslint-disable-next-line react/jsx-key
             <div className="flex py-5 mx-5 justify-between items-center order-items border-b border-dashed border-border last:border-0">
               <div className="flex">
@@ -16,17 +17,25 @@ const OrderDetails = (props: any) => {
                   alt=""
                 />
                 <div>
-                  <p className="text-sm">{index.product_name}</p>
-                  <p className="item-desc text-darkgray">
-                    {index.product_comments}
+                  <p className="text-sm">
+                    {index.name + ' $'}
+                    {<b>{index.price}</b>}
                   </p>
-                  {index.extra != null
-                    ? index.extra.map((value: any) => (
+                  <p className="item-desc text-darkgray">{index.comment}</p>
+                  {index.order_details_extra_addon != null
+                    ? index.order_details_extra_addon.map((value: any) => (
                         <p
                           className="item-desc text-darkgray"
-                          key={value.addon}
+                          key={value.addon_name}
                         >
-                          Extra {value.addon_name + '  $' + value.addon_price}
+                          Extra{' '}
+                          {value.addon_name +
+                            '  $' +
+                            value.addon_price +
+                            ' x ' +
+                            value.addon_count +
+                            ' = $' +
+                            value.addon_price * value.addon_count}
                         </p>
                       ))
                     : null}
@@ -39,7 +48,9 @@ const OrderDetails = (props: any) => {
                 <p className="text-sm">{'x' + index.quantity}</p>
               </div>
               <div>
-                <p className="text-sm font-bold">${index.total_price || 0}</p>
+                <p className="text-sm font-bold">
+                  ${index.price * index.quantity || 0}
+                </p>
               </div>
             </div>
           ))

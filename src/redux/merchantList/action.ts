@@ -96,7 +96,7 @@ export const placeOrder = (cartDetails: any, history: any, tip: any) => (
         localStorage.removeItem('CartProducts')
         localStorage.removeItem('personalInfoName')
         localStorage.removeItem('personalInfoComment')
-        localStorage.removeItem('personalInfoPhone')
+        // localStorage.removeItem('personalInfoPhone')
         localStorage.removeItem('orderComment')
         localStorage.removeItem('tip')
         history.push('/payment-success', { orderDetails })
@@ -123,6 +123,47 @@ export const getTax = (zipcode: string) => (dispatch: any) => {
     })
     .catch((err: any) => {
       dispatch({ type: actionTypes.GET_TAX_ERROR, payload: err })
+    })
+}
+
+export const getAllOrder = (phone: any, shopId: any) => (dispatch: any) => {
+  dispatch({ type: actionTypes.GET_ORDERS_PENDING })
+  api
+    .post(`/web/store/account/ordersOfStore`, {
+      customer_phone: phone,
+      store_id: shopId || 0,
+    })
+    .then((res) => {
+      dispatch({
+        type: actionTypes.GET_ORDERS_SUCCESS,
+        payload: res.data.payload.data,
+      })
+    })
+    .catch((err: any) => {
+      dispatch({ type: actionTypes.GET_ORDERS_ERROR, payload: err })
+    })
+}
+
+export const getOrderDetails = (id: string, history: any) => (
+  dispatch: any,
+) => {
+  dispatch({ type: actionTypes.GET_ORDER_DETAILS_PENDING })
+  api
+    .get(`/web/store/account/order/details/${id}`)
+    .then((res) => {
+      if (res.data.success) {
+        const orderDetails = res.data.payload
+        console.log('res', res.data.payload.data)
+        console.log('orderDetails', orderDetails)
+        history.push('/order-status', { orderDetails })
+      }
+      // dispatch({
+      //   type: actionTypes.GET_ORDER_DETAILS_SUCCESS,
+      //   payload: res.data.payload.data,
+      // })
+    })
+    .catch((err: any) => {
+      dispatch({ type: actionTypes.GET_ORDER_DETAILS_ERROR, payload: err })
     })
 }
 

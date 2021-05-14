@@ -1,39 +1,12 @@
-import { useEffect, useState } from 'react'
 import { OrderDetails, PaymentDetails, RestaurantInfo } from '.'
 import { LeftArrow } from '../common/icons'
 import { useHistory } from 'react-router'
 
-const OrderStatus = () => {
+const OrderStatus = (props: any) => {
+  const orderDetails = props.location.state
+    ? props.location.state.orderDetails
+    : []
   const history = useHistory()
-  const [lastOrder, setLastOrder] = useState({
-    comment: '',
-    comments: null,
-    created_at: '',
-    customer_name: '',
-    customer_phone: '',
-    discount: null,
-    eating_method: '',
-    id: 0,
-    order_unique_id: '',
-    service_fee: '',
-    status: 1,
-    store_charge: '',
-    store_id: 1,
-    sub_total: '',
-    table_no: null,
-    tax: '',
-    tip: '',
-    total: '',
-    updated_at: '',
-  })
-  useEffect(() => {
-    const totalOrder = JSON.parse(localStorage.getItem('orderDetails') || '[]')
-    if (totalOrder.new_order) {
-      console.log('totalOrder', totalOrder.new_order)
-      setLastOrder(totalOrder.new_order)
-    }
-    console.log('lastOrder', lastOrder)
-  }, [])
   return (
     <div className="bg-offWhite p-5 min-h-screen order-status">
       <div className="mx-auto max-w-xl">
@@ -50,7 +23,8 @@ const OrderStatus = () => {
           </div>
           <div className="flex items-center justify-between mb-4 px-5">
             <p className="text-sm">
-              Order Id: #{lastOrder ? lastOrder.order_unique_id : ''}
+              Order Id: #
+              {orderDetails.data ? orderDetails.data[0].order_unique_id : ''}
             </p>
             <p className="text-sm">
               Payment Status:{' '}
@@ -64,9 +38,9 @@ const OrderStatus = () => {
               Order Details
             </div>
             <div>
-              <OrderDetails lastOrder={lastOrder} />
-              {/* <OrderDetails /> */}
-              {/* <OrderDetails /> */}
+              <OrderDetails
+                orderDetails={orderDetails.data ? orderDetails.data[0] : []}
+              />
             </div>
             <div className="px-5 mb-4">
               <p className="text-sm">
@@ -82,7 +56,9 @@ const OrderStatus = () => {
               Payment Details
             </div>
             <div className="">
-              <PaymentDetails lastOrder={lastOrder} />
+              <PaymentDetails
+                orderDetails={orderDetails.data ? orderDetails.data[0] : []}
+              />
             </div>
           </div>
         </div>

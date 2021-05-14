@@ -1,4 +1,5 @@
 const PaymentDetails = (props: any) => {
+  console.log('total', props.orderDetails)
   return (
     <div>
       <div className="flex justify-between items-center border-b border-border border-dashed p-5">
@@ -14,10 +15,13 @@ const PaymentDetails = (props: any) => {
           <p>Item Total</p>
           <p>
             $
-            {props.lastOrder
+            {props.orderDetails.sub_total
               ? (
-                  parseFloat(props.lastOrder.sub_total.toString()) -
-                  parseFloat(props.lastOrder.tax)
+                  parseFloat(
+                    props.orderDetails.sub_total
+                      ? props.orderDetails.sub_total.toString()
+                      : 0,
+                  ) - parseFloat(props.orderDetails.tax)
                 ).toFixed(2)
               : 0}
           </p>
@@ -25,21 +29,27 @@ const PaymentDetails = (props: any) => {
         <div className="flex justify-between items-center py-5 mx-5 border-b border-dashed border-border">
           <p>Tips</p>
           <p>
-            ${props.lastOrder ? parseFloat(props.lastOrder.tip).toFixed(2) : 0}
+            $
+            {props.orderDetails.sub_total
+              ? parseFloat(props.orderDetails.tip).toFixed(2)
+              : 0}
           </p>
         </div>
         <div className="flex justify-between items-center py-5 mx-5 border-b border-dashed border-border">
           <p>Tax</p>
           <p>
-            ${props.lastOrder ? parseFloat(props.lastOrder.tax).toFixed(2) : 0}
+            $
+            {props.orderDetails.tax
+              ? parseFloat(props.orderDetails.tax).toFixed(2)
+              : 0}
           </p>
         </div>
         <div className="flex justify-between items-center py-5 mx-5">
           <p className="font-bold text-base">Total</p>
           <p className="font-bold text-base">
             $
-            {props.lastOrder.total
-              ? parseFloat(props.lastOrder.total).toFixed(2)
+            {props.orderDetails.total
+              ? parseFloat(props.orderDetails.total).toFixed(2)
               : 0}
           </p>
         </div>
