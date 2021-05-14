@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Input } from '../common/Form'
 
 type TipsProps = {
@@ -22,16 +22,7 @@ const Tips = ({
   let tipSet: any = []
   tipSet = JSON.parse(localStorage.getItem('tip') || '[]')
   const selectedTip: any = tip
-  // console.log(parseFloat(selectedTip.tip_value))
   const [activeTab, setActiveTab] = useState(selectedTip.tip_index)
-  useEffect(() => {
-    const totalWithTip =
-      parseFloat(localStorage.getItem('subTotal') || '0') +
-      parseFloat(selectedTip.tip_value)
-    console.log('totalWithTip', totalWithTip)
-    setSubtotal(totalWithTip)
-  }, [])
-  // console.log('TIP', JSON.parse(selectedTip.tip_value))
   return (
     <div className="mb-5">
       <h3 className="text-sm font-bold mb-2.5">Tips</h3>

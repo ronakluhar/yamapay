@@ -17,6 +17,8 @@ const tabOptions = [
 ]
 // const extraForward = []
 const CustomizeOrder = (props: any) => {
+  const history = useHistory()
+  const dispatch = useDispatch()
   const [extra, setExtra] = useState(props.location.state.extra || [])
   const [comment, setCommments] = useState('')
   let shop: any = []
@@ -30,22 +32,15 @@ const CustomizeOrder = (props: any) => {
     productId = props.location.state[0].id
   }
 
-  const history = useHistory()
   let customizeProduct = []
   customizeProduct = props.location.state[0] || props.location.state
   customizeProduct = {
     ...customizeProduct,
     quantity: props.location.state.quantity ? props.location.state.quantity : 1,
   }
-
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(getAddonList(storeId, productId))
-  }, [dispatch])
   const { addonList } = useSelector((state: any) => ({
     addonList: state.merchantListReducer.addonList,
   }))
-  // eslint-disable-next-line no-unused-vars
   const [addon, setAddon] = useState('')
   const [product, setProduct] = useState(customizeProduct)
   const [openTab, setOpenTab] = useState()
@@ -66,6 +61,16 @@ const CustomizeOrder = (props: any) => {
   useEffect(() => {
     setAaddonTotal(total || 0)
   })
+  useEffect(() => {
+    dispatch(getAddonList(storeId, productId))
+  }, [dispatch])
+  useEffect(() => {
+    setExtra((prev: any) => [
+      ...prev.map((item: any) => {
+        return { ...item, addon_price: product.quantity * item.addonprice }
+      }),
+    ])
+  }, [product])
   const setAddonValue = (value: any) => {
     const checkArray = value.split(',')
     const existingAddon = findIndex(extra, function (o: any) {
@@ -92,8 +97,6 @@ const CustomizeOrder = (props: any) => {
         count: product.quantity || props.location.state.quantity,
         addon_id: parseInt(checkArray[2]),
       }
-      console.log('arrayToPush', arrayToPush)
-      console.log('product.quantity', product.quantity)
       setExtra((prev: any) => [...prev, { ...arrayToPush }])
       total = sum(
         extra
@@ -105,7 +108,6 @@ const CustomizeOrder = (props: any) => {
     }
     setAaddonTotal(total)
   }
-  console.log('extra', extra)
 
   if (openTab === 1) {
     history.push('/restaurant')
@@ -146,7 +148,7 @@ const CustomizeOrder = (props: any) => {
       quantity: product.quantity || props.location.state.quantity,
     }
     const existingProduct = filter(a, function (o: any) {
-      return o._id !== product1._id
+      return o.itemId !== product1.itemId
     })
     existingProduct.splice(existingProduct.length, 0, product1)
     localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
@@ -257,9 +259,7 @@ const CustomizeOrder = (props: any) => {
                                 // defaultChecked={true}
                                 label={data.addon_name}
                                 onChange={(e: any) =>
-                                  e.target.checked
-                                    ? setAddonValue(e.target.value)
-                                    : setAddonValue(e.target.value)
+                                  setAddonValue(e.target.value)
                                 }
                               />
                             )}

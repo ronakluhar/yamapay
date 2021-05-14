@@ -106,7 +106,7 @@ const CategoryWiseProducts = (props: any) => {
                         history.push('/customize-order', [product])
                       }
                     >
-                      <Plus className="text-white w-6 h-6 bg-blue rounded-lg" />
+                      <Plus className="text-white w-6 h-6 bg-blue rounded-lg cursor-pointer" />
                     </div>
                   </div>
                 ))}

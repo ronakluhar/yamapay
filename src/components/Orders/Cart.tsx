@@ -29,7 +29,6 @@ const Cart = () => {
   const { taxDetails } = useSelector((state: any) => ({
     taxDetails: state.merchantListReducer.taxDetails,
   }))
-  console.log('taxDetails', taxDetails.stateRate)
   let demoProducts: any = []
   demoProducts = localStorage.getItem('CartProducts')
   demoProducts = demoProducts ? JSON.parse(demoProducts) : []
@@ -43,9 +42,6 @@ const Cart = () => {
     comment: localStorage.getItem('personalInfoComment') || '',
     selected_table: '',
   })
-  useEffect(() => {
-    updateSubTotal()
-  }, [products])
   const tipsOption = () => {
     return [
       {
@@ -92,16 +88,6 @@ const Cart = () => {
     tip_value: tipSet ? tipSet.tip_value : 0,
     tip_percentage: tipSet ? tipSet.tip_percentage : '',
   })
-  console.log(
-    'total',
-    sum(
-      products
-        ? products.map((product: any) => {
-            return parseFloat(product.total_price)
-          })
-        : null,
-    ) + parseFloat(taxDetails.stateRate || 0),
-  )
   const [customtip, setCustomtip] = useState(Number)
   const [subtotal, setSubtotal] = useState(
     sum(
@@ -110,26 +96,29 @@ const Cart = () => {
             return parseFloat(product.total_price)
           })
         : null,
-    ),
+    ) + parseFloat(tip.tip_value || 0),
   )
   useEffect(() => {
-    localStorage.setItem('subTotal', subtotal.toString())
-  }, [])
-  console.log('tip', tip)
+    const updatedTipValue = find(tipOptions, (_, i) => {
+      return i === tip.tip_index
+    })
+    setTip((prev) => ({
+      ...prev,
+      tip_value: updatedTipValue?.value || tip.tip_value,
+    }))
+  }, [tipOptions])
   useEffect(() => {
     setSubtotal(
-      sum(
-        products
-          ? products.map((product: any) => {
-              return parseFloat(product.total_price)
-            })
-          : null,
-      ),
+      parseFloat(localStorage.getItem('subTotal') || '0') +
+        parseFloat(tip.tip_value || 0),
     )
-    localStorage.setItem('subTotal', subtotal.toString())
-    setTipOptions(tipsOption())
-  }, [products.length])
-
+  }, [tip])
+  useEffect(() => {
+    updateSubTotal()
+  }, [products])
+  useEffect(() => {
+    Object.keys(cart).length > 0 && history.push('/review-order', [cart, tip])
+  }, [cart])
   const manageQuantity = (index: number, action: string) => {
     setProducts((product: any) =>
       product.map((el: any, i: any) =>
@@ -181,11 +170,7 @@ const Cart = () => {
         })
         existingProduct.splice(existingProduct.length, 0, product1)
         localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
-        return (
-          parseFloat(product.total_price) +
-          parseFloat('0') +
-          parseFloat(product.addonPrice || '0')
-        )
+        return parseFloat(product.total_price)
       }),
     )
     localStorage.setItem('subTotal', subTotal.toString())
@@ -195,7 +180,6 @@ const Cart = () => {
 
   const setCartDetails = () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
-    console.log('subtotal', subtotal)
     setCart({
       store_id: shopId.id,
       table_no: null,
@@ -216,8 +200,6 @@ const Cart = () => {
       eating_method: eatingMethod,
       comments: orderComment,
     })
-    console.log('cart', cart)
-    // history.push('/review-order', [cart, tip])
   }
   const editProduct = (product: any) => {
     history.push('customize-order', product)
@@ -233,6 +215,7 @@ const Cart = () => {
     setProducts(a)
     tipsOption()
   }
+
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
@@ -261,7 +244,7 @@ const Cart = () => {
                         {product.product_comments}
                       </p>
                       {product.addonName ? (
-                        <p className="text-sm text-darkgray">
+                        <p className="product-desc text-darkgray font-normal leading-none">
                           {product.addonName}{' '}
                           <b>{'$' + product.addonPrice.toFixed(2)}</b>
                         </p>
@@ -280,10 +263,10 @@ const Cart = () => {
                     </h4>
                     <div className="flex">
                       <span onClick={() => editProduct(product)}>
-                        <Pencil className="h-4 w-4 mr-2.5" />
+                        <Pencil className="h-4 w-4 mr-2.5 cursor-pointer" />
                       </span>
                       <span onClick={() => deleteProduct(product)}>
-                        <Trash className="h-4 w-4 text-red" />
+                        <Trash className="h-4 w-4 text-red cursor-pointer" />
                       </span>
                     </div>
                   </div>
