@@ -12,7 +12,6 @@ const tabOptions = [
 const ReviewOrder = (props: any) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  console.log('props', props.location.state)
   const tip = props.location.state ? props.location.state[1] : []
   const [openTab, setOpenTab] = useState()
   if (openTab === 1) {
@@ -38,11 +37,14 @@ const ReviewOrder = (props: any) => {
           <div className="border border-dashed order-total flex px-6 py-5 justify-between items-center">
             <h4 className="text-sm font-bold">Order Total</h4>
             <p className="text-base">
-              ${props.location.state ? props.location.state[0].total : 0}
+              $
+              {props.location.state
+                ? props.location.state[0].total.toFixed(2)
+                : 0}
             </p>
           </div>
           <div className="px-6 py-7">
-            <h4 className="text-sm font-bold">Order Total</h4>
+            <h4 className="text-sm font-bold">Payment Method</h4>
             <div className="flex items-center justify-between">
               <p className="text-base font-bold">**** **** **** 2635</p>
               <button className="bg-blue text-white change-card-btn text-sm px-4 py-1">
@@ -53,7 +55,7 @@ const ReviewOrder = (props: any) => {
         </div>
         <ButtonTabs
           tabs={tabOptions}
-          openTab={openTab || 0}
+          openTab={openTab || 1}
           setOpenTab={setOpenTab}
         />
       </div>

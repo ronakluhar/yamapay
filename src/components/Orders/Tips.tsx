@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '../common/Form'
 
 type TipsProps = {
@@ -23,6 +23,9 @@ const Tips = ({
   tipSet = JSON.parse(localStorage.getItem('tip') || '[]')
   const selectedTip: any = tip
   const [activeTab, setActiveTab] = useState(selectedTip.tip_index)
+  useEffect(() => {
+    setActiveTab(selectedTip.tip_index)
+  }, [selectedTip.tip_index])
   return (
     <div className="mb-5">
       <h3 className="text-sm font-bold mb-2.5">Tips</h3>
@@ -81,7 +84,9 @@ const Tips = ({
                   tipSet.tip_percentage === '' ? tipSet.tip_value : customtip
                 }
                 onChange={(event) => {
-                  const re = /^[0-9\b]+$/
+                  // const re = /^[0-9\b]+$/
+                  const re = /^\d*(\.\d{0,2})?$/
+
                   setFieldValue('custom_tip', event.target.value)
                   setCustomtip(event.target.value)
                   if (event.target.value && re.test(event.target.value)) {

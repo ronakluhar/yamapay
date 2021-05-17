@@ -13,7 +13,7 @@ import { Menu } from '../navigation'
 const IMG_URL = 'http://127.0.0.1:8000/'
 const tabOptions = [
   { id: 1, tabName: 'Close' },
-  { id: 2, tabName: 'Save change' },
+  { id: 2, tabName: 'Add to Cart' },
 ]
 const CustomizeOrder = (props: any) => {
   const history = useHistory()
@@ -113,7 +113,9 @@ const CustomizeOrder = (props: any) => {
     history.push('/restaurant')
   }
   if (openTab === 2) {
-    history.push('/cart')
+    props.location.state.quantity
+      ? history.push('/cart')
+      : history.push('/restaurant')
   }
   const price = product.price * product.quantity
   const setLocalStorage = (addon: any, product: any) => {
@@ -142,15 +144,18 @@ const CustomizeOrder = (props: any) => {
       price: product.price || props.location.state.price,
       product_comments: comment,
       total_price:
-        price + (parseFloat(array[1]) * product.quantity || 0) + addonTotal ||
-        props.location.state.total_price + addonTotal,
+        price +
+          (parseFloat(array[1] || props.location.state.addonPrice) *
+            product.quantity || 0) +
+          addonTotal || props.location.state.total_price + addonTotal,
       // total_price: price,
       quantity: product.quantity || props.location.state.quantity,
     }
     const existingProduct = filter(a, function (o: any) {
-      return o.itemId !== product1.itemId
+      return o._id !== product1._id
     })
     existingProduct.splice(existingProduct.length, 0, product1)
+    localStorage.removeItem('tip')
     localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
   }
   return (

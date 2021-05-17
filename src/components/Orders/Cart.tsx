@@ -8,6 +8,7 @@ import { getTax } from '../../redux/merchantList/action'
 import { Input } from '../common/Form'
 import { ChevronRight, Minus, Pencil, Plus, Trash } from '../common/icons'
 import { ButtonTabs } from '../common/Tabs'
+import { Menu } from '../navigation'
 
 const tabOptions = [
   { id: 1, tabName: 'Dine-In' },
@@ -118,8 +119,6 @@ const Cart = () => {
   useEffect(() => {
     Object.keys(cart).length > 0 && history.push('/review-order', [cart, tip])
   }, [cart])
-  // console.log('cart', cart)
-  // console.log('subtotal', cart)
   const manageQuantity = (index: number, action: string) => {
     setProducts((product: any) =>
       product.map((el: any, i: any) =>
@@ -155,6 +154,12 @@ const Cart = () => {
           : el,
       ),
     )
+    localStorage.removeItem('tip')
+    setTip({
+      tip_index: -1,
+      tip_value: 0,
+      tip_percentage: '',
+    })
     tipsOption()
   }
   const updateSubTotal = () => {
@@ -187,14 +192,22 @@ const Cart = () => {
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      total: subtotal + parseFloat(taxDetails.stateRate || 0),
+      total:
+        subtotal +
+        parseFloat(
+          taxDetails.stateRate
+            ? parseFloat(taxDetails.stateRate).toFixed(2)
+            : '0',
+        ),
       cart: products,
       store_charge: 0,
-      tax: taxDetails.stateRate ? taxDetails.stateRate : 0,
+      tax: taxDetails.stateRate
+        ? parseFloat(taxDetails.stateRate).toFixed(2)
+        : 0,
       sub_total: (
         subtotal -
-        parseFloat(tip.tip_value.toString() || '0') +
-        parseFloat(taxDetails.stateRate || 0)
+        parseFloat(tip.tip_value.toString() || '0.00') +
+        parseFloat(taxDetails.stateRate || '0.00')
       ).toFixed(2),
       tip: parseFloat(tip.tip_value).toFixed(2),
       service_fee: 0,
@@ -202,10 +215,17 @@ const Cart = () => {
       comments: orderComment,
     })
   }
+
   const editProduct = (product: any) => {
     history.push('customize-order', product)
   }
   const deleteProduct = (product: any) => {
+    localStorage.removeItem('tip')
+    setTip({
+      tip_index: -1,
+      tip_value: 0,
+      tip_percentage: '',
+    })
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
     const existingProduct = findIndex(a, function (o: any) {
@@ -353,15 +373,12 @@ const Cart = () => {
               </div>
             </div>
           </button>
-          <div className="bg-offWhite px-5 py-10 rounded-30">
-            <button
-              className="rounded-2xl w-full bg-blue text-white font-semibold focus:outline-none py-5 px-10"
-              onClick={() => history.push('/')}
-            >
-              BACK TO HOME
-            </button>
-          </div>
+          {/* <div className="bg-offWhite px-5 py-10 rounded-30"> */}
+          {/* </div> */}
         </div>
+      </div>
+      <div className="mx-5 sticky bottom-7 flex justify-center">
+        <Menu />
       </div>
     </div>
   )

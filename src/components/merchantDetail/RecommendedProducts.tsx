@@ -67,7 +67,7 @@ const RecommendedProducts = (props: any) => {
             >
               <img
                 className="product-img"
-                style={{ height: '130px', width: '130px' }}
+                style={{ height: '130px', width: '150px' }}
                 src={
                   product.image_url ? IMG_URL + product.image_url : productImg
                 }
