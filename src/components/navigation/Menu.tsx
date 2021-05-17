@@ -39,9 +39,8 @@ const Menu = () => {
         <span>
           Cart{' '}
           <span
-            className={`rounded-3xl items-center justify-center ${
-              currentPath === '/cart' ? 'text-blue' : 'text-gray'
-            } bg-white font-bold`}
+            className={`rounded-3xl items-center justify-center text-white
+            bg-red font-bold`}
           >
             {totalItemCount || ''}
           </span>

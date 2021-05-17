@@ -21,6 +21,7 @@ const Tips = ({
 }: TipsProps) => {
   let tipSet: any = []
   tipSet = JSON.parse(localStorage.getItem('tip') || '[]')
+  console.log('tipSet', tipSet)
   const selectedTip: any = tip
   const [activeTab, setActiveTab] = useState(selectedTip.tip_index)
   useEffect(() => {
@@ -68,12 +69,7 @@ const Tips = ({
             </div>
           ))}
         </div>
-        <Formik
-          initialValues={{
-            custom_tip: '',
-          }}
-          onSubmit={(values) => {}}
-        >
+        <Formik initialValues={{}} onSubmit={(values) => {}}>
           {({ values, setFieldValue }) => (
             <Form>
               <Input
@@ -85,10 +81,9 @@ const Tips = ({
                 }
                 onChange={(event) => {
                   // const re = /^[0-9\b]+$/
-                  const re = /^\d*(\.\d{0,2})?$/
-
                   setFieldValue('custom_tip', event.target.value)
                   setCustomtip(event.target.value)
+                  const re = /^\d*(\.\d{0,2})?$/
                   if (event.target.value && re.test(event.target.value)) {
                     setActiveTab(-1)
                     setTip(() => ({
@@ -116,6 +111,7 @@ const Tips = ({
                     localStorage.setItem(
                       'tip',
                       JSON.stringify({
+                        tip_index: -1,
                         tip_value: 0,
                         tip_percentage: '',
                       }),

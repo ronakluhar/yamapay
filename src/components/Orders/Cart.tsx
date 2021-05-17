@@ -110,7 +110,8 @@ const Cart = () => {
   useEffect(() => {
     setSubtotal(
       parseFloat(localStorage.getItem('subTotal') || '0') +
-        parseFloat(tip.tip_value || 0),
+        parseFloat(tip.tip_value || 0) +
+        parseFloat(taxDetails.stateRate || 0),
     )
   }, [tip])
   useEffect(() => {
@@ -204,12 +205,11 @@ const Cart = () => {
       tax: taxDetails.stateRate
         ? parseFloat(taxDetails.stateRate).toFixed(2)
         : 0,
-      sub_total: (
+      sub_total:
         subtotal -
-        parseFloat(tip.tip_value.toString() || '0.00') +
-        parseFloat(taxDetails.stateRate || '0.00')
-      ).toFixed(2),
-      tip: parseFloat(tip.tip_value).toFixed(2),
+        parseFloat(tip.tip_value || '0.00') +
+        parseFloat(taxDetails.stateRate || '0.00'),
+      tip: tip.tip_value ? parseFloat(tip.tip_value).toFixed(2) : 0,
       service_fee: 0,
       eating_method: eatingMethod,
       comments: orderComment,
@@ -362,7 +362,10 @@ const Cart = () => {
             <div className="bg-blue px-10 py-4 flex justify-between items-center">
               <div className="">
                 <p className="text-lg text-white font-bold">
-                  Total Cost: ${subtotal.toFixed(2)}
+                  Total Cost: $
+                  {(
+                    subtotal + parseFloat(taxDetails.stateRate || '0.00')
+                  ).toFixed(2)}
                 </p>
                 <p className="text-xs text-white font-normal">
                   Confirm Your Order
