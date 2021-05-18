@@ -21,7 +21,7 @@ const Tips = ({
 }: TipsProps) => {
   let tipSet: any = []
   tipSet = JSON.parse(localStorage.getItem('tip') || '[]')
-  console.log('tipSet', tipSet)
+  // console.log('tipSet', tipSet)
   const selectedTip: any = tip
   const [activeTab, setActiveTab] = useState(selectedTip.tip_index)
   useEffect(() => {
@@ -80,10 +80,9 @@ const Tips = ({
                   tipSet.tip_percentage === '' ? tipSet.tip_value : customtip
                 }
                 onChange={(event) => {
-                  // const re = /^[0-9\b]+$/
-                  setFieldValue('custom_tip', event.target.value)
+                  const re = /^[0-9]+(\.\d{0,2})?$/
                   setCustomtip(event.target.value)
-                  const re = /^\d*(\.\d{0,2})?$/
+                  setFieldValue('custom_tip', event.target.value)
                   if (event.target.value && re.test(event.target.value)) {
                     setActiveTab(-1)
                     setTip(() => ({

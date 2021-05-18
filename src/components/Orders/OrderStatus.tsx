@@ -1,10 +1,15 @@
 import { OrderDetails, PaymentDetails, RestaurantInfo } from '.'
 import { LeftArrow } from '../common/icons'
 import { useHistory } from 'react-router'
+import { Menu } from '../navigation'
 
 const OrderStatus = (props: any) => {
-  const orderDetails = props.location.state.orderDetails || []
-  // console.log('orderDetails', orderDetails.data[0])
+  const orderDetails = props.location.state.lastorderDetails
+    ? props.location.state.lastorderDetails
+    : props.location.state.orderDetails
+
+  // console.log('props', props.location.state)
+  // console.log('demoProducts', lastorderDetails)
   const history = useHistory()
   return (
     <div className="bg-offWhite p-5 min-h-screen order-status">
@@ -43,7 +48,19 @@ const OrderStatus = (props: any) => {
               <p className="text-sm">
                 Order Status:{' '}
                 <button className="bg-blue text-white change-card-btn text-sm px-3 py-1">
-                  Completed
+                  {orderDetails.data
+                    ? orderDetails.data[0].status === 1
+                      ? 'ORDER PLACED'
+                      : '' || orderDetails.data[0].status === 2
+                      ? 'PROCESSING'
+                      : '' || orderDetails.data[0].status === 3
+                      ? 'REJECTED'
+                      : '' || orderDetails.data[0].status === 4
+                      ? 'ORDER COMPLETED'
+                      : '' || orderDetails.data[0].status === 5
+                      ? 'READY'
+                      : ''
+                    : ''}
                 </button>
               </p>
             </div>
@@ -60,12 +77,9 @@ const OrderStatus = (props: any) => {
             </div>
           </div>
         </div>
-        <button
-          className="rounded-2xl w-full bg-blue text-white font-semibold focus:outline-none py-5 px-16"
-          onClick={() => history.push('/')}
-        >
-          BACK TO HOME
-        </button>
+        <div className="mx-5 sticky bottom-7 flex justify-center">
+          <Menu />
+        </div>
       </div>
     </div>
   )

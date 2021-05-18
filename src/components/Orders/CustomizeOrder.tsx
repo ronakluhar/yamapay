@@ -119,6 +119,8 @@ const CustomizeOrder = (props: any) => {
   }
   const price = product.price * product.quantity
   const setLocalStorage = (addon: any, product: any) => {
+    const shopId = JSON.parse(localStorage.getItem('shop') || '[]')
+    localStorage.setItem('prevShop', JSON.stringify(shopId))
     const addonValue = addon
     const array = addonValue.split(',')
     let a: any = []
@@ -177,7 +179,7 @@ const CustomizeOrder = (props: any) => {
               <h3 className="text-lg font-bold">
                 {product.name || product.product_name}
               </h3>
-              <p className="text-xs">${price}</p>
+              <p className="text-xs">${price.toFixed(2)}</p>
             </div>
             <div className="flex items-center justify-around order-item-quantity">
               <button

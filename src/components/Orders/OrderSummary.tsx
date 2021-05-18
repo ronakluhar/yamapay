@@ -17,7 +17,7 @@ const OrderSummary = ({ subtotal, Tax }: OrderSummaryProps) => {
         </div>
         <div className="flex justify-between items-center pt-5 pb-3.5">
           <p>Tax(%)</p>
-          <p>${Tax ? parseFloat(Tax.toString()).toFixed(2) : 0.0}</p>
+          <p>${Tax ? parseFloat(Tax.toString()).toFixed(2) : '0.00'}</p>
         </div>
       </div>
     </div>

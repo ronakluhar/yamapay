@@ -8,7 +8,7 @@ import axios from 'axios'
 const headers = {
   'Content-Type': 'application/json',
   Authorization:
-    'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiRGFGM0ZxYm1UU3NoM3M5cDg3RncyOU0xIiwic3ViIjoiMTQ5Iiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNjIxMjU2NzQwLCJleHAiOjE2MjEyNjAzNDAsImp0aSI6ImEzMTczZmMwLWZiOTYtNDJiYi04Zjc5LWJhZWY5YzQwYTczYiJ9.nqU41o-IuND-zJL6l_A6BaD6bn2CdRCZnKS9uqjBGR8',
+    'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiRGFGM0ZxYm1UU3NoM3M5cDg3RncyOU0xIiwic3ViIjoiMTQ5Iiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNjIxMzM5MTI5LCJleHAiOjE2MjEzNDI3MjksImp0aSI6IjU1NmQ1NTQ3LWZiZjgtNDBkMy1hMGYwLTBmMmY3YzY1YzJjMSJ9.cmV2nGZGal8KDRfuiCPcikS7BDUDpfCfAA5QTR87KCQ',
 }
 
 const axiosApi = axios.create({

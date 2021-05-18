@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { RestaurantInfo } from '.'
-// import { OrderDetails, RestaurantInfo } from '.'
 import { LeftArrow } from '../common/icons'
 import { useHistory } from 'react-router'
 import { getAllOrder, getOrderDetails } from '../../redux/merchantList/action'
@@ -50,12 +49,28 @@ const OrderList = () => {
                       <h4 className="text-base">
                         Order Id: #<b>{value ? value.order_unique_id : ''}</b>
                       </h4>
+                      <button className="bg-blue text-white change-card-btn text-sm px-3 py-1">
+                        {value.status
+                          ? value.status === 1
+                            ? 'ORDER PLACED'
+                            : '' || value.status === 2
+                            ? 'PROCESSING'
+                            : '' || value.status === 3
+                            ? 'REJECTED'
+                            : '' || value.status === 4
+                            ? 'ORDER COMPLETED'
+                            : '' || value.status === 5
+                            ? 'READY'
+                            : ''
+                          : ''}
+                      </button>
                       <button
                         className="bg-blue text-white change-card-btn text-sm px-3 py-1"
                         onClick={() => handleGetOrderDetails(value.id)}
                       >
                         View
                       </button>
+
                       <div>
                         <p className="text-base ">
                           <b>${value.total}</b>

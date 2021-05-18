@@ -92,7 +92,8 @@ export const placeOrder = (cartDetails: any, history: any, tip: any) => (
         cartDetails.tip_percentage = tip.tip_percentage
         cartDetails.tip_value = tip.tip_value
         localStorage.setItem('lastCartDetails', JSON.stringify(cartDetails))
-        localStorage.setItem('orderDetails', JSON.stringify(orderDetails))
+        // localStorage.setItem('orderDetails', JSON.stringify(orderDetails))
+        localStorage.setItem('lastorderDetails', JSON.stringify(orderDetails))
         localStorage.removeItem('CartProducts')
         localStorage.removeItem('personalInfoName')
         localStorage.removeItem('personalInfoComment')
@@ -153,8 +154,9 @@ export const getOrderDetails = (id: string, history: any) => (
     .then((res) => {
       if (res.data.success) {
         const orderDetails = res.data.payload
-        console.log('res', res.data.payload.data)
-        console.log('orderDetails', orderDetails)
+        // console.log('res', res.data.payload.data)
+        // console.log('orderDetails', orderDetails)
+        // localStorage.setItem('lastorderDetails', JSON.stringify(orderDetails))
         history.push('/order-status', { orderDetails })
       }
       // dispatch({

@@ -26,12 +26,19 @@ const Cart = () => {
   useEffect(() => {
     dispatch(getTax(zipcode))
   }, [dispatch])
+  const prevShopId = JSON.parse(localStorage.getItem('prevShop') || '[]')
   const { taxDetails } = useSelector((state: any) => ({
     taxDetails: state.merchantListReducer.taxDetails,
   }))
   let demoProducts: any = []
   demoProducts = localStorage.getItem('CartProducts')
   demoProducts = demoProducts ? JSON.parse(demoProducts) : []
+  useEffect(() => {
+    // console.log('store_id', demoProducts.slice(-1).pop().storeId)
+    // if (prevShopId.id === demoProducts.slice(-1).pop().storeId) {
+    localStorage.setItem('shop', JSON.stringify(prevShopId))
+    // }
+  }, [])
 
   const [products, setProducts] = useState(demoProducts)
   const [openTab, setOpenTab] = useState(1)
@@ -188,7 +195,7 @@ const Cart = () => {
   const setCartDetails = () => {
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
     setCart({
-      store_id: shopId.id,
+      store_id: shopId.view_id,
       table_no: null,
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
@@ -236,6 +243,9 @@ const Cart = () => {
     setProducts(a)
     tipsOption()
   }
+  // const addMoreItem = () => {
+  //   // alert('here')
+  // }
 
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
@@ -261,9 +271,6 @@ const Cart = () => {
                     <h4 className="text-base">
                       {product.product_name}{' '}
                       <b>{'$' + product.price.toFixed(2)}</b>{' '}
-                      <p className="product-desc font-normal leading-none mb-1 text-darkgray">
-                        {product.product_comments}
-                      </p>
                       {product.addonName ? (
                         <p className="product-desc font-normal leading-none mb-1 text-darkgray">
                           {product.addonName}{' '}
@@ -281,6 +288,9 @@ const Cart = () => {
                             </p>
                           ))
                         : null}
+                      <p className="product-desc font-normal leading-none mb-1 text-darkgray">
+                        {product.product_comments}
+                      </p>
                     </h4>
                     <div className="flex">
                       <span onClick={() => editProduct(product)}>
@@ -352,32 +362,48 @@ const Cart = () => {
             <PersonalDetails setPersonalInfo={setPersonalInfo} />
             <OrderSummary subtotal={subtotal} Tax={taxDetails.stateRate} />
           </div>
-        </div>
-        <div className="md:px-5">
-          <button
-            className="w-full text-left mb-10"
-            type="button"
-            onClick={setCartDetails}
-          >
-            <div className="bg-blue px-10 py-4 flex justify-between items-center">
-              <div className="">
-                <p className="text-lg text-white font-bold">
-                  Total Cost: $
-                  {(
-                    subtotal + parseFloat(taxDetails.stateRate || '0.00')
-                  ).toFixed(2)}
-                </p>
-                <p className="text-xs text-white font-normal">
-                  Confirm Your Order
-                </p>
+          <div className="flex rounded-2xl mb-8 tabs">
+            <button
+              className="w-full text-left mb-10"
+              type="button"
+              onClick={() => history.push('/restaurant')}
+            >
+              <div
+                className="bg-blue px-10 py-4 flex justify-between items-center rounded-2xl mr-0.5"
+                style={{ height: '100%' }}
+              >
+                <div className="">
+                  <p className="text-lg text-white font-bold">Add Items:</p>
+                  <p className="text-xs text-white font-normal"></p>
+                </div>
+                <div>
+                  <ChevronRight className="h-5 w-5 text-white" />
+                </div>
               </div>
-              <div>
-                <ChevronRight className="h-5 w-5 text-white" />
+            </button>
+            <button
+              className="w-full text-left mb-10"
+              type="button"
+              onClick={setCartDetails}
+            >
+              <div className="bg-blue px-10 py-4 flex justify-between items-center rounded-2xl">
+                <div className="">
+                  <p className="text-lg text-white font-bold">
+                    Total Cost: $
+                    {(
+                      subtotal + parseFloat(taxDetails.stateRate || '0.00')
+                    ).toFixed(2)}
+                  </p>
+                  <p className="text-xs text-white font-normal">
+                    Confirm Your Order
+                  </p>
+                </div>
+                <div>
+                  <ChevronRight className="h-5 w-5 text-white" />
+                </div>
               </div>
-            </div>
-          </button>
-          {/* <div className="bg-offWhite px-5 py-10 rounded-30"> */}
-          {/* </div> */}
+            </button>
+          </div>
         </div>
       </div>
       <div className="mx-5 sticky bottom-7 flex justify-center">

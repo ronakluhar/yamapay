@@ -3,7 +3,7 @@ import itemImg from '../../images/item1.webp'
 const OrderDetails = (props: any) => {
   // console.log('props', props.orderDetails.order_details)
   const products = props.orderDetails || []
-  console.log('products 12', products)
+  // console.log('products 12', products)
   return (
     <>
       {products.order_details
@@ -35,7 +35,7 @@ const OrderDetails = (props: any) => {
                             ' x ' +
                             value.addon_count +
                             ' = $' +
-                            value.addon_price * value.addon_count}
+                            (value.addon_price * value.addon_count).toFixed(2)}
                         </p>
                       ))
                     : null}
@@ -49,7 +49,7 @@ const OrderDetails = (props: any) => {
               </div>
               <div>
                 <p className="text-sm font-bold">
-                  ${index.price * index.quantity || 0}
+                  ${(index.price * index.quantity).toFixed(2) || 0}
                 </p>
               </div>
             </div>

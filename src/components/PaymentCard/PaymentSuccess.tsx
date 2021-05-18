@@ -3,20 +3,28 @@ import paymentSuccess from '../../images/payment-success.png'
 import { useState } from 'react'
 import { ButtonTabs } from '../common/Tabs'
 import { useHistory } from 'react-router'
+import { getOrderDetails } from '../../redux/merchantList/action'
+import { useDispatch } from 'react-redux'
 
 const tabOptions = [
   { id: 1, tabName: 'ORDER STATUS' },
   { id: 2, tabName: 'BACK TO HOME' },
 ]
 const InvalidCard = (props: any) => {
+  const dispatch = useDispatch()
   const history = useHistory()
   const [openTab, setOpenTab] = useState()
   const shop = JSON.parse(localStorage.getItem('shop') || '[]')
+  let lastorderDetails: any = []
+  lastorderDetails = JSON.parse(
+    localStorage.getItem('lastorderDetails') || '[]',
+  )
+  // console.log('lastorderDetails', lastorderDetails.data.slice(-1).pop().id)
   if (openTab === 2) {
     history.push('/')
   }
   if (openTab === 1) {
-    history.push('/order-list')
+    dispatch(getOrderDetails(lastorderDetails.data.slice(-1).pop().id, history))
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen">
@@ -36,8 +44,8 @@ const InvalidCard = (props: any) => {
             <p className="font-bold text-2xl text-blue">Payment Success !!</p>
             <p className="text-lg text-lightblack ">
               You just paid <b>{shop.store_name ? shop.store_name : ''}</b> ${' '}
-              {props.location.state.orderDetails
-                ? props.location.state.orderDetails.new_order.total
+              {props.location.state
+                ? props.location.state.orderDetails.new_order.total.toFixed(2)
                 : 0}
             </p>
           </div>

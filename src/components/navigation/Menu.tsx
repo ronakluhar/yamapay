@@ -12,6 +12,7 @@ const Menu = () => {
   useEffect(() => {
     totalItemCount = cartProducts.length
   }, [cartProducts])
+
   return (
     <div className="bg-white py-4 flex justify-between items-center rounded-10 px-5 max-w-xl flex-1 menu">
       <Link
@@ -38,12 +39,20 @@ const Menu = () => {
         <Cart className="h-5 w-5" />
         <span>
           Cart{' '}
-          <span
-            className={`rounded-3xl items-center justify-center text-white
+          {totalItemCount !== 0 ? (
+            <button
+              className={`rounded-full h-4 w-4 flex items-center justify-center text-white
+            bg-red font-bold`}
+            >
+              {totalItemCount || ''}
+            </button>
+          ) : null}{' '}
+          {/* <button
+            className={`rounded-full h-4 w-4 flex items-center justify-center text-white
             bg-red font-bold`}
           >
             {totalItemCount || ''}
-          </span>
+          </button> */}
         </span>
       </Link>
       <Link
