@@ -391,7 +391,12 @@ const Cart = () => {
                   <p className="text-lg text-white font-bold">
                     Total Cost: $
                     {(
-                      subtotal + parseFloat(taxDetails.stateRate || '0.00')
+                      subtotal +
+                      parseFloat(
+                        taxDetails.stateRate
+                          ? parseFloat(taxDetails.stateRate).toFixed(2)
+                          : '0',
+                      )
                     ).toFixed(2)}
                   </p>
                   <p className="text-xs text-white font-normal">

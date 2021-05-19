@@ -100,7 +100,7 @@ const CategoryWiseProducts = (props: any) => {
                           {product.description}
                         </p>
                         <span className="text-blue text-sm">
-                          USD {product.price}
+                          ${product.price.toFixed(2)}
                         </span>
                       </div>
                     </div>

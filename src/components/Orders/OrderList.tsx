@@ -4,6 +4,7 @@ import { LeftArrow } from '../common/icons'
 import { useHistory } from 'react-router'
 import { getAllOrder, getOrderDetails } from '../../redux/merchantList/action'
 import { useDispatch, useSelector } from 'react-redux'
+import { Menu } from '../navigation'
 
 const OrderList = () => {
   const history = useHistory()
@@ -70,7 +71,6 @@ const OrderList = () => {
                       >
                         View
                       </button>
-
                       <div>
                         <p className="text-base ">
                           <b>${value.total}</b>
@@ -83,12 +83,9 @@ const OrderList = () => {
             </div>
           </div>
         </div>
-        <button
-          className="rounded-2xl w-full bg-blue text-white font-semibold focus:outline-none py-5 px-16"
-          onClick={() => history.push('/')}
-        >
-          BACK TO HOME
-        </button>
+        <div className="mx-5 sticky bottom-7 flex justify-center">
+          <Menu />
+        </div>
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ const Menu = () => {
   cartProducts = cartProducts ? JSON.parse(cartProducts) : []
   useEffect(() => {
     totalItemCount = cartProducts.length
-  }, [cartProducts])
+  }, [cartProducts.length])
 
   return (
     <div className="bg-white py-4 flex justify-between items-center rounded-10 px-5 max-w-xl flex-1 menu">

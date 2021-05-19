@@ -9,8 +9,8 @@ const OrderDetails = (props: any) => {
       {products.order_details
         ? products.order_details.map((index: any, value: any) => (
             // eslint-disable-next-line react/jsx-key
-            <div className="flex py-5 mx-5 justify-between items-center order-items border-b border-dashed border-border last:border-0">
-              <div className="flex">
+            <div className="flex py-5 mx-5 justify-between items-center order-items border-b border-dashed border-border last:border-0 ">
+              <div className="flex w-1/3">
                 <img
                   className="w-12 h-12 rounded-10 mr-2.5"
                   src={itemImg}
@@ -21,7 +21,6 @@ const OrderDetails = (props: any) => {
                     {index.name + ' $'}
                     {<b>{index.price}</b>}
                   </p>
-                  <p className="item-desc text-darkgray">{index.comment}</p>
                   {index.order_details_extra_addon != null
                     ? index.order_details_extra_addon.map((value: any) => (
                         <p
@@ -42,6 +41,7 @@ const OrderDetails = (props: any) => {
                   <p className="item-desc">
                     {index.addonName ? 'Extra' + index.addonName : ''}
                   </p>
+                  <p className="item-desc text-darkgray">{index.comment}</p>
                 </div>
               </div>
               <div>

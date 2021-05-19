@@ -82,7 +82,7 @@ const RecommendedProducts = (props: any) => {
               <div className="flex justify-between px-2">
                 <div>
                   <span className="text-green product-price">
-                    USD {product.price}
+                    ${product.price.toFixed(2)}
                   </span>
                 </div>
                 <div className="product-quantity flex items-center"></div>
