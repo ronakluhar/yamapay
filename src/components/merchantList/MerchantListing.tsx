@@ -57,7 +57,7 @@ const MerchantListing = () => {
               <div
                 className="relative merchant"
                 key={index}
-                onClick={() => alert(index)}
+                // onClick={() => alert(index)}
               >
                 <img className="merchant-img mr-5" src={shopImg} alt="" />
                 <div className="opacity-50 bg-black rounded-xl absolute bottom-1"></div>
