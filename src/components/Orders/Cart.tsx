@@ -191,31 +191,48 @@ const Cart = () => {
     setSubtotal(subTotal)
     setTipOptions(tipsOption())
   }
-
   const setCartDetails = () => {
+    const finalsubTotal =
+      subtotal -
+      parseFloat(tip.tip_value ? parseFloat(tip.tip_value).toFixed(2) : '0') +
+      parseFloat(
+        taxDetails.stateRate
+          ? parseFloat(taxDetails.stateRate).toFixed(2)
+          : '0',
+      )
+    const finalTotal =
+      subtotal +
+      parseFloat(
+        taxDetails.stateRate
+          ? parseFloat(taxDetails.stateRate).toFixed(2)
+          : '0',
+      )
     const eatingMethod = find(tabOptions, { id: openTab })?.tabName
     setCart({
       store_id: shopId.view_id,
+      merchant_id: shopId.merchantId,
       table_no: null,
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      total:
-        subtotal +
-        parseFloat(
-          taxDetails.stateRate
-            ? parseFloat(taxDetails.stateRate).toFixed(2)
-            : '0',
-        ),
+      // total:
+      //   subtotal +
+      //   parseFloat(
+      //     taxDetails.stateRate
+      //       ? parseFloat(taxDetails.stateRate).toFixed(2)
+      //       : '0',
+      //   ),
+      total: finalTotal.toFixed(2),
       cart: products,
       store_charge: 0,
       tax: taxDetails.stateRate
         ? parseFloat(taxDetails.stateRate).toFixed(2)
         : 0,
-      sub_total:
-        subtotal -
-        parseFloat(tip.tip_value || '0.00') +
-        parseFloat(taxDetails.stateRate || '0.00'),
+      // sub_total:
+      //   subtotal -
+      //   parseFloat(tip.tip_value || '0.00') +
+      //   parseFloat(taxDetails.stateRate || '0.00'),
+      sub_total: finalsubTotal.toFixed(2),
       tip: tip.tip_value ? parseFloat(tip.tip_value).toFixed(2) : 0,
       service_fee: 0,
       eating_method: eatingMethod,
@@ -243,10 +260,6 @@ const Cart = () => {
     setProducts(a)
     tipsOption()
   }
-  // const addMoreItem = () => {
-  //   // alert('here')
-  // }
-
   return (
     <div className="bg-offWhite pt-5 min-h-screen cart">
       <div className="mx-auto max-w-xl">
@@ -270,11 +283,10 @@ const Cart = () => {
                   <div className="py-2 flex justify-between items-center">
                     <h4 className="text-base">
                       {product.product_name}{' '}
-                      <b>{'$' + product.price.toFixed(2)}</b>{' '}
+                      <b>{'$' + parseFloat(product.price).toFixed(2)}</b>{' '}
                       {product.addonName ? (
                         <p className="product-desc font-normal leading-none mb-1 text-darkgray">
-                          {product.addonName}{' '}
-                          <b>{'$' + product.addonPrice.toFixed(2)}</b>
+                          {product.addonName} <b>{'$' + product.addonPrice}</b>
                         </p>
                       ) : null}
                       {product.extra != null
@@ -284,7 +296,7 @@ const Cart = () => {
                               key={value.addon_id}
                             >
                               {value.addon_name}{' '}
-                              <b>{'  $' + value.addonprice.toFixed(2)}</b>
+                              <b>{'  $' + value.addonprice}</b>
                             </p>
                           ))
                         : null}
@@ -324,7 +336,7 @@ const Cart = () => {
                     </div>
                     <div>
                       <p className="text-base">
-                        ${product.total_price.toFixed(2)}
+                        ${parseFloat(product.total_price).toFixed(2)}
                       </p>
                     </div>
                   </div>

@@ -10,7 +10,7 @@ const OrderDetails = (props: any) => {
         ? products.order_details.map((index: any, value: any) => (
             // eslint-disable-next-line react/jsx-key
             <div className="flex py-5 mx-5 justify-between items-center order-items border-b border-dashed border-border last:border-0 ">
-              <div className="flex w-1/3">
+              <div className="flex w-2/3">
                 <img
                   className="w-12 h-12 rounded-10 mr-2.5"
                   src={itemImg}

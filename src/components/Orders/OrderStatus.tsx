@@ -12,17 +12,18 @@ const OrderStatus = (props: any) => {
     : props.location.state.orderDetails
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(
-      getOrderDetails(
-        props.location.state.lastorderDetails
-          ? props.location.state.lastorderDetails.data[0].id
-          : props.location.state.orderDetails.data[0].id,
-        history,
-      ),
-    )
+    const interval = setInterval(() => {
+      dispatch(
+        getOrderDetails(
+          props.location.state.lastorderDetails
+            ? props.location.state.lastorderDetails.data[0].id
+            : props.location.state.orderDetails.data[0].id,
+          history,
+        ),
+      )
+    }, 10000)
+    return () => clearInterval(interval)
   }, [])
-  // console.log('props', props.location.state.orderDetails.data[0].id)
-  // console.log('demoProducts', lastorderDetails)
   const history = useHistory()
   return (
     <>

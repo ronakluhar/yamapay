@@ -12,7 +12,7 @@ const Menu = () => {
   useEffect(() => {
     totalItemCount = cartProducts.length
   }, [cartProducts.length])
-
+  // console.log('totalItemCount', totalItemCount)
   return (
     <div className="bg-white py-4 flex justify-between items-center rounded-10 px-5 max-w-xl flex-1 menu">
       <Link
@@ -39,7 +39,7 @@ const Menu = () => {
         <Cart className="h-5 w-5" />
         <span>
           Cart{' '}
-          {totalItemCount !== 0 ? (
+          {typeof totalItemCount !== 'undefined' && totalItemCount ? (
             <button
               className={`rounded-full h-4 w-4 flex items-center justify-center text-white
             bg-red font-bold`}
@@ -47,12 +47,6 @@ const Menu = () => {
               {totalItemCount || ''}
             </button>
           ) : null}{' '}
-          {/* <button
-            className={`rounded-full h-4 w-4 flex items-center justify-center text-white
-            bg-red font-bold`}
-          >
-            {totalItemCount || ''}
-          </button> */}
         </span>
       </Link>
       <Link

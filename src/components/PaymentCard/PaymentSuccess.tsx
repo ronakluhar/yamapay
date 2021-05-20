@@ -45,7 +45,9 @@ const InvalidCard = (props: any) => {
             <p className="text-lg text-lightblack ">
               You just paid <b>{shop.store_name ? shop.store_name : ''}</b> ${' '}
               {props.location.state
-                ? props.location.state.orderDetails.new_order.total.toFixed(2)
+                ? parseFloat(
+                    props.location.state.orderDetails.new_order.total,
+                  ).toFixed(2)
                 : 0}
             </p>
           </div>

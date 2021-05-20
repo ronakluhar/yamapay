@@ -2,17 +2,17 @@ import { LeftArrow, Verified } from '../common/icons'
 import logo from '../../images/logo.png'
 import { Input } from '../common/Form'
 import { Formik, Field } from 'formik'
-// import { paymentCardSchema } from '../../validators'
-// import CreditCardInput from 'react-credit-card-input'
 import * as Yup from 'yup'
 import { useHistory } from 'react-router'
-
+// @ts-ignore
+import { css } from 'styled-components'
 // @ts-ignore
 import { PaymentInputsWrapper, usePaymentInputs } from 'react-payment-inputs'
 // @ts-ignore
 import images from 'react-payment-inputs/images'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 const PaymentCard = () => {
+  const card = JSON.parse(localStorage.getItem('cardDetails') || '[]')
   const history = useHistory()
   const [cardDetails, setCardDetails] = useState({})
   const {
@@ -24,13 +24,17 @@ const PaymentCard = () => {
     wrapperProps,
   } = usePaymentInputs()
   const paymentCardSchema = Yup.object({
-    name_on_card: Yup.string().required('Name is a required field'),
+    nameOnCard: Yup.string().required('Name is a required field'),
   })
-  useEffect(() => {
-    console.log('cardDetails', cardDetails)
-    // Object.keys(cardDetails).length > 0 &&
-    //   localStorage.setItem('cardDetails', JSON.stringify(cardDetails) || '[]')
-  }, [cardDetails])
+
+  // useEffect(() => {
+  //   Object.keys(cardDetails).length > 0 && redirectBack
+  // }, [cardDetails])
+  if (Object.keys(cardDetails).length > 0) {
+    localStorage.setItem('cardDetails', JSON.stringify(cardDetails) || '[]')
+    history.goBack()
+  }
+
   return (
     <div className="bg-offWhite p-5 min-h-screen">
       <div className="mx-auto max-w-xl">
@@ -47,13 +51,12 @@ const PaymentCard = () => {
             <Verified className="h-5 v-5 text-lime absolute right-8 top-8" />
           </div>
         </div>
-        <Formik
+        {/* <Formik
           initialValues={{
             cardNumber: '',
             expiryDate: '',
             cvc: '',
-            name_on_card: '',
-            image: '',
+            nameOnCard: '',
           }}
           validationSchema={paymentCardSchema}
           onSubmit={(data) => setCardDetails(data)}
@@ -71,8 +74,98 @@ const PaymentCard = () => {
             if (meta.erroredInputs.cvc) {
               errors.cvc = meta.erroredInputs.cvc
             }
-            if (meta.erroredInputs.name_on_card) {
-              errors.name_on_card = meta.erroredInputs.name_on_card
+            if (meta.erroredInputs.nameOnCard) {
+              errors.nameOnCard = meta.erroredInputs.nameOnCard
+            }
+            return errors
+          }}
+        >
+          {({ handleSubmit, setFieldValue, errors }) => (
+            <Form onSubmit={handleSubmit}>
+              <div className="bg-white px-3 py-16 rounded-30 mb-5 relative">
+                <div className="mb-5">
+                  <Input
+                    type="text"
+                    name="name_on_card"
+                    label="Name on Card"
+                    error={errors.nameOnCard?.toString()}
+                  />
+                </div>
+                <div className="mb-5">
+                  <svg {...getCardImageProps({ images })} />
+                  <Input
+                    type="text"
+                    name="card_number"
+                    label="Card Number"
+                    error={errors.cardNumber}
+                    {...getCardNumberProps({
+                      onChange: (event: any) => {
+                        setFieldValue('cardNumber', event.target.value)
+                        console.log(event.target.value)
+                      },
+                    })}
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <Input
+                    type="month"
+                    name="expiry"
+                    label="Expiry Date"
+                    error={errors.expiryDate?.toString()}
+                    {...getExpiryDateProps({
+                      onChange: (event: any) => {
+                        setFieldValue('expiryDate', event.target.value)
+                      },
+                    })}
+                  />
+                  <Input
+                    type="number"
+                    name="cvv"
+                    label="CVV"
+                    min="000"
+                    error={errors.cvc?.toString()}
+                    {...getCVCProps({
+                      onChange: (event: any) => {
+                        setFieldValue('cvc', event.target.value)
+                      },
+                    })}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="rounded-2xl w-full bg-blue text-white font-semibold focus:outline-none py-5 px-16"
+              >
+                Save Card
+              </button>
+            </Form>
+          )}
+        </Formik> */}
+        <Formik
+          initialValues={{
+            cardNumber: card ? card.cardNumber : '',
+            expiryDate: card ? card.expiryDate : '',
+            cvc: card ? card.cvc : '',
+            nameOnCard: card ? card.nameOnCard : '',
+          }}
+          validationSchema={paymentCardSchema}
+          onSubmit={(data) => setCardDetails(data)}
+          validate={() => {
+            const errors: any = {}
+            if (meta.erroredInputs.cardNumber) {
+              errors.cardNumber = meta.erroredInputs.cardNumber
+            }
+            if (meta.erroredInputs.expiryDate) {
+              errors.expiryDate = meta.erroredInputs.expiryDate
+            }
+            if (meta.erroredInputs.cvc) {
+              errors.cvc = meta.erroredInputs.cvc
+            }
+            if (meta.erroredInputs.cvc) {
+              errors.cvc = meta.erroredInputs.cvc
+            }
+            if (meta.erroredInputs.nameOnCard) {
+              errors.nameOnCard = meta.erroredInputs.nameOnCard
             }
             return errors
           }}
@@ -83,12 +176,11 @@ const PaymentCard = () => {
                 <div className="mb-5">
                   <Input
                     type="text"
-                    name="name_on_card"
+                    name="nameOnCard"
                     label="Name on Card"
-                    error={errors.name_on_card}
+                    error={errors.nameOnCard?.toString()}
                     onChange={(event) => {
-                      setFieldValue('name_on_card', event.target.value)
-                      setFieldValue('image', getCardImageProps({ images }))
+                      setFieldValue('nameOnCard', event.target.value)
                     }}
                   />
                 </div>
@@ -96,18 +188,18 @@ const PaymentCard = () => {
                   {...wrapperProps}
                   styles={{
                     fieldWrapper: {
-                      base: `
+                      base: css`
                         margin-bottom: 1rem;
                       `,
                     },
                     inputWrapper: {
-                      base: `
+                      base: css`
                         border-color: blue;
                       `,
-                      errored: `
+                      errored: css`
                         border-color: maroon;
                       `,
-                      focused: `
+                      focused: css`
                         border-color: unset;
                         box-shadow: unset;
                         outline: 2px solid blue;
@@ -115,43 +207,38 @@ const PaymentCard = () => {
                       `,
                     },
                     input: {
-                      base: `
+                      base: css`
                         color: black;
                       `,
-                      errored: `
+                      errored: css`
                         color: maroon;
                       `,
-                      cardNumber: `
-                        width: 15rem;
-                      `,
-                      expiryDate: `
+                      cardNumber: 'custom-input',
+                      expiryDate: css`
                         width: 10rem;
                       `,
-                      cvc: `
+                      cvc: css`
                         width: 5rem;
                       `,
                     },
                     errorText: {
-                      base: `
+                      base: css`
                         color: maroon;
                       `,
                     },
                   }}
                 >
                   <svg {...getCardImageProps({ images })} />
-                  {console.log(getCardImageProps({ images }))}
                   <div>
                     <Field name="cardNumber">
                       {(field: any) => (
                         <input
+                          className="custom-box-input"
+                          // value={cardNumber}
                           {...getCardNumberProps({
                             onBlur: field.onBlur,
                             onChange: (event: any) => {
                               setFieldValue('cardNumber', event.target.value)
-                              setFieldValue(
-                                'image',
-                                getCardImageProps({ images }),
-                              )
                             },
                           })}
                         />
@@ -164,12 +251,9 @@ const PaymentCard = () => {
                         <input
                           {...getExpiryDateProps({
                             onBlur: field.onBlur,
+                            // value: expiryDate,
                             onChange: (event: any) => {
                               setFieldValue('expiryDate', event.target.value)
-                              setFieldValue(
-                                'image',
-                                getCardImageProps({ images }),
-                              )
                             },
                           })}
                         />
@@ -180,12 +264,9 @@ const PaymentCard = () => {
                         <input
                           {...getCVCProps({
                             onBlur: field.onBlur,
+                            // value: cvc,
                             onChange: (event: any) => {
                               setFieldValue('cvc', event.target.value)
-                              setFieldValue(
-                                'image',
-                                getCardImageProps({ images }),
-                              )
                             },
                           })}
                         />

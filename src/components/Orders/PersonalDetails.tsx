@@ -7,6 +7,9 @@ type Props = {
 }
 
 const PersonalDetails = ({ setPersonalInfo }: Props) => {
+  let cartProducts: any = []
+  cartProducts = localStorage.getItem('CartProducts')
+  cartProducts = cartProducts ? JSON.parse(cartProducts) : []
   const PersonalDetailsSchema = Yup.object().shape({
     name: Yup.string().required('Name is Required Field'),
     phone: Yup.number().required('Phone is Required Field'),
@@ -43,7 +46,10 @@ const PersonalDetails = ({ setPersonalInfo }: Props) => {
         <Formik
           initialValues={{
             name: localStorage.getItem('personalInfoName') || '',
-            phone: localStorage.getItem('personalInfoPhone') || '',
+            phone:
+              cartProducts.length !== 0
+                ? localStorage.getItem('personalInfoPhone')
+                : '',
             comment: localStorage.getItem('personalInfoComment') || '',
             selected_table: '',
           }}

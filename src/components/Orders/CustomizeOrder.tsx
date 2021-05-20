@@ -90,10 +90,9 @@ const CustomizeOrder = (props: any) => {
     } else {
       const arrayToPush = {
         addon_name: checkArray[0],
-        addonprice: parseInt(checkArray[1]),
+        addonprice: parseFloat(checkArray[1]).toFixed(2),
         addon_price:
-          parseInt(checkArray[1]) *
-          (product.quantity || props.location.state.quantity),
+          checkArray[1] * product.quantity || props.location.state.quantity,
         count: product.quantity || props.location.state.quantity,
         addon_id: parseInt(checkArray[2]),
       }
@@ -109,14 +108,6 @@ const CustomizeOrder = (props: any) => {
     setAaddonTotal(total)
   }
 
-  if (openTab === 1) {
-    history.push('/restaurant')
-  }
-  if (openTab === 2) {
-    props.location.state.quantity
-      ? history.push('/cart')
-      : history.push('/restaurant')
-  }
   const price = product.price * product.quantity
   const setLocalStorage = (addon: any, product: any) => {
     const shopId = JSON.parse(localStorage.getItem('shop') || '[]')
@@ -125,6 +116,12 @@ const CustomizeOrder = (props: any) => {
     const array = addonValue.split(',')
     let a: any = []
     a = JSON.parse(localStorage.getItem('CartProducts') || '[]')
+    const finalTotal =
+      price +
+        (parseFloat(array[1] || props.location.state.addonPrice) *
+          product.quantity || 0) +
+        addonTotal || props.location.state.total_price + addonTotal
+    // console.log('finalTotal =>', finalTotal.toFixed(2))
     const product1 = {
       _id: product._id || new Date().getTime(),
       storeId: shop.id,
@@ -140,16 +137,19 @@ const CustomizeOrder = (props: any) => {
         : props.location.state.addonId || '',
       addonName: array[0] ? array[0] : props.location.state.addonName || '',
       addonPrice: parseFloat(array[1])
-        ? parseFloat(array[1])
+        ? parseFloat(array[1]).toFixed(2)
         : props.location.state.addonPrice || '',
       product_name: product.name || props.location.state.product_name,
-      price: product.price || props.location.state.price,
+      price:
+        parseFloat(product.price).toFixed(2) ||
+        parseFloat(props.location.state.price).toFixed(2),
       product_comments: comment,
-      total_price:
-        price +
-          (parseFloat(array[1] || props.location.state.addonPrice) *
-            product.quantity || 0) +
-          addonTotal || props.location.state.total_price + addonTotal,
+      total_price: finalTotal.toFixed(2),
+      // total_price:
+      //   price +
+      //     (parseFloat(array[1] || props.location.state.addonPrice) *
+      //       product.quantity || 0) +
+      //     addonTotal || props.location.state.total_price + addonTotal,
       // total_price: price,
       quantity: product.quantity || props.location.state.quantity,
     }
@@ -159,6 +159,15 @@ const CustomizeOrder = (props: any) => {
     existingProduct.splice(existingProduct.length, 0, product1)
     localStorage.removeItem('tip')
     localStorage.setItem('CartProducts', JSON.stringify(existingProduct))
+    props.location.state.quantity
+      ? history.push('/cart')
+      : history.push('/restaurant')
+  }
+  if (openTab === 1) {
+    history.push('/restaurant')
+  }
+  if (openTab === 2) {
+    setLocalStorage(addon, product)
   }
   return (
     <div className="bg-offWhite p-5 min-h-screen order-item">
@@ -288,7 +297,7 @@ const CustomizeOrder = (props: any) => {
           tabs={tabOptions}
           openTab={openTab || 1}
           setOpenTab={setOpenTab}
-          setLocalStorage={() => setLocalStorage(addon, product)}
+          // setLocalStorage={() => setLocalStorage(addon, product)}
         />
       </div>
       <div className="mx-5 sticky bottom-7 flex justify-center">
