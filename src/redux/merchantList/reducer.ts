@@ -113,18 +113,6 @@ const reducer = (
         loading: false,
         orderDetails: action.payload,
       }
-    case actionTypes.SET_LOCAL_STORAGE:
-      return {
-        ...state,
-        loading: false,
-        newProduct: action.payload,
-      }
-    case actionTypes.SET_PRODUCT:
-      return {
-        ...state,
-        loading: false,
-        products: action.payload,
-      }
     case actionTypes.GET_TAX_PENDING:
       return {
         ...state,

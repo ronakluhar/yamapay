@@ -46,7 +46,6 @@ const CustomizeOrder = (props: any) => {
   const [product, setProduct] = useState(customizeProduct)
   const [openTab, setOpenTab] = useState()
   const [addonTotal, setAaddonTotal] = useState(0)
-  // const checkboxAddon = false
   const addonExist = (addonId: any) => {
     return extra.some(function (el: any) {
       return el.addon_id === addonId
@@ -145,12 +144,6 @@ const CustomizeOrder = (props: any) => {
         parseFloat(props.location.state.price).toFixed(2),
       product_comments: comment,
       total_price: finalTotal.toFixed(2),
-      // total_price:
-      //   price +
-      //     (parseFloat(array[1] || props.location.state.addonPrice) *
-      //       product.quantity || 0) +
-      //     addonTotal || props.location.state.total_price + addonTotal,
-      // total_price: price,
       quantity: product.quantity || props.location.state.quantity,
     }
     const existingProduct = filter(a, function (o: any) {
@@ -227,7 +220,6 @@ const CustomizeOrder = (props: any) => {
             <div className="px-5 pt-6 pb-4">
               <Formik initialValues={{}} onSubmit={(values) => {}}>
                 {() => (
-                  // <Form>
                   <>
                     <div className="my-3">
                       <Input
@@ -272,7 +264,6 @@ const CustomizeOrder = (props: any) => {
                                   data.id
                                 }
                                 checked={addonExist(data.id) || null}
-                                // defaultChecked={true}
                                 label={data.addon_name}
                                 onChange={(e: any) =>
                                   setAddonValue(e.target.value)
@@ -286,8 +277,6 @@ const CustomizeOrder = (props: any) => {
                         ))
                       : null}
                   </>
-                  // {' '}
-                  // </Form>
                 )}
               </Formik>
             </div>
@@ -297,7 +286,6 @@ const CustomizeOrder = (props: any) => {
           tabs={tabOptions}
           openTab={openTab || 1}
           setOpenTab={setOpenTab}
-          // setLocalStorage={() => setLocalStorage(addon, product)}
         />
       </div>
       <div className="mx-5 sticky bottom-7 flex justify-center">

@@ -50,7 +50,10 @@ const OrderList = () => {
                       <h4 className="text-base">
                         Order Id: #<b>{value ? value.order_unique_id : ''}</b>
                       </h4>
-                      <button className="bg-blue text-white change-card-btn text-sm px-3 py-1">
+                      <button
+                        className="bg-blue text-white change-card-btn text-sm px-3 py-1"
+                        onClick={() => location.reload(false)}
+                      >
                         {value.status
                           ? value.status === 1
                             ? 'ORDER PLACED'

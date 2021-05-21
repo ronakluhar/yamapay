@@ -12,7 +12,6 @@ const Menu = () => {
   useEffect(() => {
     totalItemCount = cartProducts.length
   }, [cartProducts.length])
-  // console.log('totalItemCount', totalItemCount)
   return (
     <div className="bg-white py-4 flex justify-between items-center rounded-10 px-5 max-w-xl flex-1 menu">
       <Link
@@ -52,7 +51,7 @@ const Menu = () => {
       <Link
         to={'/order-list'}
         className={`flex flex-col items-center ${
-          currentPath === '/order-status' ? 'text-blue' : 'text-gray'
+          currentPath === '/order-list' ? 'text-blue' : 'text-gray'
         }`}
         data-toggle="tab"
         role="tab"

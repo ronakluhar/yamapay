@@ -19,7 +19,6 @@ const InvalidCard = (props: any) => {
   lastorderDetails = JSON.parse(
     localStorage.getItem('lastorderDetails') || '[]',
   )
-  // console.log('lastorderDetails', lastorderDetails.data.slice(-1).pop().id)
   if (openTab === 2) {
     history.push('/')
   }

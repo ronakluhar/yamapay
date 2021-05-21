@@ -19,13 +19,13 @@ const ReviewOrder = (props: any) => {
   let cardNumber: any = ''
   cardNumber = cardDetails.cardNumber || '1234 1234 1234 1234'
   const checkArray = cardNumber.split(' ')
+  console.log('length=>', checkArray.length)
   cardNumber =
-    checkArray[0] +
+    checkArray[checkArray.length - checkArray.length] +
+    '  **** ' +
     ' **** ' +
-    ' **** ' +
-    (checkArray[3] ? checkArray[3] : '') +
     ' ' +
-    (checkArray[4] ? checkArray[4] : '')
+    (checkArray[checkArray.length - 1] ? checkArray[checkArray.length - 1] : '')
   const dispatch = useDispatch()
   const history = useHistory()
   const tip = props.location.state ? props.location.state[1] : []
@@ -34,7 +34,7 @@ const ReviewOrder = (props: any) => {
     history.push('/cart')
   }
   if (openTab === 2) {
-    if (props.location.state) {
+    if (props.location.state && props.location.state[0].total > 1) {
       dispatch(placeOrder(props.location.state[0] || [], history, tip))
     }
   }
@@ -109,7 +109,9 @@ const ReviewOrder = (props: any) => {
               </Formik>
               <button
                 className="bg-blue text-white change-card-btn text-sm px-4 py-1"
-                onClick={() => history.push('/payment-card')}
+                onClick={() =>
+                  history.push('/payment-card', props.location.state)
+                }
               >
                 CHANGE
               </button>

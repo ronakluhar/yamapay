@@ -92,20 +92,14 @@ export const placeOrder = (cartDetails: any, history: any, tip: any) => (
         cartDetails.tip_percentage = tip.tip_percentage
         cartDetails.tip_value = tip.tip_value
         localStorage.setItem('lastCartDetails', JSON.stringify(cartDetails))
-        // localStorage.setItem('orderDetails', JSON.stringify(orderDetails))
         localStorage.setItem('lastorderDetails', JSON.stringify(orderDetails))
         localStorage.removeItem('CartProducts')
         localStorage.removeItem('personalInfoName')
         localStorage.removeItem('personalInfoComment')
-        // localStorage.removeItem('personalInfoPhone')
         localStorage.removeItem('orderComment')
         localStorage.removeItem('tip')
         history.push('/payment-success', { orderDetails })
       }
-      // dispatch({
-      //   type: actionTypes.PLACE_ORDER_SUCCESS,
-      //   payload: res.data.payload.data,
-      // })
     })
     .catch((err: any) => {
       dispatch({ type: actionTypes.PLACE_ORDER_ERROR, payload: err })
@@ -154,32 +148,10 @@ export const getOrderDetails = (id: string, history: any) => (
     .then((res) => {
       if (res.data.success) {
         const orderDetails = res.data.payload
-        // console.log('res', res.data.payload.data)
-        // console.log('orderDetails', orderDetails)
-        // localStorage.setItem('lastorderDetails', JSON.stringify(orderDetails))
         history.push('/order-status', { orderDetails })
       }
-      // dispatch({
-      //   type: actionTypes.GET_ORDER_DETAILS_SUCCESS,
-      //   payload: res.data.payload.data,
-      // })
     })
     .catch((err: any) => {
       dispatch({ type: actionTypes.GET_ORDER_DETAILS_ERROR, payload: err })
     })
-}
-
-export const setLocalStorageForCart = (products: any) => (dispatch: any) => {
-  let a: any = []
-  a = localStorage.getItem('CartProducts')
-  console.log('a', a)
-  a.push(products)
-  localStorage.setItem('CartProducts', JSON.stringify(a))
-  dispatch({ type: actionTypes.SET_LOCAL_STORAGE })
-}
-export const setProducts = (products: any) => (dispatch: any) => {
-  dispatch({
-    type: actionTypes.SET_PRODUCT,
-    payload: JSON.parse(products || []),
-  })
 }

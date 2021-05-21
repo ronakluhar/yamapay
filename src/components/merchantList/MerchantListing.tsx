@@ -14,7 +14,6 @@ const MerchantListing = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   useEffect(() => {
-    // dispatch(getMerChantList())
     dispatch(getShopsList())
   }, [dispatch])
   const { shopsList } = useSelector((state: any) => ({
@@ -24,7 +23,6 @@ const MerchantListing = () => {
   shopId = JSON.parse(localStorage.getItem('shop') || '[]')
   const getProduct = (shop: any) => {
     if (shop.id !== shopId.id) {
-      // localStorage.setItem('prevShop', JSON.stringify(shopId))
       localStorage.setItem('shop', JSON.stringify(shop))
     }
     history.push('restaurant', shop)
@@ -43,22 +41,12 @@ const MerchantListing = () => {
             src="https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png"
             alt="promo offer"
           />
-          {/* <button
-            className="tag bg-lightgreen text-green mr-4 mb-2 p-2"
-            // onClick={() => getTax('75206')}
-          >
-            get Tax
-          </button> */}
         </div>
         <div className="popular-merchants-carousal mb-8">
           <h5 className="my-3 text-base">Popular Shops</h5>
           <div className="popular-merchants flex flex-row flex-nowrap overflow-auto">
             {popularShops.map((shopImg, index) => (
-              <div
-                className="relative merchant"
-                key={index}
-                // onClick={() => alert(index)}
-              >
+              <div className="relative merchant" key={index}>
                 <img className="merchant-img mr-5" src={shopImg} alt="" />
                 <div className="opacity-50 bg-black rounded-xl absolute bottom-1"></div>
                 <div className="merchant-info absolute text-white">

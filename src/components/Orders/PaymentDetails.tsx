@@ -1,5 +1,4 @@
 const PaymentDetails = (props: any) => {
-  // console.log('total', props.orderDetails)
   return (
     <div>
       <div className="flex justify-between items-center border-b border-border border-dashed p-5">

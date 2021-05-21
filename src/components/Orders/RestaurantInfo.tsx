@@ -24,7 +24,6 @@ const RestaurantInfo = () => {
               <p>{shop.description}</p>
             )
           ) : null}
-          {/* {shop.description || 'Restaurant, American Food, Chinese'} */}
         </p>
         <div className="flex items-center mb-1">
           <div className="h-4 w-4 mr-2">

@@ -1,9 +1,7 @@
 import itemImg from '../../images/item1.webp'
 
 const OrderDetails = (props: any) => {
-  // console.log('props', props.orderDetails.order_details)
   const products = props.orderDetails || []
-  // console.log('products 12', products)
   return (
     <>
       {products.order_details

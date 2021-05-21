@@ -1,5 +1,4 @@
 import { Form, Formik } from 'formik'
-// import { ThemeConfig } from 'react-select/src/theme'
 import { Input, YPSelect } from '../common/Form'
 import * as Yup from 'yup'
 type Props = {

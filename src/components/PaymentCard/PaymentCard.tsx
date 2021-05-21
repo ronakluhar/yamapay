@@ -1,20 +1,27 @@
 import { LeftArrow, Verified } from '../common/icons'
 import logo from '../../images/logo.png'
 import { Input } from '../common/Form'
-import { Formik, Field } from 'formik'
+import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 import { useHistory } from 'react-router'
 // @ts-ignore
 import { css } from 'styled-components'
 // @ts-ignore
 import { PaymentInputsWrapper, usePaymentInputs } from 'react-payment-inputs'
+
 // @ts-ignore
 import images from 'react-payment-inputs/images'
 import { useState } from 'react'
-const PaymentCard = () => {
+
+const PaymentCard = (props: any) => {
   const card = JSON.parse(localStorage.getItem('cardDetails') || '[]')
   const history = useHistory()
   const [cardDetails, setCardDetails] = useState({})
+  let cardNumber: any = card ? card.cardNumber : ''
+  let expiryDate: any = card ? card.expiryDate : ''
+  let cvc: any = card ? card.cvc : ''
+  const nameOnCard: any = card ? card.nameOnCard : ''
+  console.log(cardNumber, expiryDate, cvc, nameOnCard)
   const {
     meta,
     getCardImageProps,
@@ -26,13 +33,9 @@ const PaymentCard = () => {
   const paymentCardSchema = Yup.object({
     nameOnCard: Yup.string().required('Name is a required field'),
   })
-
-  // useEffect(() => {
-  //   Object.keys(cardDetails).length > 0 && redirectBack
-  // }, [cardDetails])
   if (Object.keys(cardDetails).length > 0) {
     localStorage.setItem('cardDetails', JSON.stringify(cardDetails) || '[]')
-    history.goBack()
+    history.push('/review-order', props.location.state)
   }
 
   return (
@@ -51,7 +54,7 @@ const PaymentCard = () => {
             <Verified className="h-5 v-5 text-lime absolute right-8 top-8" />
           </div>
         </div>
-        {/* <Formik
+        <Formik
           initialValues={{
             cardNumber: '',
             expiryDate: '',
@@ -140,8 +143,9 @@ const PaymentCard = () => {
               </button>
             </Form>
           )}
-        </Formik> */}
+        </Formik>
         <Formik
+          enableReinitialize
           initialValues={{
             cardNumber: card ? card.cardNumber : '',
             expiryDate: card ? card.expiryDate : '',
@@ -230,17 +234,20 @@ const PaymentCard = () => {
                 >
                   <svg {...getCardImageProps({ images })} />
                   <div>
-                    <Field name="cardNumber">
+                    <Field name="cardNumber" value={cardNumber}>
                       {(field: any) => (
                         <input
                           className="custom-box-input"
-                          // value={cardNumber}
+                          value={field.form.values.cardNumber}
+                          {...console.log('field', field.form.values)}
                           {...getCardNumberProps({
                             onBlur: field.onBlur,
                             onChange: (event: any) => {
                               setFieldValue('cardNumber', event.target.value)
+                              cardNumber = event.target.value
                             },
                           })}
+                          // value=""
                         />
                       )}
                     </Field>
@@ -249,26 +256,32 @@ const PaymentCard = () => {
                     <Field name="expiryDate">
                       {(field: any) => (
                         <input
+                          value={field.form.values.expiryDate}
                           {...getExpiryDateProps({
                             onBlur: field.onBlur,
                             // value: expiryDate,
                             onChange: (event: any) => {
                               setFieldValue('expiryDate', event.target.value)
+                              expiryDate = event.target.value
                             },
                           })}
+                          // value=""
                         />
                       )}
                     </Field>
                     <Field name="cvc">
                       {(field: any) => (
                         <input
+                          value={field.form.values.cvc}
                           {...getCVCProps({
                             onBlur: field.onBlur,
                             // value: cvc,
                             onChange: (event: any) => {
                               setFieldValue('cvc', event.target.value)
+                              cvc = event.target.value
                             },
                           })}
+                          // value=""
                         />
                       )}
                     </Field>

@@ -1,58 +1,7 @@
-// import { useState } from 'react'
 import productImg from '../../images/hotel1.jpg'
-// import { Minus, Plus } from '../common/icons'
 const IMG_URL = 'http://127.0.0.1:8000/'
 
-// const demoProducts = [
-//   {
-//     product_name: 'Burger Meal',
-//     product_desc: 'Description of Product...',
-//     price: '$20.45',
-//     product_image: productImg,
-//     quantity: 1,
-//   },
-//   {
-//     product_name: 'Burger Meal',
-//     product_desc: 'Description of Product...',
-//     price: '$20.45',
-//     product_image: productImg,
-//     quantity: 2,
-//   },
-//   {
-//     product_name: 'Burger Meal',
-//     product_desc: 'Description of Product...',
-//     price: '$20.45',
-//     product_image: productImg,
-//     quantity: 3,
-//   },
-//   {
-//     product_name: 'Burger Meal',
-//     product_desc: 'Description of Product...',
-//     price: '$20.45',
-//     product_image: productImg,
-//     quantity: 4,
-//   },
-// ]
 const RecommendedProducts = (props: any) => {
-  // const [products, setProducts] = useState(props.productList)
-  // const manageQuantity = (index: number, action: string) => {
-  //   setProducts((product: any) =>
-  //     product.map((el: any, i: any) =>
-  //       i === index
-  //         ? {
-  //             ...el,
-  //             quantity:
-  //               el.quantity +
-  //               parseInt(
-  //                 `${action === 'increment' ? 1 : el.quantity > 1 ? -1 : 0}`,
-  //               ),
-  //             // or
-  //             // quantity: Math.max(0, el.quantity + action === "increment" ? 1 : -1)
-  //           }
-  //         : el,
-  //     ),
-  //   )
-  // }
   return (
     <div>
       <h5 className="text-base my-3">Recommended</h5>

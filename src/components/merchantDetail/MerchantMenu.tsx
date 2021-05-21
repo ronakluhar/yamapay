@@ -15,14 +15,12 @@ const MerchantMenu = (props: any) => {
   let shop: any = []
   shop = JSON.parse(localStorage.getItem('shop') || '[]')
   const dispatch = useDispatch()
-  // console.log(shop)
   useEffect(() => {
-    dispatch(getProductsList(shop.id))
+    dispatch(getProductsList(shop.id || 1))
   }, [dispatch])
   const { productList } = useSelector((state: any) => ({
     productList: state.merchantListReducer.productList,
   }))
-  // const MerchantMenu = () => {
   const [openTab, setOpenTab] = useState(1)
   return (
     <div className="merchant-menu bg-white p-0 my-0 relative max-w-6xl mx-auto">

@@ -34,10 +34,7 @@ const Cart = () => {
   demoProducts = localStorage.getItem('CartProducts')
   demoProducts = demoProducts ? JSON.parse(demoProducts) : []
   useEffect(() => {
-    // console.log('store_id', demoProducts.slice(-1).pop().storeId)
-    // if (prevShopId.id === demoProducts.slice(-1).pop().storeId) {
     localStorage.setItem('shop', JSON.stringify(prevShopId))
-    // }
   }, [])
 
   const [products, setProducts] = useState(demoProducts)
@@ -215,23 +212,12 @@ const Cart = () => {
       customer_name: personalInfo.name || '',
       customer_phone: personalInfo.phone || '',
       comment: personalInfo.comment || '',
-      // total:
-      //   subtotal +
-      //   parseFloat(
-      //     taxDetails.stateRate
-      //       ? parseFloat(taxDetails.stateRate).toFixed(2)
-      //       : '0',
-      //   ),
       total: finalTotal.toFixed(2),
       cart: products,
       store_charge: 0,
       tax: taxDetails.stateRate
         ? parseFloat(taxDetails.stateRate).toFixed(2)
         : 0,
-      // sub_total:
-      //   subtotal -
-      //   parseFloat(tip.tip_value || '0.00') +
-      //   parseFloat(taxDetails.stateRate || '0.00'),
       sub_total: finalsubTotal.toFixed(2),
       tip: tip.tip_value ? parseFloat(tip.tip_value).toFixed(2) : 0,
       service_fee: 0,

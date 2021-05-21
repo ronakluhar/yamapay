@@ -55,8 +55,6 @@ const CategoryWiseProducts = (props: any) => {
     localStorage.removeItem('tip')
     localStorage.removeItem('CartProducts')
     localStorage.removeItem('orderDetails')
-    // localStorage.setItem('shop', JSON.stringify(shopId))
-    // localStorage.setItem('prevShop', JSON.stringify(shopId))
     setOpen(false)
     history.push('/customize-order', [product])
   }
@@ -64,8 +62,6 @@ const CategoryWiseProducts = (props: any) => {
     setOpen(false)
     localStorage.setItem('shop', JSON.stringify(prevShopId))
   }
-  // console.log('open', open)
-
   return (
     <div className="product-category">
       {categoryList.categories

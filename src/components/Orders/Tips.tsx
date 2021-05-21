@@ -21,7 +21,6 @@ const Tips = ({
 }: TipsProps) => {
   let tipSet: any = []
   tipSet = JSON.parse(localStorage.getItem('tip') || '[]')
-  // console.log('tipSet', tipSet)
   const selectedTip: any = tip
   const [activeTab, setActiveTab] = useState(selectedTip.tip_index)
   useEffect(() => {
