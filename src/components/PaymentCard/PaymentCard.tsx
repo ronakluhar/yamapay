@@ -193,69 +193,74 @@ const PaymentCard = (props: any) => {
                   styles={{
                     fieldWrapper: {
                       base: css`
-                        margin-bottom: 1rem;
+                        width: 100%;
                       `,
                     },
                     inputWrapper: {
                       base: css`
-                        border-color: blue;
+                        display: block;
+                        border: none;
+                        box-shadow: none;
+                        height: auto;
                       `,
                       errored: css`
-                        border-color: maroon;
+                        border: 0px;
+                        border-color: transparent;
+                        box-shadow: none;
                       `,
                       focused: css`
                         border-color: unset;
                         box-shadow: unset;
-                        outline: 2px solid blue;
-                        outline-offset: 2px;
                       `,
                     },
                     input: {
                       base: css`
-                        color: black;
-                      `,
-                      errored: css`
-                        color: maroon;
+                        padding: 1rem;
+                        background-color: #f4f4f8;
+                        border: none;
+                        border-radius: 10px;
+                        outline: none;
+                        width: 100% !important;
                       `,
                       cardNumber: 'custom-input',
                       expiryDate: css`
-                        width: 10rem;
-                      `,
-                      cvc: css`
-                        width: 5rem;
+                        margin-right: 24px;
                       `,
                     },
                     errorText: {
                       base: css`
-                        color: maroon;
+                        color: #cd051d;
                       `,
                     },
                   }}
                 >
-                  <svg {...getCardImageProps({ images })} />
-                  <div>
-                    <Field name="cardNumber" value={cardNumber}>
-                      {(field: any) => (
-                        <input
-                          className="custom-box-input"
-                          value={field.form.values.cardNumber}
-                          {...console.log('field', field.form.values)}
-                          {...getCardNumberProps({
-                            onBlur: field.onBlur,
-                            onChange: (event: any) => {
-                              setFieldValue('cardNumber', event.target.value)
-                              cardNumber = event.target.value
-                            },
-                          })}
-                          // value=""
-                        />
-                      )}
-                    </Field>
+                  <div className="flex items-center mb-5">
+                    <svg {...getCardImageProps({ images })} />
+                    <div className="w-full">
+                      <Field name="cardNumber" value={cardNumber}>
+                        {(field: any) => (
+                          <input
+                            className="custom-box-input"
+                            value={field.form.values.cardNumber}
+                            {...console.log('field', field.form.values)}
+                            {...getCardNumberProps({
+                              onBlur: field.onBlur,
+                              onChange: (event: any) => {
+                                setFieldValue('cardNumber', event.target.value)
+                                cardNumber = event.target.value
+                              },
+                            })}
+                            // value=""
+                          />
+                        )}
+                      </Field>
+                    </div>
                   </div>
-                  <div>
+                  <div className="flex justify-between">
                     <Field name="expiryDate">
                       {(field: any) => (
                         <input
+                          className="mr-6"
                           value={field.form.values.expiryDate}
                           {...getExpiryDateProps({
                             onBlur: field.onBlur,
