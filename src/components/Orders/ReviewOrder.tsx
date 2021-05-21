@@ -19,7 +19,6 @@ const ReviewOrder = (props: any) => {
   let cardNumber: any = ''
   cardNumber = cardDetails.cardNumber || '1234 1234 1234 1234'
   const checkArray = cardNumber.split(' ')
-  console.log('length=>', checkArray.length)
   cardNumber =
     checkArray[checkArray.length - checkArray.length] +
     '  **** ' +

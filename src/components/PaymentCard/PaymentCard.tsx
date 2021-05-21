@@ -1,7 +1,7 @@
 import { LeftArrow, Verified } from '../common/icons'
 import logo from '../../images/logo.png'
 import { Input } from '../common/Form'
-import { Formik, Field, Form } from 'formik'
+import { Formik, Field } from 'formik'
 import * as Yup from 'yup'
 import { useHistory } from 'react-router'
 // @ts-ignore
@@ -17,11 +17,6 @@ const PaymentCard = (props: any) => {
   const card = JSON.parse(localStorage.getItem('cardDetails') || '[]')
   const history = useHistory()
   const [cardDetails, setCardDetails] = useState({})
-  let cardNumber: any = card ? card.cardNumber : ''
-  let expiryDate: any = card ? card.expiryDate : ''
-  let cvc: any = card ? card.cvc : ''
-  const nameOnCard: any = card ? card.nameOnCard : ''
-  console.log(cardNumber, expiryDate, cvc, nameOnCard)
   const {
     meta,
     getCardImageProps,
@@ -54,96 +49,7 @@ const PaymentCard = (props: any) => {
             <Verified className="h-5 v-5 text-lime absolute right-8 top-8" />
           </div>
         </div>
-        <Formik
-          initialValues={{
-            cardNumber: '',
-            expiryDate: '',
-            cvc: '',
-            nameOnCard: '',
-          }}
-          validationSchema={paymentCardSchema}
-          onSubmit={(data) => setCardDetails(data)}
-          validate={() => {
-            const errors: any = {}
-            if (meta.erroredInputs.cardNumber) {
-              errors.cardNumber = meta.erroredInputs.cardNumber
-            }
-            if (meta.erroredInputs.expiryDate) {
-              errors.expiryDate = meta.erroredInputs.expiryDate
-            }
-            if (meta.erroredInputs.cvc) {
-              errors.cvc = meta.erroredInputs.cvc
-            }
-            if (meta.erroredInputs.cvc) {
-              errors.cvc = meta.erroredInputs.cvc
-            }
-            if (meta.erroredInputs.nameOnCard) {
-              errors.nameOnCard = meta.erroredInputs.nameOnCard
-            }
-            return errors
-          }}
-        >
-          {({ handleSubmit, setFieldValue, errors }) => (
-            <Form onSubmit={handleSubmit}>
-              <div className="bg-white px-3 py-16 rounded-30 mb-5 relative">
-                <div className="mb-5">
-                  <Input
-                    type="text"
-                    name="name_on_card"
-                    label="Name on Card"
-                    error={errors.nameOnCard?.toString()}
-                  />
-                </div>
-                <div className="mb-5">
-                  <svg {...getCardImageProps({ images })} />
-                  <Input
-                    type="text"
-                    name="card_number"
-                    label="Card Number"
-                    error={errors.cardNumber}
-                    {...getCardNumberProps({
-                      onChange: (event: any) => {
-                        setFieldValue('cardNumber', event.target.value)
-                        console.log(event.target.value)
-                      },
-                    })}
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <Input
-                    type="month"
-                    name="expiry"
-                    label="Expiry Date"
-                    error={errors.expiryDate?.toString()}
-                    {...getExpiryDateProps({
-                      onChange: (event: any) => {
-                        setFieldValue('expiryDate', event.target.value)
-                      },
-                    })}
-                  />
-                  <Input
-                    type="number"
-                    name="cvv"
-                    label="CVV"
-                    min="000"
-                    error={errors.cvc?.toString()}
-                    {...getCVCProps({
-                      onChange: (event: any) => {
-                        setFieldValue('cvc', event.target.value)
-                      },
-                    })}
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="rounded-2xl w-full bg-blue text-white font-semibold focus:outline-none py-5 px-16"
-              >
-                Save Card
-              </button>
-            </Form>
-          )}
-        </Formik>
+
         <Formik
           enableReinitialize
           initialValues={{
@@ -174,7 +80,7 @@ const PaymentCard = (props: any) => {
             return errors
           }}
         >
-          {({ handleSubmit, setFieldValue, errors }) => (
+          {({ handleSubmit, setFieldValue, errors, touched, ...meta }) => (
             <form onSubmit={handleSubmit}>
               <div className="bg-white px-3 py-16 rounded-30 mb-5 relative">
                 <div className="mb-5">
@@ -204,7 +110,7 @@ const PaymentCard = (props: any) => {
                         height: auto;
                       `,
                       errored: css`
-                        border: 0px;
+                        border: 1px;
                         border-color: transparent;
                         box-shadow: none;
                       `,
@@ -237,20 +143,17 @@ const PaymentCard = (props: any) => {
                   <div className="flex items-center mb-5">
                     <svg {...getCardImageProps({ images })} />
                     <div className="w-full">
-                      <Field name="cardNumber" value={cardNumber}>
+                      <Field name="cardNumber">
                         {(field: any) => (
                           <input
                             className="custom-box-input"
                             value={field.form.values.cardNumber}
-                            {...console.log('field', field.form.values)}
                             {...getCardNumberProps({
                               onBlur: field.onBlur,
                               onChange: (event: any) => {
                                 setFieldValue('cardNumber', event.target.value)
-                                cardNumber = event.target.value
                               },
                             })}
-                            // value=""
                           />
                         )}
                       </Field>
@@ -264,13 +167,10 @@ const PaymentCard = (props: any) => {
                           value={field.form.values.expiryDate}
                           {...getExpiryDateProps({
                             onBlur: field.onBlur,
-                            // value: expiryDate,
                             onChange: (event: any) => {
                               setFieldValue('expiryDate', event.target.value)
-                              expiryDate = event.target.value
                             },
                           })}
-                          // value=""
                         />
                       )}
                     </Field>
@@ -280,13 +180,10 @@ const PaymentCard = (props: any) => {
                           value={field.form.values.cvc}
                           {...getCVCProps({
                             onBlur: field.onBlur,
-                            // value: cvc,
                             onChange: (event: any) => {
                               setFieldValue('cvc', event.target.value)
-                              cvc = event.target.value
                             },
                           })}
-                          // value=""
                         />
                       )}
                     </Field>
