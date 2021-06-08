@@ -7,6 +7,8 @@ import { placeOrder } from '../../redux/merchantList/action'
 import { useDispatch } from 'react-redux'
 import { Formik, Field } from 'formik'
 // @ts-ignore
+import { Crypt } from 'hybrid-crypto-js'
+// @ts-ignore
 import { PaymentInputsWrapper, usePaymentInputs } from 'react-payment-inputs'
 // @ts-ignore
 import images from 'react-payment-inputs/images'
@@ -14,6 +16,7 @@ const tabOptions = [
   { id: 1, tabName: 'Cancel' },
   { id: 2, tabName: 'Pay' },
 ]
+
 const ReviewOrder = (props: any) => {
   const cardDetails = JSON.parse(localStorage.getItem('cardDetails') || '[]')
   let cardNumber: any = ''
@@ -34,6 +37,30 @@ const ReviewOrder = (props: any) => {
   }
   if (openTab === 2) {
     if (props.location.state && props.location.state[0].total > 1) {
+      if (cardDetails) {
+        const crypt = new Crypt()
+        props.location.state[0].cardNumber = JSON.parse(
+          crypt.encrypt(
+            process.env.REACT_APP_PUBLIC_KEY,
+            cardDetails.cardNumber,
+          ),
+        )
+        props.location.state[0].cvc = JSON.parse(
+          crypt.encrypt(process.env.REACT_APP_PUBLIC_KEY, cardDetails.cvc),
+        ).keys
+        props.location.state[0].expiryDate = JSON.parse(
+          crypt.encrypt(
+            process.env.REACT_APP_PUBLIC_KEY,
+            cardDetails.expiryDate,
+          ),
+        ).keys
+        props.location.state[0].nameOnCard = JSON.parse(
+          crypt.encrypt(
+            process.env.REACT_APP_PUBLIC_KEY,
+            cardDetails.nameOnCard,
+          ),
+        ).keys
+      }
       dispatch(placeOrder(props.location.state[0] || [], history, tip))
     }
   }

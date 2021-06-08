@@ -10,7 +10,6 @@ import { getAddonList } from '../../redux/merchantList/action'
 import { filter, findIndex, sum } from 'lodash'
 import { Menu } from '../navigation'
 
-const IMG_URL = 'http://127.0.0.1:8000/'
 const tabOptions = [
   { id: 1, tabName: 'Close' },
   { id: 2, tabName: 'Add to Cart' },
@@ -173,7 +172,11 @@ const CustomizeOrder = (props: any) => {
             <div className="mr-4">
               <img
                 className="w-12 h-12 order-item-img"
-                src={product.image_url ? IMG_URL + product.image_url : itemImg}
+                src={
+                  product.image_url
+                    ? process.env.REACT_APP_IMG_URL + product.image_url
+                    : itemImg
+                }
                 alt=""
               />
             </div>

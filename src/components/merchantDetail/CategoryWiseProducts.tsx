@@ -6,7 +6,6 @@ import { getCategoryList } from '../../redux/merchantList/action'
 import { Dialog, Transition } from '@headlessui/react'
 // import api from '../../utils/API'
 import { Plus } from '../common/icons'
-const IMG_URL = 'http://127.0.0.1:8000/'
 let productForAddon: any = []
 const CategoryWiseProducts = (props: any) => {
   // const shop = props.store
@@ -83,7 +82,7 @@ const CategoryWiseProducts = (props: any) => {
                         style={{ height: '130px', width: '130px' }}
                         src={
                           product.image_url
-                            ? IMG_URL + product.image_url
+                            ? process.env.REACT_APP_IMG_URL + product.image_url
                             : itemImg
                         }
                         alt=""

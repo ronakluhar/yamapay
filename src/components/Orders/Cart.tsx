@@ -16,7 +16,7 @@ const tabOptions = [
 ]
 
 const Cart = () => {
-  const shopId = JSON.parse(localStorage.getItem('shop') || '')
+  const shopId = JSON.parse(localStorage.getItem('shop') || '[]')
   const [orderComment, setOrderComment] = useState(
     localStorage.getItem('orderComment') || '',
   )

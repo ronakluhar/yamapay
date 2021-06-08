@@ -7,7 +7,6 @@ import { Menu, Navigation } from '../navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import { getShopsList } from '../../redux/merchantList/action'
 import { useHistory } from 'react-router'
-const IMG_URL = 'http://127.0.0.1:8000/'
 const MAX_LENGTH = 20
 const popularShops = [img1, img2, img3, img1, img2, img3]
 const MerchantListing = () => {
@@ -79,7 +78,11 @@ const MerchantListing = () => {
                   <img
                     className="merchant-img mr-5"
                     style={{ height: '200px', width: '335px' }}
-                    src={value.logo_url ? IMG_URL + value.logo_url : img1}
+                    src={
+                      value.logo_url
+                        ? process.env.REACT_APP_IMG_URL + value.logo_url
+                        : img1
+                    }
                     alt=""
                   />
                 </div>

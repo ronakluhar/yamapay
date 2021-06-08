@@ -109,7 +109,7 @@ export const placeOrder = (cartDetails: any, history: any, tip: any) => (
 export const getTax = (zipcode: string) => (dispatch: any) => {
   dispatch({ type: actionTypes.GET_TAX_PENDING })
   api
-    .get(`http://gateway.yamapay.com/reporting/mobile/tax/${zipcode}`)
+    .get(process.env.REACT_APP_GET_TAX_URL + zipcode)
     .then((res) => {
       dispatch({
         type: actionTypes.GET_TAX_SUCCESS,

@@ -1,5 +1,4 @@
 import productImg from '../../images/hotel1.jpg'
-const IMG_URL = 'http://127.0.0.1:8000/'
 
 const RecommendedProducts = (props: any) => {
   return (
@@ -18,7 +17,9 @@ const RecommendedProducts = (props: any) => {
                 className="product-img"
                 style={{ height: '130px', width: '150px' }}
                 src={
-                  product.image_url ? IMG_URL + product.image_url : productImg
+                  product.image_url
+                    ? process.env.REACT_APP_IMG_URL + product.image_url
+                    : productImg
                 }
                 alt="dish"
               />

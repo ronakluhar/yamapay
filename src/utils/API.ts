@@ -1,9 +1,5 @@
 import axios from 'axios'
 
-// const token: string | null = localStorage.getItem('token')
-// https://railsapi.yamapay.com:443/api/v1/sign_in
-// user[email] = ronakmethan@gmail.com
-// user[password] = RonMet123#
 const headers = {
   'Content-Type': 'application/json',
   Authorization:

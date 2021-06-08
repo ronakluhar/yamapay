@@ -37,51 +37,54 @@ const OrderList = () => {
 
           <div className="order-details">
             <div className="border border-dashed border-border order-status-subheader px-5 py-2">
-              Your Orders
+              {allOrderDetails.length ? 'Your Orders' : 'No Details Available'}
             </div>
             <div>
               <div className="px-4 bg-white mt-2.5 cart-items">
-                {allOrderDetails.map((value: any, index: any) => (
-                  <div
-                    className="border-b last:border-0 border-border border-dashed py-8"
-                    key={value.id}
-                  >
-                    <div className="py-2 flex justify-between items-center">
-                      <h4 className="text-base">
-                        Order Id: #<b>{value ? value.order_unique_id : ''}</b>
-                      </h4>
-                      <button
-                        className="bg-blue text-white change-card-btn text-sm px-3 py-1"
-                        onClick={() => location.reload(false)}
+                {allOrderDetails.length
+                  ? allOrderDetails.map((value: any, index: any) => (
+                      <div
+                        className="border-b last:border-0 border-border border-dashed py-8"
+                        key={value.id}
                       >
-                        {value.status
-                          ? value.status === 1
-                            ? 'ORDER PLACED'
-                            : '' || value.status === 2
-                            ? 'PROCESSING'
-                            : '' || value.status === 3
-                            ? 'REJECTED'
-                            : '' || value.status === 4
-                            ? 'ORDER COMPLETED'
-                            : '' || value.status === 5
-                            ? 'READY'
-                            : ''
-                          : ''}
-                      </button>
-                      <button
-                        className="bg-blue text-white change-card-btn text-sm px-3 py-1"
-                        onClick={() => handleGetOrderDetails(value.id)}
-                      >
-                        View
-                      </button>
-                      <div>
-                        <p className="text-base ">
-                          <b>${value.total}</b>
-                        </p>
+                        <div className="py-2 flex justify-between items-center">
+                          <h4 className="text-base">
+                            Order Id: #
+                            <b>{value ? value.order_unique_id : ''}</b>
+                          </h4>
+                          <button
+                            className="bg-blue text-white change-card-btn text-sm px-3 py-1"
+                            onClick={() => location.reload(false)}
+                          >
+                            {value.status
+                              ? value.status === 1
+                                ? 'ORDER PLACED'
+                                : '' || value.status === 2
+                                ? 'PROCESSING'
+                                : '' || value.status === 3
+                                ? 'REJECTED'
+                                : '' || value.status === 4
+                                ? 'ORDER COMPLETED'
+                                : '' || value.status === 5
+                                ? 'READY'
+                                : ''
+                              : ''}
+                          </button>
+                          <button
+                            className="bg-blue text-white change-card-btn text-sm px-3 py-1"
+                            onClick={() => handleGetOrderDetails(value.id)}
+                          >
+                            View
+                          </button>
+                          <div>
+                            <p className="text-base ">
+                              <b>${value.total}</b>
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    ))
+                  : ''}
               </div>
             </div>
           </div>
