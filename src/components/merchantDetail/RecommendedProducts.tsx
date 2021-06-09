@@ -1,5 +1,5 @@
 import productImg from '../../images/hotel1.jpg'
-
+const MAX_LENGTH = 20
 const RecommendedProducts = (props: any) => {
   return (
     <div>
@@ -27,7 +27,16 @@ const RecommendedProducts = (props: any) => {
                 {product.name}
               </h6>
               <p className="text-violet product-desc break-words">
-                {product.description}
+                {product.description ? (
+                  product.description.length > MAX_LENGTH ? (
+                    <div>{`${product.description.substring(
+                      0,
+                      MAX_LENGTH,
+                    )}...`}</div>
+                  ) : (
+                    <p>{product.description}</p>
+                  )
+                ) : null}
               </p>
               <div className="flex justify-between px-2">
                 <div>

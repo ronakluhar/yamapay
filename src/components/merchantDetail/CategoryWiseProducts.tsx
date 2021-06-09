@@ -7,6 +7,7 @@ import { Dialog, Transition } from '@headlessui/react'
 // import api from '../../utils/API'
 import { Plus } from '../common/icons'
 let productForAddon: any = []
+const MAX_LENGTH = 20
 const CategoryWiseProducts = (props: any) => {
   // const shop = props.store
   let shop: any = []
@@ -92,7 +93,16 @@ const CategoryWiseProducts = (props: any) => {
                       <div>
                         <h6 className="product-name">{product.name}</h6>
                         <p className="product-desc text-gray">
-                          {product.description}
+                          {product.description ? (
+                            product.description.length > MAX_LENGTH ? (
+                              <div>{`${product.description.substring(
+                                0,
+                                MAX_LENGTH,
+                              )}...`}</div>
+                            ) : (
+                              <p>{product.description}</p>
+                            )
+                          ) : null}
                         </p>
                         <span className="text-blue text-sm">
                           ${product.price.toFixed(2)}

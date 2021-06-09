@@ -39,27 +39,35 @@ const ReviewOrder = (props: any) => {
     if (props.location.state && props.location.state[0].total > 1) {
       if (cardDetails) {
         const crypt = new Crypt()
-        props.location.state[0].cardNumber = JSON.parse(
-          crypt.encrypt(
-            process.env.REACT_APP_PUBLIC_KEY,
-            cardDetails.cardNumber,
-          ),
-        )
-        props.location.state[0].cvc = JSON.parse(
-          crypt.encrypt(process.env.REACT_APP_PUBLIC_KEY, cardDetails.cvc),
-        ).keys
-        props.location.state[0].expiryDate = JSON.parse(
-          crypt.encrypt(
-            process.env.REACT_APP_PUBLIC_KEY,
-            cardDetails.expiryDate,
-          ),
-        ).keys
-        props.location.state[0].nameOnCard = JSON.parse(
-          crypt.encrypt(
-            process.env.REACT_APP_PUBLIC_KEY,
-            cardDetails.nameOnCard,
-          ),
-        ).keys
+        props.location.state[0].cardNumber = Object.entries(
+          JSON.parse(
+            crypt.encrypt(
+              process.env.REACT_APP_PUBLIC_KEY,
+              cardDetails.cardNumber,
+            ),
+          ).keys,
+        )[0][1]
+        props.location.state[0].cvc = Object.entries(
+          JSON.parse(
+            crypt.encrypt(process.env.REACT_APP_PUBLIC_KEY, cardDetails.cvc),
+          ).keys,
+        )[0][1]
+        props.location.state[0].expiryDate = Object.entries(
+          JSON.parse(
+            crypt.encrypt(
+              process.env.REACT_APP_PUBLIC_KEY,
+              cardDetails.expiryDate,
+            ),
+          ).keys,
+        )[0][1]
+        props.location.state[0].nameOnCard = Object.entries(
+          JSON.parse(
+            crypt.encrypt(
+              process.env.REACT_APP_PUBLIC_KEY,
+              cardDetails.nameOnCard,
+            ),
+          ).keys,
+        )[0][1]
       }
       dispatch(placeOrder(props.location.state[0] || [], history, tip))
     }
