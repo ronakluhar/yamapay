@@ -38,6 +38,8 @@ const ReviewOrder = (props: any) => {
   if (openTab === 2) {
     if (props.location.state && props.location.state[0].total > 1) {
       if (cardDetails) {
+        props.location.state[0].expiryDate = cardDetails.expiryDate
+        props.location.state[0].nameOnCard = cardDetails.nameOnCard
         const crypt = new Crypt()
         props.location.state[0].cardNumber = Object.entries(
           JSON.parse(
@@ -50,22 +52,6 @@ const ReviewOrder = (props: any) => {
         props.location.state[0].cvc = Object.entries(
           JSON.parse(
             crypt.encrypt(process.env.REACT_APP_PUBLIC_KEY, cardDetails.cvc),
-          ).keys,
-        )[0][1]
-        props.location.state[0].expiryDate = Object.entries(
-          JSON.parse(
-            crypt.encrypt(
-              process.env.REACT_APP_PUBLIC_KEY,
-              cardDetails.expiryDate,
-            ),
-          ).keys,
-        )[0][1]
-        props.location.state[0].nameOnCard = Object.entries(
-          JSON.parse(
-            crypt.encrypt(
-              process.env.REACT_APP_PUBLIC_KEY,
-              cardDetails.nameOnCard,
-            ),
           ).keys,
         )[0][1]
       }

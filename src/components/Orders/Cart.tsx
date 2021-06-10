@@ -261,73 +261,80 @@ const Cart = () => {
           <div className="py-5">
             <h3 className="text-sm font-bold">Items in Cart</h3>
             <div className="px-4 bg-white mt-2.5 cart-items">
-              {products.map((product: any, index: any) => (
-                <div
-                  className="border-b last:border-0 border-border border-dashed py-8"
-                  key={index}
-                >
-                  <div className="py-2 flex justify-between items-center">
-                    <h4 className="text-base">
-                      {product.product_name}{' '}
-                      <b>{'$' + parseFloat(product.price).toFixed(2)}</b>{' '}
-                      {product.addonName ? (
+              {products.length !== 0 ? (
+                products.map((product: any, index: any) => (
+                  <div
+                    className="border-b last:border-0 border-border border-dashed py-8"
+                    key={index}
+                  >
+                    <div className="py-2 flex justify-between items-center">
+                      <h4 className="text-base">
+                        {product.product_name}{' '}
+                        <b>{'$' + parseFloat(product.price).toFixed(2)}</b>{' '}
+                        {product.addonName ? (
+                          <p className="product-desc font-normal leading-none mb-1 text-darkgray">
+                            {product.addonName}{' '}
+                            <b>{'$' + product.addonPrice}</b>
+                          </p>
+                        ) : null}
+                        {product.extra != null
+                          ? product.extra.map((value: any) => (
+                              <p
+                                className="product-desc font-normal leading-none mb-1 text-darkgray"
+                                key={value.addon_id}
+                              >
+                                {value.addon_name}{' '}
+                                <b>{'  $' + value.addonprice}</b>
+                              </p>
+                            ))
+                          : null}
                         <p className="product-desc font-normal leading-none mb-1 text-darkgray">
-                          {product.addonName} <b>{'$' + product.addonPrice}</b>
+                          {product.product_comments}
                         </p>
-                      ) : null}
-                      {product.extra != null
-                        ? product.extra.map((value: any) => (
-                            <p
-                              className="product-desc font-normal leading-none mb-1 text-darkgray"
-                              key={value.addon_id}
-                            >
-                              {value.addon_name}{' '}
-                              <b>{'  $' + value.addonprice}</b>
-                            </p>
-                          ))
-                        : null}
-                      <p className="product-desc font-normal leading-none mb-1 text-darkgray">
-                        {product.product_comments}
-                      </p>
-                    </h4>
-                    <div className="flex">
-                      <span onClick={() => editProduct(product)}>
-                        <Pencil className="h-4 w-4 mr-2.5 cursor-pointer" />
-                      </span>
-                      <span onClick={() => deleteProduct(product)}>
-                        <Trash className="h-4 w-4 text-red cursor-pointer" />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center justify-around order-item-quantity shadow-none">
-                      <button
-                        className="px-2 my-1 border-r focus:outline-none"
-                        type="button"
-                        onClick={() => manageQuantity(index, 'decrement')}
-                      >
-                        <Minus className="w-5 h-5" />
-                      </button>
-                      <div>
-                        <span className="px-2">{product.quantity}</span>
+                      </h4>
+                      <div className="flex">
+                        <span onClick={() => editProduct(product)}>
+                          <Pencil className="h-4 w-4 mr-2.5 cursor-pointer" />
+                        </span>
+                        <span onClick={() => deleteProduct(product)}>
+                          <Trash className="h-4 w-4 text-red cursor-pointer" />
+                        </span>
                       </div>
-
-                      <button
-                        className="px-2 my-1 border-l focus:outline-none"
-                        type="button"
-                        onClick={() => manageQuantity(index, 'increment')}
-                      >
-                        <Plus className="w-5 h-5" />
-                      </button>
                     </div>
-                    <div>
-                      <p className="text-base">
-                        ${parseFloat(product.total_price).toFixed(2)}
-                      </p>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center justify-around order-item-quantity shadow-none">
+                        <button
+                          className="px-2 my-1 border-r focus:outline-none"
+                          type="button"
+                          onClick={() => manageQuantity(index, 'decrement')}
+                        >
+                          <Minus className="w-5 h-5" />
+                        </button>
+                        <div>
+                          <span className="px-2">{product.quantity}</span>
+                        </div>
+
+                        <button
+                          className="px-2 my-1 border-l focus:outline-none"
+                          type="button"
+                          onClick={() => manageQuantity(index, 'increment')}
+                        >
+                          <Plus className="w-5 h-5" />
+                        </button>
+                      </div>
+                      <div>
+                        <p className="text-base">
+                          ${parseFloat(product.total_price).toFixed(2)}
+                        </p>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="px-5 py-2 mt-2 mb-2 text-opacity-50 text-center font-bold">
+                  No Item Added
                 </div>
-              ))}
+              )}
             </div>
             <Formik initialValues={{}} onSubmit={(values) => {}}>
               {({ values }) => (
