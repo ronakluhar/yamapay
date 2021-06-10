@@ -1,3 +1,9 @@
+Prerequisite
+
+1. You need to install node js 
+2. Node Js - 14.0.0
+3. Yarn - 1.22.0
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -7,6 +13,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### `yarn install`
 
 In the project directory run this command to install dependencies
+
+Once this done please change REACT_APP_API_URL as per your environment in .env file and other respective URL. 
 
 ### `yarn start`
 
