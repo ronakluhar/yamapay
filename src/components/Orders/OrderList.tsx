@@ -12,7 +12,9 @@ const OrderList = () => {
   const phone = localStorage.getItem('personalInfoPhone') || 0
   const shop = JSON.parse(localStorage.getItem('shop') || '[]')
   useEffect(() => {
-    dispatch(getAllOrder(phone, shop.id))
+    if (shop.length !== 0) {
+      dispatch(getAllOrder(phone, shop.id))
+    }
   }, [])
   const { allOrderDetails } = useSelector((state: any) => ({
     allOrderDetails: state.merchantListReducer.allOrderDetails,

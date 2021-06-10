@@ -23,9 +23,7 @@ const Cart = () => {
   const zipcode: any = '75206'
   const dispatch = useDispatch()
   const history = useHistory()
-  useEffect(() => {
-    dispatch(getTax(zipcode))
-  }, [dispatch])
+
   const prevShopId = JSON.parse(localStorage.getItem('prevShop') || '[]')
   const { taxDetails } = useSelector((state: any) => ({
     taxDetails: state.merchantListReducer.taxDetails,
@@ -40,6 +38,11 @@ const Cart = () => {
   const [products, setProducts] = useState(demoProducts)
   const [openTab, setOpenTab] = useState(1)
   const [cart, setCart] = useState({})
+  useEffect(() => {
+    if (products.length !== 0) {
+      dispatch(getTax(zipcode))
+    }
+  }, [dispatch])
   const [personalInfo, setPersonalInfo] = useState({
     name: localStorage.getItem('personalInfoName') || '',
     phone: localStorage.getItem('personalInfoPhone') || '',
@@ -336,84 +339,96 @@ const Cart = () => {
                 </div>
               )}
             </div>
-            <Formik initialValues={{}} onSubmit={(values) => {}}>
-              {({ values }) => (
-                <Form>
-                  <div className="my-3">
-                    <Input
-                      type="text"
-                      name="order_comments"
-                      value={orderComment}
-                      placeholder={
-                        'Please write any other info we should share with the chef...*'
-                      }
-                      onChange={(event) => {
-                        localStorage.setItem('orderComment', event.target.value)
-                        setOrderComment(event.target.value)
-                      }}
-                    />
+            {products.length !== 0 ? (
+              <>
+                <Formik initialValues={{}} onSubmit={(values) => {}}>
+                  {({ values }) => (
+                    <Form>
+                      <div className="my-3">
+                        <Input
+                          type="text"
+                          name="order_comments"
+                          value={orderComment}
+                          placeholder={
+                            'Please write any other info we should share with the chef...*'
+                          }
+                          onChange={(event) => {
+                            localStorage.setItem(
+                              'orderComment',
+                              event.target.value,
+                            )
+                            setOrderComment(event.target.value)
+                          }}
+                        />
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+
+                <Tips
+                  tip={tip}
+                  tipOptions={tipOptions}
+                  setTip={setTip}
+                  customtip={customtip}
+                  setCustomtip={setCustomtip}
+                  setSubtotal={setSubtotal}
+                />
+                <PersonalDetails setPersonalInfo={setPersonalInfo} />
+                <OrderSummary subtotal={subtotal} Tax={taxDetails.stateRate} />
+              </>
+            ) : null}
+          </div>
+          {products.length !== 0 ? (
+            <>
+              <div className="flex rounded-2xl mb-8 tabs">
+                <button
+                  className="w-full text-left mb-10"
+                  type="button"
+                  onClick={() => history.push('/restaurant')}
+                >
+                  <div
+                    className="bg-blue px-10 py-4 flex justify-between items-center rounded-2xl mr-0.5"
+                    style={{ height: '100%' }}
+                  >
+                    <div className="">
+                      <p className="text-lg text-white font-bold">Add Items:</p>
+                      <p className="text-xs text-white font-normal"></p>
+                    </div>
+                    <div>
+                      <ChevronRight className="h-5 w-5 text-white" />
+                    </div>
                   </div>
-                </Form>
-              )}
-            </Formik>
-            <Tips
-              tip={tip}
-              tipOptions={tipOptions}
-              setTip={setTip}
-              customtip={customtip}
-              setCustomtip={setCustomtip}
-              setSubtotal={setSubtotal}
-            />
-            <PersonalDetails setPersonalInfo={setPersonalInfo} />
-            <OrderSummary subtotal={subtotal} Tax={taxDetails.stateRate} />
-          </div>
-          <div className="flex rounded-2xl mb-8 tabs">
-            <button
-              className="w-full text-left mb-10"
-              type="button"
-              onClick={() => history.push('/restaurant')}
-            >
-              <div
-                className="bg-blue px-10 py-4 flex justify-between items-center rounded-2xl mr-0.5"
-                style={{ height: '100%' }}
-              >
-                <div className="">
-                  <p className="text-lg text-white font-bold">Add Items:</p>
-                  <p className="text-xs text-white font-normal"></p>
-                </div>
-                <div>
-                  <ChevronRight className="h-5 w-5 text-white" />
-                </div>
+                </button>
+                <button
+                  className="w-full text-left mb-10"
+                  type="button"
+                  onClick={setCartDetails}
+                >
+                  <div className="bg-blue px-10 py-4 flex justify-between items-center rounded-2xl">
+                    <div className="">
+                      <p className="text-lg text-white font-bold">
+                        Total Cost: $
+                        {(
+                          subtotal +
+                          parseFloat(
+                            taxDetails.stateRate
+                              ? parseFloat(taxDetails.stateRate).toFixed(2)
+                              : '0',
+                          )
+                        ).toFixed(2)}
+                      </p>
+                      <p className="text-xs text-white font-normal">
+                        Confirm Your Order
+                      </p>
+                    </div>
+                    <div>
+                      <ChevronRight className="h-5 w-5 text-white" />
+                    </div>
+                  </div>
+                </button>
               </div>
-            </button>
-            <button
-              className="w-full text-left mb-10"
-              type="button"
-              onClick={setCartDetails}
-            >
-              <div className="bg-blue px-10 py-4 flex justify-between items-center rounded-2xl">
-                <div className="">
-                  <p className="text-lg text-white font-bold">
-                    Total Cost: $
-                    {(
-                      subtotal +
-                      parseFloat(
-                        taxDetails.stateRate
-                          ? parseFloat(taxDetails.stateRate).toFixed(2)
-                          : '0',
-                      )
-                    ).toFixed(2)}
-                  </p>
-                  <p className="text-xs text-white font-normal">
-                    Confirm Your Order
-                  </p>
-                </div>
-                <div>
-                  <ChevronRight className="h-5 w-5 text-white" />
-                </div>
-              </div>
-            </button>
-          </div>
+            </>
+          ) : null}
         </div>
       </div>
       <div className="mx-5 sticky bottom-7 flex justify-center">
